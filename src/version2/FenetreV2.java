@@ -42,8 +42,8 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 	// Taille de la fenêtre par défaut
 	static private int LARGEUR_FENETRE = 1024 +  2 * PREMIER_PIXEL_X + 256 + 5; 
 	// Largeur : marge (barre bleue) à gauche et à droite
-	static private int HAUTEUR_FENETRE = 512 + PREMIER_PIXEL_Y + 17 + 8;
-	// Hauteur : PREMIER_PIXEL_Y pour le haut, 17 pour le texte, 8 pour la marge en bas
+	static private int HAUTEUR_FENETRE = 512 + PREMIER_PIXEL_Y + 26 + 8;
+	// Hauteur : PREMIER_PIXEL_Y pour le haut, 26 pour le texte, 8 pour la marge en bas
 
 	// Image de la map
 	private Panneau pan;
@@ -60,7 +60,7 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 	private JLabel labelLecture = new JLabel();
 	
 	// Bouton pour copier le résultat
-	private JButton resButton = new JButton();
+	private JButton copyButton = new JButton();
 	
 	// Demande d'accès à une province particulière
 	private JFormattedTextField lectureText = new JFormattedTextField(NumberFormat.getIntegerInstance());
@@ -126,24 +126,24 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 		labelLecture.setForeground(Color.blue);
 		lectureText.setFont(police);
 		lectureText.setForeground(Color.blue);
-		resButton.setText(text.copyClipboard());
+		copyButton.setText(text.copyClipboard());
 		JPanel north = new JPanel();
 		north.setLayout(new GridLayout(1, 6, 5, 5));
 		north.add(labelText);
 		north.add(labelRes);
-		north.add(resButton);
+		north.add(copyButton);
 		north.add(labelLecture);
 		north.add(lectureText);
-		north.add(lectureButton);
+		north.add(lectureButton);		
 		container.add(north, BorderLayout.NORTH);
 		
 		// Actions des boutons
-		resButton.addActionListener(new BoutonCopierListener());
+		copyButton.addActionListener(new BoutonCopierListener());
 		lectureButton.addActionListener(new BoutonLectureListener());
 		
 		// On rend la fenêtre focusable pour lire le clavier, mais pas le bouton de résultat
 		setFocusable(true);
-		resButton.setFocusable(false);
+		copyButton.setFocusable(false);
 		
 		// Ajout du conteneur
 		this.setContentPane(container);
@@ -407,5 +407,14 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 		public void actionPerformed(ActionEvent arg0) {			
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(labelRes.getText()), null);
 		}
+	}
+	
+	// ---------------- Testing ---------------------------
+	public int premierPixelX() {
+		return PREMIER_PIXEL_X;
+	}
+	
+	public int premierPixelY() {
+		return PREMIER_PIXEL_Y + labelText.getHeight();
 	}
 }
