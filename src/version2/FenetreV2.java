@@ -19,12 +19,14 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import text.Text;
 import base.MiniMap;
 import base.Panneau;
 import base.Province;
+import base.SearchDialog;
 import base.StockageProvince;
 
 /**
@@ -50,21 +52,19 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 
 	// Mini image de la map
 	private MiniMap miniMap;
-	
+
 	// Conteneur des objets
 	private JPanel container = new JPanel();
 
 	// Affichage textuel
 	private JLabel labelText = new JLabel();
 	private JLabel labelRes = new JLabel("");
-	private JLabel labelLecture = new JLabel();
-	
+
 	// Bouton pour copier le résultat
 	private JButton copyButton = new JButton();
-	
+
 	// Demande d'accès à une province particulière
-	private JFormattedTextField lectureText = new JFormattedTextField(NumberFormat.getIntegerInstance());
-	private JButton lectureButton = new JButton("Chercher");
+	private JButton searchButton = new JButton("Chercher une province");
 
 	// Base de données des provinces
 	private StockageProvince provinces;
@@ -76,6 +76,9 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 	private boolean enabledDroit = true;
 	private boolean enabledPlus = true;
 	private boolean enabledMoins = true;
+
+	// Text
+	private Text text;
 
 	// On récupère seulement les pointeurs (i.e pas de copie)
 	public FenetreV2(StockageProvince provinces, Panneau panneau, Text text, MiniMap miniMap) {
@@ -95,7 +98,10 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 		// Accès à la fenêtre à partir de la mini map
 		this.miniMap = miniMap;
 		miniMap.setWindow(this);
-		
+
+		// Text
+		this.text = text;
+
 		// Fenêtre
 		this.setTitle(title);		
 		this.setSize(largeur, hauteur);
@@ -113,7 +119,7 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 		east.add(new JPanel());
 		east.add(miniMap);
 		container.add(east, BorderLayout.EAST);
-		
+
 		// Ajout des textes et boutons
 		Font police = new Font("Tahoma", Font.BOLD, 14);
 		labelText.setText(text.clickedProvince());
@@ -121,30 +127,23 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 		labelText.setForeground(Color.blue);
 		labelRes.setFont(police);
 		labelRes.setForeground(Color.blue);
-		labelLecture.setText(text.provinceSearch());
-		labelLecture.setFont(police);
-		labelLecture.setForeground(Color.blue);
-		lectureText.setFont(police);
-		lectureText.setForeground(Color.blue);
 		copyButton.setText(text.copyClipboard());
 		JPanel north = new JPanel();
-		north.setLayout(new GridLayout(1, 6, 5, 5));
+		north.setLayout(new GridLayout(1, 4, 5, 5));
 		north.add(labelText);
 		north.add(labelRes);
 		north.add(copyButton);
-		north.add(labelLecture);
-		north.add(lectureText);
-		north.add(lectureButton);		
+		north.add(searchButton);
 		container.add(north, BorderLayout.NORTH);
-		
+
 		// Actions des boutons
 		copyButton.addActionListener(new BoutonCopierListener());
-		lectureButton.addActionListener(new BoutonLectureListener());
-		
+		searchButton.addActionListener(new SearchButtonListener());
+
 		// On rend la fenêtre focusable pour lire le clavier, mais pas le bouton de résultat
 		setFocusable(true);
 		copyButton.setFocusable(false);
-		
+
 		// Ajout du conteneur
 		this.setContentPane(container);
 
@@ -163,7 +162,7 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 	public String getRes() {
 		return labelRes.getText();
 	}
-	
+
 	/**
 	 * Verrouille les boutons selon l'image
 	 * et met à jour les booléens pour "verrouiller" les touches clavier
@@ -355,65 +354,61 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 			miniMap.setRectangle();
 		}
 	}
-	
-	private void actionLecture() {
-		if (lectureText.getValue() != null) {
-			try {
-				// Calcul du barycentre de la province cherchée		
-				Point barycentre = pan.getPosition(provinces.getProvince(((Long)lectureText.getValue()).intValue()).getIdentifiantRGB());
-				// On multiple par 4 / pan.getLargeurAfficheImageReelle() pour avoir le double du numéro
-				int numLargeur = (int)barycentre.getX() * 4 / pan.getLargeurAfficheImageReelle();
-				// On enlève 1 pour centrer
-				numLargeur--;
-				// On divise par 2 pour avoir un nombre correct
-				numLargeur /= 2;
-				// Si on dépasse on prend le max
-				if (numLargeur >= pan.getLargeurReelle()/(pan.getLargeurAfficheImageReelle()/2) - 2) {
-					numLargeur = pan.getLargeurReelle()/(pan.getLargeurAfficheImageReelle()/2) - 2;
-				}
-				// On met à jour l'image
-				pan.setNumLargeur(numLargeur);
-				// On fait de même pour la hauteur
-				int numHauteur = (int)barycentre.getY() * 4 / pan.getHauteurAfficheImageReelle();
-				numHauteur--;
-				numHauteur /= 2;
-				if (numHauteur >= pan.getHauteurReelle()/(pan.getHauteurAfficheImageReelle()/2) - 2) {
-					numHauteur = pan.getHauteurReelle()/(pan.getHauteurAfficheImageReelle()/2) - 2;			
-				}
-				pan.setNumHauteur(numHauteur);
-				// On met à jour la fenetre (gestions des touches + affichage)
-				verouillageDeverouillageBoutonsDirections();
-				repaint();
-				miniMap.setRectangle();
-				
-			} catch (IllegalArgumentException e) {
-				// Province not found
-				lectureText.setText("");
-			}
-		}
-		// On rend le focus à la fenêtre
-		// TODO : Améliorer cela car si la fenêtre ne suit pas le focus c'est KO
-		KeyboardFocusManager.getCurrentKeyboardFocusManager().focusNextComponent();
-	}
-	
+
 	// ---------------- Actions des boutons ---------------------------
-	class BoutonLectureListener implements ActionListener {
-		public void actionPerformed(ActionEvent arg0) {			
-			actionLecture();
-		}
-	}
-	
 	class BoutonCopierListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {			
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(labelRes.getText()), null);
 		}
 	}
-	
+
+	class SearchButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {			
+			SearchDialog searchDialog = new SearchDialog(null, "Chercher une province", true, text, provinces, false, null, null);
+			Province searchProvince = searchDialog.getSearchResult();
+			if (searchProvince != null) {
+				try {
+					// Calcul du barycentre de la province cherchée		
+					Point barycentre = pan.getPosition(searchProvince.getIdentifiantRGB());
+					// On multiple par 4 / pan.getLargeurAfficheImageReelle() pour avoir le double du numéro
+					int numLargeur = (int)barycentre.getX() * 4 / pan.getLargeurAfficheImageReelle();
+					// On enlève 1 pour centrer
+					numLargeur--;
+					// On divise par 2 pour avoir un nombre correct
+					numLargeur /= 2;
+					// Si on dépasse on prend le max
+					if (numLargeur >= pan.getLargeurReelle()/(pan.getLargeurAfficheImageReelle()/2) - 2) {
+						numLargeur = pan.getLargeurReelle()/(pan.getLargeurAfficheImageReelle()/2) - 2;
+					}
+					// On met à jour l'image
+					pan.setNumLargeur(numLargeur);
+					// On fait de même pour la hauteur
+					int numHauteur = (int)barycentre.getY() * 4 / pan.getHauteurAfficheImageReelle();
+					numHauteur--;
+					numHauteur /= 2;
+					if (numHauteur >= pan.getHauteurReelle()/(pan.getHauteurAfficheImageReelle()/2) - 2) {
+						numHauteur = pan.getHauteurReelle()/(pan.getHauteurAfficheImageReelle()/2) - 2;			
+					}
+					pan.setNumHauteur(numHauteur);
+					// On met à jour la fenetre (gestions des touches + affichage)
+					verouillageDeverouillageBoutonsDirections();
+					repaint();
+					miniMap.setRectangle();
+
+				} catch (IllegalArgumentException e) {
+					// Province not found
+					JOptionPane.showMessageDialog(null, "Province non trouvée", "Attention", JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		}
+	}
+
+
 	// ---------------- Testing ---------------------------
 	public int premierPixelX() {
 		return PREMIER_PIXEL_X;
 	}
-	
+
 	public int premierPixelY() {
 		return PREMIER_PIXEL_Y + labelText.getHeight();
 	}

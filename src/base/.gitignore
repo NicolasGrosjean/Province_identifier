@@ -11,3 +11,11 @@
 /MiniMap.class
 /Panneau$1.class
 /Panneau.class
+/Levenstein.class
+/SearchDialog.class
+/SearchDialog$BoutonLectureListener.class
+/SearchDialog$IdSearchButtonListener.class
+/SearchDialog$NameSearchButtonListener.class
+/SearchDialog$1.class
+/SearchDialog$NameSelectorButtonListener.class
+/SearchDialog$CancelButtonListener.class
