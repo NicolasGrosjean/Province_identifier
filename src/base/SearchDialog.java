@@ -64,15 +64,15 @@ public class SearchDialog extends JDialog {
 
 		// Bloc for ID province search
 		JPanel west = new JPanel();
-		JLabel idProvinceSearchInfo = new JLabel(text.provinceSearch());
+		JLabel idProvinceSearchInfo = new JLabel(text.idProvinceSearchLabel());
 		idReader = new JFormattedTextField(NumberFormat.getIntegerInstance());
-		JButton idSearchButton = new JButton("Chercher la province correspondant à cette ID");
+		JButton idSearchButton = new JButton(text.idProvinceSearchButton());
 		idSearchButton.addActionListener(new IdSearchButtonListener());
 		west.setLayout(new GridLayout(3, 1, 5, 5));
 		west.add(idProvinceSearchInfo);
 		west.add(idReader);
 		west.add(idSearchButton);
-		west.setBorder(BorderFactory.createTitledBorder("Recherche de province par son ID"));
+		west.setBorder(BorderFactory.createTitledBorder(text.idProvinceSearchBloc()));
 		west.setPreferredSize(new Dimension(getWidth() / 2 - 3, 60));
 		// The bloc occupy only a little part of the space
 		JPanel newWest = new JPanel();
@@ -82,12 +82,12 @@ public class SearchDialog extends JDialog {
 
 		// Bloc for ID province search
 		JPanel east = new JPanel();
-		JLabel nameProvinceSearchInfo = new JLabel("Entrer le nom de la province");
+		JLabel nameProvinceSearchInfo = new JLabel(text.nameProvinceSearchLabel());
 		nameReader = new JTextField();
 		if (searchName != null) {
 			nameReader.setText(searchName);
 		}
-		JButton nameSearchButton = new JButton("Chercher les provinces au nom proche de celui-ci");
+		JButton nameSearchButton = new JButton(text.nameProvinceSearchButton());
 		nameSearchButton.addActionListener(new NameSearchButtonListener());
 		if (nameSearch) {
 			east.setLayout(new GridLayout(4, 1, 5, 5));
@@ -118,19 +118,19 @@ public class SearchDialog extends JDialog {
 			bottomNameProvinceSearch.add(thirdProvince);
 			bottomNameProvinceSearch.add(fourthProvince);
 			bottomNameProvinceSearch.add(fifthProvince);
-			JButton nameSelectorButton = new JButton("Chercher la province sélectionnée");
+			JButton nameSelectorButton = new JButton(text.nameProvinceSelectionButton());
 			nameSelectorButton.addActionListener(new NameSelectorButtonListener());
 			bottomNameProvinceSearch.add(nameSelectorButton);							
 		}
 		newEast.setLayout(new GridLayout(2, 1, 5, 5));
 		newEast.add(east);
 		newEast.add(bottomNameProvinceSearch);	
-		newEast.setBorder(BorderFactory.createTitledBorder("Recherche de province par son nom"));
+		newEast.setBorder(BorderFactory.createTitledBorder(text.nameProvinceSearchBloc()));
 		newEast.setPreferredSize(new Dimension(getWidth() / 2 - 3, 60));
 		container.add(newEast, BorderLayout.EAST);
 
 		// Bloc for cancel
-		JButton cancelButton = new JButton("Annuler");
+		JButton cancelButton = new JButton(text.cancelButton());
 		cancelButton.addActionListener(new CancelButtonListener());
 		container.add(cancelButton, BorderLayout.SOUTH);
 		
@@ -144,7 +144,7 @@ public class SearchDialog extends JDialog {
 			try {
 				searchedProvince = provinces.getProvince(((Long)idReader.getValue()).intValue());
 			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "Province non trouvée", "Attention", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, text.provinceNotFound(), text.warningMessage(), JOptionPane.WARNING_MESSAGE);
 			}
 			// End of the dialogue
 			setVisible(false);

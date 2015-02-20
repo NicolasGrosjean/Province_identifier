@@ -47,10 +47,70 @@ public abstract class Text {
 	public abstract String copyClipboard();
 	
 	/**
-	 * Element for the province research
+	 * Text in button and dialog window to search a province
 	 * @return
 	 */
 	public abstract String provinceSearch();
+	
+	/**
+	 * Message on the label for the search of province by id
+	 * @return
+	 */
+	public abstract String idProvinceSearchLabel();
+	
+	/**
+	 * Message on the button for the search of province by id
+	 * @return
+	 */
+	public abstract String idProvinceSearchButton();
+	
+	/**
+	 * Message on the bloc for the search of province by id
+	 * @return
+	 */
+	public abstract String idProvinceSearchBloc();
+	
+	/**
+	 * Message on the label for the search of province by name
+	 * @return
+	 */
+	public abstract String nameProvinceSearchLabel();
+	
+	/**
+	 * Message on the button for the search of province by name
+	 * @return
+	 */
+	public abstract String nameProvinceSearchButton();
+	
+	/**
+	 * Message on the button for the selection of province
+	 * @return
+	 */
+	public abstract String nameProvinceSelectionButton();
+	
+	/**
+	 * Message on the bloc for the search of province by name
+	 * @return
+	 */
+	public abstract String nameProvinceSearchBloc();
+	
+	/**
+	 * Message on the button to cancel
+	 * @return
+	 */
+	public abstract String cancelButton();
+	
+	/**
+	 * Warning message window
+	 * @return
+	 */
+	public abstract String warningMessage();
+	
+	/**
+	 * Warning province not Found
+	 * @return
+	 */
+	public abstract String provinceNotFound();
 	
 	/**
 	 * Exception invalid width

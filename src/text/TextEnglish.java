@@ -29,9 +29,58 @@ public class TextEnglish extends Text {
 
 	@Override
 	public String provinceSearch() {
-		return "Province ID to search";
+		return "Search a province";
 	}
 	
+	@Override
+	public String idProvinceSearchLabel() {
+		return "Province ID to search";
+	}
+
+	@Override
+	public  String idProvinceSearchButton() {
+		return "Search the province corresponding to this ID";
+	}
+	
+	@Override
+	public  String idProvinceSearchBloc() {
+		return "Searching province by ID";
+	}
+	
+	@Override
+	public String nameProvinceSearchLabel() {
+		return "Name (approximate) of province to search : ";
+	}
+	
+	@Override
+	public String nameProvinceSearchButton() {
+		return "Search the provinces with name near from this name";
+	}
+	
+	@Override
+	public String nameProvinceSelectionButton() {
+		return "Search selected province";
+	}
+	
+	@Override
+	public String nameProvinceSearchBloc() {
+		return "Searching province by name";
+	}
+	
+	@Override
+	public String cancelButton() {
+		return "Cancel";
+	}
+	
+	@Override
+	public String warningMessage() {
+		return "Warning";
+	}
+	
+	@Override
+	public String provinceNotFound() {
+		return "Province not found";
+	}
 	@Override
 	public String invalidWidth() {
 		return "Displayed image has an invalid width";

@@ -64,7 +64,7 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 	private JButton copyButton = new JButton();
 
 	// Demande d'accès à une province particulière
-	private JButton searchButton = new JButton("Chercher une province");
+	private JButton searchButton = new JButton();
 
 	// Base de données des provinces
 	private StockageProvince provinces;
@@ -128,6 +128,7 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 		labelRes.setFont(police);
 		labelRes.setForeground(Color.blue);
 		copyButton.setText(text.copyClipboard());
+		searchButton.setText(text.provinceSearch());
 		JPanel north = new JPanel();
 		north.setLayout(new GridLayout(1, 4, 5, 5));
 		north.add(labelText);
@@ -364,7 +365,7 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 
 	class SearchButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {			
-			SearchDialog searchDialog = new SearchDialog(null, "Chercher une province", true, text, provinces, false, null, null);
+			SearchDialog searchDialog = new SearchDialog(null, text.provinceSearch(), true, text, provinces, false, null, null);
 			Province searchProvince = searchDialog.getSearchResult();
 			if (searchProvince != null) {
 				try {
@@ -397,7 +398,7 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 
 				} catch (IllegalArgumentException e) {
 					// Province not found
-					JOptionPane.showMessageDialog(null, "Province non trouvée", "Attention", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null, text.provinceNotFound(), text.warningMessage(), JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		}
