@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.text.NumberFormat;
 import java.util.LinkedList;
 
@@ -87,6 +89,7 @@ public class SearchDialog extends JDialog {
 		if (searchName != null) {
 			nameReader.setText(searchName);
 		}
+		nameReader.addKeyListener(new NameTextFieldListener()); // To have only letters
 		JButton nameSearchButton = new JButton(text.nameProvinceSearchButton());
 		nameSearchButton.addActionListener(new NameSearchButtonListener());
 		if (nameSearch) {
@@ -133,7 +136,7 @@ public class SearchDialog extends JDialog {
 		JButton cancelButton = new JButton(text.cancelButton());
 		cancelButton.addActionListener(new CancelButtonListener());
 		container.add(cancelButton, BorderLayout.SOUTH);
-		
+
 		setContentPane(container);
 	}
 
@@ -144,7 +147,7 @@ public class SearchDialog extends JDialog {
 			try {
 				searchedProvince = provinces.getProvince(((Long)idReader.getValue()).intValue());
 			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, text.provinceNotFound(), text.warningMessage(), JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, text.enterIdPlease(), text.warningMessage(), JOptionPane.WARNING_MESSAGE);
 			}
 			// End of the dialogue
 			setVisible(false);
@@ -152,16 +155,20 @@ public class SearchDialog extends JDialog {
 	}
 
 	class NameSearchButtonListener implements ActionListener {
-		public void actionPerformed(ActionEvent arg0) {			
-			// Refresh the SearchDialog but with the 3 nearest province name to the name typed by the user
-			nameSearch = true;
+		public void actionPerformed(ActionEvent arg0) {
 			searchName = nameReader.getText();
-			nearestProvinces = provinces.nearestProvinces(searchName, 5);
-			initComponent();
-			setVisible(true);
+			if (searchName.equals("")) {
+				JOptionPane.showMessageDialog(null, text.enterNamePlease(), text.warningMessage(), JOptionPane.WARNING_MESSAGE);
+			} else {
+				// Refresh the SearchDialog but with the 5 nearest province name to the name typed by the user
+				nameSearch = true;
+				nearestProvinces = provinces.nearestProvinces(searchName, 5);
+				initComponent();
+				setVisible(true);
+			}
 		}
 	}
-	
+
 	class NameSelectorButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			// The searched province is the province selected by the user
@@ -176,16 +183,36 @@ public class SearchDialog extends JDialog {
 			} else if (fifthProvince.isSelected()) {
 				searchedProvince = nearestProvinces.get(4);
 			}
-			
+
 			// End of the dialogue
 			setVisible(false);
 		}
 	}
-	
+
 	class CancelButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			// End of the dialogue
 			setVisible(false);
+		}
+	}
+
+	// ---------------- Keyboard Actions ---------------------------
+	class NameTextFieldListener implements KeyListener{
+		@Override
+		public void keyPressed(KeyEvent event) {
+			// nothing
+		}
+		@Override
+		public void keyReleased(KeyEvent event) {
+			// We want only letters
+			if(event.getKeyCode() < 65 || event.getKeyCode() > 90) {
+				nameReader.setText(nameReader.getText().replace(String.valueOf(event.getKeyChar()), "")); 
+			}
+		}
+
+		@Override
+		public void keyTyped(KeyEvent event) {
+			// nothing
 		}
 	}
 }

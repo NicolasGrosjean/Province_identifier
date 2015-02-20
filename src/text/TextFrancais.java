@@ -83,6 +83,16 @@ public class TextFrancais extends Text {
 	}
 	
 	@Override
+	public String enterIdPlease() {
+		return "Veuillez entrer un id (entier identifiant la province)";
+	}
+	
+	@Override
+	public String enterNamePlease() {
+		return "Veuillez entrer un nom de province (même approximatif)";
+	}
+	
+	@Override
 	public String invalidWidth() {
 		return "largeur de l'image incorrecte";
 	}

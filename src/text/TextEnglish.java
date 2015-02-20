@@ -81,6 +81,17 @@ public class TextEnglish extends Text {
 	public String provinceNotFound() {
 		return "Province not found";
 	}
+	
+	@Override
+	public String enterIdPlease() {
+		return "Please enter an id (integer which identify the province)";
+	}
+	
+	@Override
+	public String enterNamePlease() {
+		return "Please enter a province name (even if it is approximate)";
+	}
+	
 	@Override
 	public String invalidWidth() {
 		return "Displayed image has an invalid width";

@@ -107,10 +107,22 @@ public abstract class Text {
 	public abstract String warningMessage();
 	
 	/**
-	 * Warning province not Found
+	 * Warning : province not Found
 	 * @return
 	 */
 	public abstract String provinceNotFound();
+	
+	/**
+	 * Warning : no id typed
+	 * @return
+	 */
+	public abstract String enterIdPlease();
+	
+	/**
+	 * Warning : no name typed
+	 * @return
+	 */
+	public abstract String enterNamePlease();
 	
 	/**
 	 * Exception invalid width
