@@ -10,10 +10,10 @@ import java.util.regex.Pattern;
 
 import text.Text;
 import text.TextFrancais;
-import version2.FenetreV2;
+import base.Window;
 import base.MiniMap;
-import base.Panneau;
-import base.StockageProvince;
+import base.Panel;
+import base.ProvinceStorage;
 import junit.framework.TestCase;
 
 public class TestMiniMap extends TestCase {
@@ -21,8 +21,8 @@ public class TestMiniMap extends TestCase {
 	private final String nomFichierProvince = "provinces.bmp";
 	private final Text text = new TextFrancais();
 	private FileInputStream fichierLecture = null;
-	private StockageProvince provinces = new StockageProvince();
-	private Panneau pan;
+	private ProvinceStorage provinces = new ProvinceStorage();
+	private Panel pan;
 	
 	private void SetUp() {
 		try {
@@ -64,9 +64,9 @@ public class TestMiniMap extends TestCase {
 			scanner.close();
 			
 			// Création de l'image à afficher
-			pan = new Panneau(nomFichierProvince, text);
+			pan = new Panel(nomFichierProvince, text);
 
-			FenetreV2 windowV2 = new FenetreV2(provinces, pan, text, new MiniMap(nomFichierProvince, text, pan));		
+			Window windowV2 = new Window(provinces, pan, text, new MiniMap(nomFichierProvince, text, pan));		
 		} catch (FileNotFoundException e) {
 			System.out.println(text.fileNotFound(nomFichierLecture));
 		} catch (IOException e) {
@@ -85,7 +85,7 @@ public class TestMiniMap extends TestCase {
 		// Initialisation
 		SetUp();
 		MiniMap miniMap = new MiniMap(nomFichierProvince, text, pan);
-		FenetreV2 windowV2 = new FenetreV2(provinces, pan, text, miniMap);	
+		Window windowV2 = new Window(provinces, pan, text, miniMap);	
 		
 		// Clic de souris
 		MouseEvent evt = new MouseEvent(miniMap, MouseEvent.MOUSE_CLICKED, 1, 0, 0, 0, 1, false);
@@ -94,44 +94,44 @@ public class TestMiniMap extends TestCase {
 		for(MouseListener ml: miniMap.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		assertEquals("Numero de largeur invalide", pan.getNumLargeur(), 0);
-		assertEquals("Numero de hauteur invalide", pan.getNumHauteur(), 0);
+		assertEquals("Numero de largeur invalide", pan.getWidthNumber(), 0);
+		assertEquals("Numero de hauteur invalide", pan.getHeightNumber(), 0);
 		
 		// Nouveau clic ...
-		evt.translatePoint((int)((float)pan.getLargeurAfficheImageReelle() / pan.getLargeurReelle()
-				 * miniMap.getLargeurImage()), 0);	
+		evt.translatePoint((int)((float)pan.getDisplayingRealImageWidth() / pan.getRealWidth()
+				 * miniMap.getImageWidth()), 0);	
 		for(MouseListener ml: miniMap.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		assertEquals("Numero de largeur invalide", pan.getNumLargeur(), 1);
-		assertEquals("Numero de hauteur invalide", pan.getNumHauteur(), 0);
+		assertEquals("Numero de largeur invalide", pan.getWidthNumber(), 1);
+		assertEquals("Numero de hauteur invalide", pan.getHeightNumber(), 0);
 		
-		evt.translatePoint(0, (int)((float)pan.getHauteurAfficheImageReelle() / pan.getHauteurReelle()
-				 * miniMap.getHauteurImage()));	
+		evt.translatePoint(0, (int)((float)pan.getDisplayingRealImageHeight() / pan.getRealHeight()
+				 * miniMap.getImageHeight()));	
 		for(MouseListener ml: miniMap.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		assertEquals("Numero de largeur invalide", pan.getNumLargeur(), 1);
-		assertEquals("Numero de hauteur invalide", pan.getNumHauteur(), 1);
+		assertEquals("Numero de largeur invalide", pan.getWidthNumber(), 1);
+		assertEquals("Numero de hauteur invalide", pan.getHeightNumber(), 1);
 		
 		// Coin en haut à gauche
 		evt = new MouseEvent(miniMap, MouseEvent.MOUSE_CLICKED, 1, 0, 0, 0, 1, false);
-		evt.translatePoint(miniMap.getLargeurImage() - 1, 0);	
+		evt.translatePoint(miniMap.getImageWidth() - 1, 0);	
 		for(MouseListener ml: miniMap.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		assertEquals("Numero de largeur invalide", pan.getNumLargeur(),
-				pan.getLargeurReelle() / (pan.getLargeurAfficheImageReelle()/2) - 2);
-		assertEquals("Numero de hauteur invalide", pan.getNumHauteur(), 0);
+		assertEquals("Numero de largeur invalide", pan.getWidthNumber(),
+				pan.getRealWidth() / (pan.getDisplayingRealImageWidth()/2) - 2);
+		assertEquals("Numero de hauteur invalide", pan.getHeightNumber(), 0);
 		
 		// Coin en bas à droite
-		evt.translatePoint(0, miniMap.getHauteurImage() - 1);	
+		evt.translatePoint(0, miniMap.getImageHeight() - 1);	
 		for(MouseListener ml: miniMap.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		assertEquals("Numero de largeur invalide", pan.getNumLargeur(),
-				pan.getLargeurReelle() / (pan.getLargeurAfficheImageReelle()/2) - 2);
-		assertEquals("Numero de hauteur invalide", pan.getNumHauteur(), 
-				pan.getHauteurReelle() /(pan.getHauteurAfficheImageReelle()/2) - 2);
+		assertEquals("Numero de largeur invalide", pan.getWidthNumber(),
+				pan.getRealWidth() / (pan.getDisplayingRealImageWidth()/2) - 2);
+		assertEquals("Numero de hauteur invalide", pan.getHeightNumber(), 
+				pan.getRealHeight() /(pan.getDisplayingRealImageHeight()/2) - 2);
 	}
 }

@@ -8,15 +8,16 @@ import java.util.regex.Pattern;
 import text.Text;
 import text.TextEnglish;
 import text.TextFrancais;
-import version2.FenetreV2;
 
-
+/**
+ * Main of the program
+ * 
+ * @author Mouchi
+ *
+ */
 public class Main {
-	public static void main(String[] args) {
-		boolean v2 = true; // version du logiciel
-		//boolean v2 = false;
-		
-		// Langue
+	public static void main(String[] args) {	
+		// Language
 		Text text;
 		if (args.length > 0 && args[0].equals("-en")) {
 			text = new TextEnglish();
@@ -24,42 +25,42 @@ public class Main {
 			text = new TextFrancais();
 		}
 		
-		// Fichiers lus
+		// Read files
 		final String nomFichierLecture = "definition.csv";
 		final String nomFichierProvince = "provinces.bmp";
 		FileInputStream fichierLecture = null;
 		
 		/**
-		 * Base de données des provinces
+		 * Province data base
 		 */
-		StockageProvince provinces = new StockageProvince();
+		ProvinceStorage provinces = new ProvinceStorage();
 		
 		try {
-			// Ouverture du fichier
+			// Open file
 			fichierLecture = new FileInputStream(nomFichierLecture);
 
-			// Lecture en délimitant par des ;
+			// Read by separating with ";"
 			Scanner scanner = new Scanner(fichierLecture, "ISO-8859-1"); 
-			// ISO-8859-1 pour caractères spéciaux
+			// ISO-8859-1 for special char
 			scanner.useDelimiter(Pattern.compile("[;\n]"));
 			
-			// On cherche des entiers
+			// Searching integer
 			while (!scanner.hasNextInt()) {
 				@SuppressWarnings("unused")
 				String useless = scanner.next();
 			}
 
 			while (scanner.hasNextInt()) {
-				// Lecture d'une province			
+				// Reading a province			
 				int id = scanner.nextInt();
 				if (!scanner.hasNextInt())
-					break; // Fin de la lecture
+					break; // End of reading
 				int r = scanner.nextInt();
 				if (!scanner.hasNextInt())
-					break; // Fin de la lecture
+					break; // End of reading
 				int g = scanner.nextInt();	
 				if (!scanner.hasNextInt())
-					break; // Fin de la lecture
+					break; // End of reading
 				int b = scanner.nextInt();
 				String nom = scanner.next();
 				while (!scanner.hasNextInt() && scanner.hasNext()) {
@@ -67,23 +68,17 @@ public class Main {
 					String useless = scanner.next();
 				}
 				
-				// Stockage de la province
+				// Store the province
 				provinces.addProvince(id, r, g, b, nom);
 			}
 			scanner.close();
 			
-			// Création de l'image à afficher
-			Panneau pan = new Panneau(nomFichierProvince, text);
+			// Create the map to display
+			Panel pan = new Panel(nomFichierProvince, text);
 			
-			// Création de la fenêtre qui fait tout le reste du boulot
-			// (on boucle indéfiniment chez elle)
-			if (v2) {
-				@SuppressWarnings("unused")
-				FenetreV2 windowV2 = new FenetreV2(provinces, pan, text, new MiniMap(nomFichierProvince, text, pan));
-			} else {
-				@SuppressWarnings("unused")
-				Fenetre window = new Fenetre(provinces, pan);
-			}			
+			// Create the window
+			@SuppressWarnings("unused")
+			Window window = new Window(provinces, pan, text, new MiniMap(nomFichierProvince, text, pan));			
 		} catch (FileNotFoundException e) {
 			System.out.println(text.fileNotFound(nomFichierLecture));
 		} catch (IOException e) {

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import text.Text;
 import text.TextFrancais;
-import base.Panneau;
+import base.Panel;
 import junit.framework.TestCase;
 
 /**
@@ -22,7 +22,7 @@ public class TestPanneau extends TestCase {
 		
 		// Tente de créer le panneau sur un test inexistant
 		try {
-			new Panneau(nomFichierInexistant, text);
+			new Panel(nomFichierInexistant, text);
 			ouvertureFichierOK = false;
 		} catch (IOException e) {
 			System.out.println("OK : Fichier " + nomFichierInexistant + " non trouvé !");
@@ -30,7 +30,7 @@ public class TestPanneau extends TestCase {
 		
 		// Tente de créer le panneau sur le bon fichier
 		try {
-			new Panneau(nomFichierProvince, text);
+			new Panel(nomFichierProvince, text);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -39,149 +39,149 @@ public class TestPanneau extends TestCase {
 	}
 	
 	public void testGetLargeurImage() throws IOException {
-		Panneau pan = new Panneau(nomFichierProvince, text);
-		assertEquals("Largeur incorrecte", pan.getLargeurImage(), Panneau.LARGEUR_IMAGE);
+		Panel pan = new Panel(nomFichierProvince, text);
+		assertEquals("Largeur incorrecte", pan.getImageWidth(), Panel.IMAGE_WIDTH);
 	}
 	
 	public void testGetHauteurImage() throws IOException {
-		Panneau pan = new Panneau(nomFichierProvince, text);
-		assertEquals("Heuteur incorrecte", pan.getHauteurImage(), Panneau.HAUTEUR_IMAGE);
+		Panel pan = new Panel(nomFichierProvince, text);
+		assertEquals("Heuteur incorrecte", pan.getImageHeight(), Panel.IMAGE_HEIGHT);
 	}
 	
 	public void testGetLargeurReduite() throws IOException {
-		Panneau pan = new Panneau(nomFichierProvince, text);
-		assertEquals("Largeur incorrecte", pan.getLargeurAfficheImageReelle(), Panneau.LARGEUR_IMAGE);
+		Panel pan = new Panel(nomFichierProvince, text);
+		assertEquals("Largeur incorrecte", pan.getDisplayingRealImageWidth(), Panel.IMAGE_WIDTH);
 	}
 	
 	public void testGetHauteurReduite() throws IOException {
-		Panneau pan = new Panneau(nomFichierProvince, text);
-		assertEquals("Heuteur incorrecte", pan.getHauteurAfficheImageReelle(), Panneau.HAUTEUR_IMAGE);
+		Panel pan = new Panel(nomFichierProvince, text);
+		assertEquals("Heuteur incorrecte", pan.getDisplayingRealImageHeight(), Panel.IMAGE_HEIGHT);
 	}	
 	
 	public void testGetNumLargeur() throws IOException {
-		Panneau pan = new Panneau(nomFichierProvince, text);
-		assertEquals("Numéro de largeur incorrect", pan.getNumLargeur(), 0);
+		Panel pan = new Panel(nomFichierProvince, text);
+		assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), 0);
 	}
 	
 	public void testGetNumHauteur() throws IOException {
-		Panneau pan = new Panneau(nomFichierProvince, text);
-		assertEquals("Numéro de hauteur incorrect", pan.getNumHauteur(), 0);
+		Panel pan = new Panel(nomFichierProvince, text);
+		assertEquals("Numéro de hauteur incorrect", pan.getHeightNumber(), 0);
 	}
 	
 	public void testNumLargeurPlus() throws IOException {
-		Panneau pan = new Panneau(nomFichierProvince, text);
+		Panel pan = new Panel(nomFichierProvince, text);
 		int i = 1;
-		if (pan.getLargeurImage() < pan.getLargeurReelle()) {
-			pan.numLargeurPlus();
-			assertEquals("Numéro de largeur incorrect", pan.getNumLargeur(), i);
+		if (pan.getImageWidth() < pan.getRealWidth()) {
+			pan.widthNumberMore();
+			assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), i);
 			i++;
 		}
-		while (pan.getNumLargeur() * pan.getLargeurAfficheImageReelle() / 2  + pan.getLargeurAfficheImageReelle()
-				< pan.getLargeurReelle()) {
-			pan.numLargeurPlus();
-			assertEquals("Numéro de largeur incorrect", pan.getNumLargeur(), i);
+		while (pan.getWidthNumber() * pan.getDisplayingRealImageWidth() / 2  + pan.getDisplayingRealImageWidth()
+				< pan.getRealWidth()) {
+			pan.widthNumberMore();
+			assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), i);
 			i++;
 		}
 		try {
-			pan.numLargeurPlus();
+			pan.widthNumberMore();
 			assertEquals("Débordement en largeur espéré", false, true);
 		} catch (IllegalArgumentException e) {			
 		}
 	}
 	
 	public void testNumHauteurPlus() throws IOException {
-		Panneau pan = new Panneau(nomFichierProvince, text);
+		Panel pan = new Panel(nomFichierProvince, text);
 		int i = 1;
-		if (pan.getHauteurImage() < pan.getHauteurReelle()) {
-			pan.numHauteurPlus();
-			assertEquals("Numéro de hauteur incorrect", pan.getNumHauteur(), i);
+		if (pan.getImageHeight() < pan.getRealHeight()) {
+			pan.heightNumberMore();
+			assertEquals("Numéro de hauteur incorrect", pan.getHeightNumber(), i);
 			i++;
 		}
-		while (pan.getNumHauteur() * pan.getHauteurAfficheImageReelle() / 2  + pan.getHauteurAfficheImageReelle()
-				< pan.getHauteurReelle()) {
-			pan.numHauteurPlus();
-			assertEquals("Numéro de hauteur incorrect", pan.getNumHauteur(), i);
+		while (pan.getHeightNumber() * pan.getDisplayingRealImageHeight() / 2  + pan.getDisplayingRealImageHeight()
+				< pan.getRealHeight()) {
+			pan.heightNumberMore();
+			assertEquals("Numéro de hauteur incorrect", pan.getHeightNumber(), i);
 			i++;
 		}
 		try {
-			pan.numHauteurPlus();
+			pan.heightNumberMore();
 			assertEquals("Débordement en hauteur espéré", false, true);
 		} catch (IllegalArgumentException e) {			
 		}
 	}
 	
 	public void testNumLargeurMoins() throws IOException {
-		Panneau pan = new Panneau(nomFichierProvince, text);
+		Panel pan = new Panel(nomFichierProvince, text);
 		int i = 0;
-		while (pan.getNumLargeur() * pan.getLargeurAfficheImageReelle() / 2  + pan.getLargeurAfficheImageReelle()
-				< pan.getLargeurReelle()) {
-			pan.numLargeurPlus();
+		while (pan.getWidthNumber() * pan.getDisplayingRealImageWidth() / 2  + pan.getDisplayingRealImageWidth()
+				< pan.getRealWidth()) {
+			pan.widthNumberMore();
 			i++;
 		}	
-		while (pan.getNumLargeur() > 0) {
-			pan.numLargeurMoins();
+		while (pan.getWidthNumber() > 0) {
+			pan.widthNumberLeast();
 			i--;
-			assertEquals("Numéro de largeur incorrect", pan.getNumLargeur(), i);
+			assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), i);
 		}
 		try {
-			pan.numLargeurMoins();
+			pan.widthNumberLeast();
 			assertEquals("Débordement en largeur espéré", false, true);
 		} catch (IllegalArgumentException e) {			
 		}
 	}
 	
 	public void testNumHauteurMoins() throws IOException {
-		Panneau pan = new Panneau(nomFichierProvince, text);
+		Panel pan = new Panel(nomFichierProvince, text);
 		int i = 0;
-		while (pan.getNumHauteur() * pan.getHauteurAfficheImageReelle() / 2  + pan.getHauteurAfficheImageReelle()
-				< pan.getHauteurReelle()) {
-			pan.numHauteurPlus();
+		while (pan.getHeightNumber() * pan.getDisplayingRealImageHeight() / 2  + pan.getDisplayingRealImageHeight()
+				< pan.getRealHeight()) {
+			pan.heightNumberMore();
 			i++;
 		}	
-		while (pan.getNumHauteur() > 0) {
-			pan.numHauteurMoins();
+		while (pan.getHeightNumber() > 0) {
+			pan.heightNumberLeast();
 			i--;
-			assertEquals("Numéro de Hauteur incorrect", pan.getNumHauteur(), i);
+			assertEquals("Numéro de Hauteur incorrect", pan.getHeightNumber(), i);
 		}
 		try {
-			pan.numHauteurMoins();
+			pan.heightNumberLeast();
 			assertEquals("Débordement en hauteur espéré", false, true);
 		} catch (IllegalArgumentException e) {			
 		}
 	}
 	
 	public void testZoomPlus() throws IOException {
-		Panneau pan = new Panneau(nomFichierProvince, text);
+		Panel pan = new Panel(nomFichierProvince, text);
 		for (int i = 0; i < 3; i++) {
-			int largeurImageReellePrecedente = pan.getLargeurAfficheImageReelle();
-			int hauteurImageReellePrecedente = pan.getHauteurAfficheImageReelle();
-			int numLargeurPrecedent = pan.getNumLargeur();
-			int numHauteurPrecedent = pan.getNumHauteur();
-			pan.zoomPlus();
-			assertEquals("Largeur incorrecte", pan.getLargeurAfficheImageReelle(), largeurImageReellePrecedente / 2);
-			assertEquals("Hauteur incorrecte", pan.getHauteurAfficheImageReelle(), hauteurImageReellePrecedente / 2);
-			assertEquals("Numéro de largeur incorrect", pan.getNumLargeur(), numLargeurPrecedent * 2 + 1);
-			assertEquals("Numéro de hauteur incorrect", pan.getNumHauteur(), numHauteurPrecedent * 2 + 1);
+			int largeurImageReellePrecedente = pan.getDisplayingRealImageWidth();
+			int hauteurImageReellePrecedente = pan.getDisplayingRealImageHeight();
+			int numLargeurPrecedent = pan.getWidthNumber();
+			int numHauteurPrecedent = pan.getHeightNumber();
+			pan.zoomMore();
+			assertEquals("Largeur incorrecte", pan.getDisplayingRealImageWidth(), largeurImageReellePrecedente / 2);
+			assertEquals("Hauteur incorrecte", pan.getDisplayingRealImageHeight(), hauteurImageReellePrecedente / 2);
+			assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), numLargeurPrecedent * 2 + 1);
+			assertEquals("Numéro de hauteur incorrect", pan.getHeightNumber(), numHauteurPrecedent * 2 + 1);
 		}
 	}
 	
 	public void testZoomMoins() throws IOException {
-		Panneau pan = new Panneau(nomFichierProvince, text);
+		Panel pan = new Panel(nomFichierProvince, text);
 		// On zoome pour être sûr de pouvoir dézoomer après
 		for (int i = 0; i < 3; i++) {
-			pan.zoomPlus();
+			pan.zoomMore();
 		}
-		while (pan.getLargeurAfficheImageReelle() < pan.getLargeurReelle()
-				&& pan.getHauteurAfficheImageReelle() < pan.getHauteurReelle()) {
-			int largeurImageReellePrecedente = pan.getLargeurAfficheImageReelle();
-			int hauteurImageReellePrecedente = pan.getHauteurAfficheImageReelle();
-			int numLargeurPrecedent = pan.getNumLargeur();
-			int numHauteurPrecedent = pan.getNumHauteur();
-			pan.zoomMoins();
-			assertEquals("Largeur incorrecte", pan.getLargeurAfficheImageReelle(), largeurImageReellePrecedente * 2);
-			assertEquals("Hauteur incorrecte", pan.getHauteurAfficheImageReelle(), hauteurImageReellePrecedente * 2);
-			assertEquals("Numéro de largeur incorrect", pan.getNumLargeur(), (numLargeurPrecedent - 1) / 2);
-			assertEquals("Numéro de hauteur incorrect", pan.getNumHauteur(), (numHauteurPrecedent - 1) / 2);
+		while (pan.getDisplayingRealImageWidth() < pan.getRealWidth()
+				&& pan.getDisplayingRealImageHeight() < pan.getRealHeight()) {
+			int largeurImageReellePrecedente = pan.getDisplayingRealImageWidth();
+			int hauteurImageReellePrecedente = pan.getDisplayingRealImageHeight();
+			int numLargeurPrecedent = pan.getWidthNumber();
+			int numHauteurPrecedent = pan.getHeightNumber();
+			pan.zoomLeast();
+			assertEquals("Largeur incorrecte", pan.getDisplayingRealImageWidth(), largeurImageReellePrecedente * 2);
+			assertEquals("Hauteur incorrecte", pan.getDisplayingRealImageHeight(), hauteurImageReellePrecedente * 2);
+			assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), (numLargeurPrecedent - 1) / 2);
+			assertEquals("Numéro de hauteur incorrect", pan.getHeightNumber(), (numHauteurPrecedent - 1) / 2);
 		}
 	}
 }

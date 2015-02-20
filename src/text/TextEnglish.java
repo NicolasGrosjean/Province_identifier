@@ -1,5 +1,10 @@
 package text;
 
+/**
+ * Text in English
+ * @author Mouchi
+ *
+ */
 public class TextEnglish extends Text {
 
 	@Override

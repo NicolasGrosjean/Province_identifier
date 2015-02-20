@@ -5,20 +5,20 @@ import java.util.Map;
 import java.util.PriorityQueue;
 
 /**
- * Stockage des provinces
+ * Store provinces
  * 
  * @author Mouchi
  *
  */
-public class StockageProvince {
+public class ProvinceStorage {
 	/**
-	 * Stockage des provinces selon leur identifiant RGB
-	 * (VOIR dans Province.java comment il est calculé)
+	 * Store provinces by RGB identifier
+	 * (SEE Province.java for RGB identifier calculate)
 	 */
 	private Map<Integer, Province> provincesRGB;
 	
 	/**
-	 * Stockage des provinces selon leur ID
+	 * Store provinces by ID
 	 */
 	private Map<Integer, Province> provincesID;
 
@@ -27,7 +27,7 @@ public class StockageProvince {
 	 */
 	private LinkedList<Province> provinces;
 
-	public StockageProvince() {
+	public ProvinceStorage() {
 		super();
 		this.provincesRGB = new HashMap<Integer, Province>();
 		this.provincesID = new HashMap<Integer, Province>();
@@ -35,7 +35,7 @@ public class StockageProvince {
 	}
 	
 	/**
-	 * Ajoute une province au stockage
+	 * Store a province
 	 * @param id
 	 * @param r
 	 * @param g
@@ -50,7 +50,7 @@ public class StockageProvince {
 	}
 	
 	/**
-	 * Retourne la province ayant ce code RGB
+	 * Get province with this RGB
 	 * @param r
 	 * @param g
 	 * @param b
@@ -61,7 +61,7 @@ public class StockageProvince {
 	}
 	
 	/**
-	 * Retourne la province ayant cet id
+	 * Get province with this id
 	 * @param id
 	 * @return
 	 */

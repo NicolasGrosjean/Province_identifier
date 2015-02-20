@@ -1,4 +1,4 @@
-package version2;
+package base;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -23,11 +23,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import text.Text;
-import base.MiniMap;
-import base.Panneau;
-import base.Province;
-import base.SearchDialog;
-import base.StockageProvince;
 
 /**
  * Classe qui affiche la fenêtre graphique et fait principalement le boulot
@@ -35,7 +30,7 @@ import base.StockageProvince;
  * @author Mouchi
  *
  */
-public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
+public class Window extends JFrame implements MouseListener, KeyListener {
 
 	// Constantes de la position du premier pixel de l'image par rapport à la fenêtre
 	static private int PREMIER_PIXEL_X = 8;
@@ -48,7 +43,7 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 	// Hauteur : PREMIER_PIXEL_Y pour le haut, 26 pour le texte, 8 pour la marge en bas
 
 	// Image de la map
-	private Panneau pan;
+	private Panel pan;
 
 	// Mini image de la map
 	private MiniMap miniMap;
@@ -67,7 +62,7 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 	private JButton searchButton = new JButton();
 
 	// Base de données des provinces
-	private StockageProvince provinces;
+	private ProvinceStorage provinces;
 
 	// Redondance de l'état activé pour le clavier
 	private boolean enabledHaut = false; // car on commence en haut
@@ -81,19 +76,19 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 	private Text text;
 
 	// On récupère seulement les pointeurs (i.e pas de copie)
-	public FenetreV2(StockageProvince provinces, Panneau panneau, Text text, MiniMap miniMap) {
+	public Window(ProvinceStorage provinces, Panel panel, Text text, MiniMap miniMap) {
 		this(text.windowTitle(), LARGEUR_FENETRE, HAUTEUR_FENETRE, provinces,
-				panneau, text, miniMap);
+				panel, text, miniMap);
 	}
 
 	// On récupère seulement les pointeurs (i.e pas de copie)
-	public FenetreV2(String title, int largeur, int hauteur,
-			StockageProvince provinces, Panneau panneau, Text text, MiniMap miniMap) {
+	public Window(String title, int width, int height,
+			ProvinceStorage provinces, Panel panel, Text text, MiniMap miniMap) {
 		// Accès aux provinces
 		this.provinces = provinces;
 
 		// Accès à l'affichage de la map
-		this.pan = panneau;
+		this.pan = panel;
 
 		// Accès à la fenêtre à partir de la mini map
 		this.miniMap = miniMap;
@@ -104,7 +99,7 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 
 		// Fenêtre
 		this.setTitle(title);		
-		this.setSize(largeur, hauteur);
+		this.setSize(width, height);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null); // place au centre		
 
@@ -169,24 +164,24 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 	 * et met à jour les booléens pour "verrouiller" les touches clavier
 	 */
 	public void verouillageDeverouillageBoutonsDirections() {
-		if (pan.getNumHauteur() == 0) {
+		if (pan.getHeightNumber() == 0) {
 			enabledHaut = false;		
 		} else {
 			enabledHaut = true;		
 		}
-		if (pan.getNumLargeur() == 0) {
+		if (pan.getWidthNumber() == 0) {
 			enabledGauche = false;		
 		} else {
 			enabledGauche = true;		
 		}
-		if (pan.getNumHauteur() == pan.getHauteurReelle()
-				/ (pan.getHauteurAfficheImageReelle() / 2) - 2) {
+		if (pan.getHeightNumber() == pan.getRealHeight()
+				/ (pan.getDisplayingRealImageHeight() / 2) - 2) {
 			enabledBas = false;		
 		} else {
 			enabledBas = true;		
 		}
-		if (pan.getNumLargeur() == pan.getLargeurReelle()
-				/ (pan.getLargeurAfficheImageReelle() / 2) - 2) {
+		if (pan.getWidthNumber() == pan.getRealWidth()
+				/ (pan.getDisplayingRealImageWidth() / 2) - 2) {
 			enabledDroit = false;		
 		} else {
 			enabledDroit = true;		
@@ -197,8 +192,8 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 	@Override
 	public void mouseClicked(MouseEvent arg0) {	
 		int premier_pixel_y = PREMIER_PIXEL_Y + labelText.getHeight();
-		if (arg0.getX() < pan.getLargeurImage() + PREMIER_PIXEL_X
-				&& arg0.getY() < pan.getHauteurImage() + premier_pixel_y
+		if (arg0.getX() < pan.getImageWidth() + PREMIER_PIXEL_X
+				&& arg0.getY() < pan.getImageHeight() + premier_pixel_y
 				&& arg0.getY() > premier_pixel_y) {
 			/*Algo : on calcule la position par rapport au pixel en haut à gauche
 			 * de l'image affichée. (On retranche la position du premier pixel
@@ -207,11 +202,11 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 			 */
 			int rgb = pan.getRGB(
 					(int)((arg0.getX() - PREMIER_PIXEL_X ) /
-							((float)pan.getLargeurImage() / (float)pan.getLargeurAfficheImageReelle()) + 
-							(pan.getNumLargeur() * pan.getLargeurAfficheImageReelle() / 2))
+							((float)pan.getImageWidth() / (float)pan.getDisplayingRealImageWidth()) + 
+							(pan.getWidthNumber() * pan.getDisplayingRealImageWidth() / 2))
 							, (int)((arg0.getY() - premier_pixel_y) /
-									((float)pan.getHauteurImage() / (float)pan.getHauteurAfficheImageReelle()) +
-									(pan.getNumHauteur() * pan.getHauteurAfficheImageReelle() / 2)));
+									((float)pan.getImageHeight() / (float)pan.getDisplayingRealImageHeight()) +
+									(pan.getHeightNumber() * pan.getDisplayingRealImageHeight() / 2)));
 			/*
 			 * On a fait appel à des cast car 1/2 = 0 alors que
 			 * (float)1/(float)2 = 0.5 On recast en int car on veut un int
@@ -289,7 +284,7 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 	 * Déplacement de l'image vers le haut
 	 */
 	private void actionHaut() {
-		pan.numHauteurMoins();
+		pan.heightNumberLeast();
 		verouillageDeverouillageBoutonsDirections();
 		this.repaint();
 		miniMap.setRectangle();
@@ -299,7 +294,7 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 	 * Déplacement de l'image vers le bas
 	 */
 	private void actionBas() {
-		pan.numHauteurPlus();
+		pan.heightNumberMore();
 		verouillageDeverouillageBoutonsDirections();
 		this.repaint();	
 		miniMap.setRectangle();
@@ -309,7 +304,7 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 	 * Déplacement de l'image vers la gauche
 	 */
 	private void actionGauche() {
-		pan.numLargeurMoins();
+		pan.widthNumberLeast();
 		verouillageDeverouillageBoutonsDirections();
 		this.repaint();
 		miniMap.setRectangle();
@@ -319,7 +314,7 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 	 * Déplacement de l'image vers la droite
 	 */
 	private void actionDroit() {
-		pan.numLargeurPlus();
+		pan.widthNumberMore();
 		verouillageDeverouillageBoutonsDirections();
 		this.repaint();
 		miniMap.setRectangle();
@@ -329,10 +324,10 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 	 * Zoom sur l'image
 	 */
 	private void actionPlus() {
-		pan.zoomPlus();
+		pan.zoomMore();
 		enabledMoins = true;
 		// On bloque le zoom à X256
-		if (pan.getLargeurImage() / pan.getLargeurAfficheImageReelle() == 256) {
+		if (pan.getImageWidth() / pan.getDisplayingRealImageWidth() == 256) {
 			enabledPlus = false;
 		}			
 		verouillageDeverouillageBoutonsDirections();
@@ -344,11 +339,11 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 	 * Dézoom de l'image
 	 */
 	private void actionMoins() {
-		if (2 * pan.getLargeurAfficheImageReelle() > pan.getLargeurReelle()
-				|| 2 * pan.getHauteurAfficheImageReelle() > pan.getHauteurReelle()) {
+		if (2 * pan.getDisplayingRealImageWidth() > pan.getRealWidth()
+				|| 2 * pan.getDisplayingRealImageHeight() > pan.getRealHeight()) {
 			enabledMoins = false;
 		} else {
-			pan.zoomMoins();
+			pan.zoomLeast();
 			enabledPlus = true;			
 			verouillageDeverouillageBoutonsDirections();
 			this.repaint();
@@ -372,25 +367,25 @@ public class FenetreV2 extends JFrame implements MouseListener, KeyListener {
 					// Calcul du barycentre de la province cherchée		
 					Point barycentre = pan.getPosition(searchProvince.getIdentifiantRGB());
 					// On multiple par 4 / pan.getLargeurAfficheImageReelle() pour avoir le double du numéro
-					int numLargeur = (int)barycentre.getX() * 4 / pan.getLargeurAfficheImageReelle();
+					int numLargeur = (int)barycentre.getX() * 4 / pan.getDisplayingRealImageWidth();
 					// On enlève 1 pour centrer
 					numLargeur--;
 					// On divise par 2 pour avoir un nombre correct
 					numLargeur /= 2;
 					// Si on dépasse on prend le max
-					if (numLargeur >= pan.getLargeurReelle()/(pan.getLargeurAfficheImageReelle()/2) - 2) {
-						numLargeur = pan.getLargeurReelle()/(pan.getLargeurAfficheImageReelle()/2) - 2;
+					if (numLargeur >= pan.getRealWidth()/(pan.getDisplayingRealImageWidth()/2) - 2) {
+						numLargeur = pan.getRealWidth()/(pan.getDisplayingRealImageWidth()/2) - 2;
 					}
 					// On met à jour l'image
-					pan.setNumLargeur(numLargeur);
+					pan.setWidthNumber(numLargeur);
 					// On fait de même pour la hauteur
-					int numHauteur = (int)barycentre.getY() * 4 / pan.getHauteurAfficheImageReelle();
+					int numHauteur = (int)barycentre.getY() * 4 / pan.getDisplayingRealImageHeight();
 					numHauteur--;
 					numHauteur /= 2;
-					if (numHauteur >= pan.getHauteurReelle()/(pan.getHauteurAfficheImageReelle()/2) - 2) {
-						numHauteur = pan.getHauteurReelle()/(pan.getHauteurAfficheImageReelle()/2) - 2;			
+					if (numHauteur >= pan.getRealHeight()/(pan.getDisplayingRealImageHeight()/2) - 2) {
+						numHauteur = pan.getRealHeight()/(pan.getDisplayingRealImageHeight()/2) - 2;			
 					}
-					pan.setNumHauteur(numHauteur);
+					pan.setHeightNumber(numHauteur);
 					// On met à jour la fenetre (gestions des touches + affichage)
 					verouillageDeverouillageBoutonsDirections();
 					repaint();

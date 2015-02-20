@@ -24,9 +24,15 @@ import javax.swing.JTextField;
 
 import text.Text;
 
+/**
+ * Dialog box/window to search a province by its id or its name
+ * 
+ * @author Mouchi
+ *
+ */
 public class SearchDialog extends JDialog {
 	private Text text;
-	private StockageProvince provinces;
+	private ProvinceStorage provinces;
 	private Province searchedProvince;
 	private JFormattedTextField idReader;
 	private JTextField nameReader;
@@ -40,7 +46,7 @@ public class SearchDialog extends JDialog {
 	private JRadioButton fifthProvince;
 
 	public SearchDialog(JFrame parent, String title, boolean modal, Text text,
-			StockageProvince provinces, boolean nameSearch,
+			ProvinceStorage provinces, boolean nameSearch,
 			LinkedList<Province> nearestProvinces, String searchName) {
 		super(parent, title, modal);
 		this.text = text;

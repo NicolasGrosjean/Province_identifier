@@ -9,13 +9,13 @@ import java.util.regex.Pattern;
 
 import junit.framework.TestCase;
 import base.Province;
-import base.StockageProvince;
+import base.ProvinceStorage;
 
 public class TestLevenshtein extends TestCase {
 	private final String nomFichierLecture = "definition.csv";
 	private final String nomFichierProvince = "provinces.bmp";
 	private FileInputStream fichierLecture = null;
-	private StockageProvince provinces = new StockageProvince();
+	private ProvinceStorage provinces = new ProvinceStorage();
 
 	private void SetUp() {
 		try {
