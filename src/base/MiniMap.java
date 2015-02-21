@@ -166,7 +166,7 @@ public class MiniMap extends JPanel implements MouseListener {
 		}
 		pan.setHeightNumber(numHauteur);
 		// Actualize window (key management + displaying)
-		window.verouillageDeverouillageBoutonsDirections();
+		window.movingActionLockingUnlocking();
 		window.repaint();
 		// Actualize mini-map rectangle
 		this.setRectangle();

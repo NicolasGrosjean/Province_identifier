@@ -3,7 +3,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
@@ -13,10 +12,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.text.NumberFormat;
 
 import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -25,89 +22,81 @@ import javax.swing.JPanel;
 import text.Text;
 
 /**
- * Classe qui affiche la fenêtre graphique et fait principalement le boulot
+ * Graphic window, the body of the software
  * 
  * @author Mouchi
  *
  */
 public class Window extends JFrame implements MouseListener, KeyListener {
 
-	// Constantes de la position du premier pixel de l'image par rapport à la fenêtre
-	static private int PREMIER_PIXEL_X = 8;
-	static private int PREMIER_PIXEL_Y = 31;
+	// First pixel position
+	static private int FIRST_PIXEL_X = 8;
+	static private int FIRST_PIXEL_Y = 31;
 
-	// Taille de la fenêtre par défaut
-	static private int LARGEUR_FENETRE = 1024 +  2 * PREMIER_PIXEL_X + 256 + 5; 
-	// Largeur : marge (barre bleue) à gauche et à droite
-	static private int HAUTEUR_FENETRE = 512 + PREMIER_PIXEL_Y + 26 + 8;
-	// Hauteur : PREMIER_PIXEL_Y pour le haut, 26 pour le texte, 8 pour la marge en bas
+	// Default window size
+	static private int WINDOW_WIDTH = 1024 +  2 * FIRST_PIXEL_X + 256 + 5; 
+	// Width margin : 2 FIRST_PIXEL_X for the  2 border + 256 for the mini-map + 5 for a little extra margin
+	static private int WINDOW_HEIGHT = 512 + FIRST_PIXEL_Y + 26 + 8;
+	// Height margin : FIRST_PIXEL_Y for the top border + 26 for text and buttons + 8 for the bottom border
 
-	// Image de la map
+	// Map image
 	private Panel pan;
 
-	// Mini image de la map
+	// Mini-map image
 	private MiniMap miniMap;
 
-	// Conteneur des objets
+	// Object container
 	private JPanel container = new JPanel();
 
-	// Affichage textuel
-	private JLabel labelText = new JLabel();
-	private JLabel labelRes = new JLabel("");
+	// Text displaying
+	private JLabel textLabel = new JLabel();
+	private JLabel resLabel = new JLabel("");
 
-	// Bouton pour copier le résultat
+	// Copy button
 	private JButton copyButton = new JButton();
 
-	// Demande d'accès à une province particulière
+	// Search button
 	private JButton searchButton = new JButton();
 
-	// Base de données des provinces
+	// Province database
 	private ProvinceStorage provinces;
 
-	// Redondance de l'état activé pour le clavier
-	private boolean enabledHaut = false; // car on commence en haut
-	private boolean enabledBas = true;
-	private boolean enabledGauche = false; // car on commence à gauche
-	private boolean enabledDroit = true;
-	private boolean enabledPlus = true;
-	private boolean enabledMoins = true;
+	// Action status for navigation (4 moving + 2 zooming actions)
+	private boolean enabledTop = false; // because we start in top
+	private boolean enabledBottom = true;
+	private boolean enabledLeft = false; // because we start in left
+	private boolean enabledRight = true;
+	private boolean enabledMore = true;
+	private boolean enabledLeast = true;
 
 	// Text
 	private Text text;
 
-	// On récupère seulement les pointeurs (i.e pas de copie)
 	public Window(ProvinceStorage provinces, Panel panel, Text text, MiniMap miniMap) {
-		this(text.windowTitle(), LARGEUR_FENETRE, HAUTEUR_FENETRE, provinces,
+		this(text.windowTitle(), WINDOW_WIDTH, WINDOW_HEIGHT, provinces,
 				panel, text, miniMap);
 	}
 
-	// On récupère seulement les pointeurs (i.e pas de copie)
 	public Window(String title, int width, int height,
 			ProvinceStorage provinces, Panel panel, Text text, MiniMap miniMap) {
-		// Accès aux provinces
+		// Parameter initialization
 		this.provinces = provinces;
-
-		// Accès à l'affichage de la map
 		this.pan = panel;
-
-		// Accès à la fenêtre à partir de la mini map
 		this.miniMap = miniMap;
 		miniMap.setWindow(this);
-
-		// Text
 		this.text = text;
 
-		// Fenêtre
+		// Window
 		this.setTitle(title);		
 		this.setSize(width, height);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLocationRelativeTo(null); // place au centre		
+		this.setLocationRelativeTo(null); // center placement
 
-		// Conteneur pour nos objets
+		// Object container
 		container.setBackground(Color.white);
 		container.setLayout(new BorderLayout());
 
-		// Ajout du panneau et de la mini-map
+		// Map and mini-map adding
 		container.add(pan, BorderLayout.CENTER);
 		JPanel east = new JPanel();
 		east.setLayout(new GridLayout(2, 1, 5, 5));
@@ -115,113 +104,105 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		east.add(miniMap);
 		container.add(east, BorderLayout.EAST);
 
-		// Ajout des textes et boutons
+		// Text and button adding
 		Font police = new Font("Tahoma", Font.BOLD, 14);
-		labelText.setText(text.clickedProvince());
-		labelText.setFont(police);
-		labelText.setForeground(Color.blue);
-		labelRes.setFont(police);
-		labelRes.setForeground(Color.blue);
+		textLabel.setText(text.clickedProvince());
+		textLabel.setFont(police);
+		textLabel.setForeground(Color.blue);
+		resLabel.setFont(police);
+		resLabel.setForeground(Color.blue);
 		copyButton.setText(text.copyClipboard());
 		searchButton.setText(text.provinceSearch());
 		JPanel north = new JPanel();
 		north.setLayout(new GridLayout(1, 4, 5, 5));
-		north.add(labelText);
-		north.add(labelRes);
+		north.add(textLabel);
+		north.add(resLabel);
 		north.add(copyButton);
 		north.add(searchButton);
 		container.add(north, BorderLayout.NORTH);
 
-		// Actions des boutons
+		// Button action
 		copyButton.addActionListener(new BoutonCopierListener());
 		searchButton.addActionListener(new SearchButtonListener());
 
-		// On rend la fenêtre focusable pour lire le clavier, mais pas le bouton de résultat
+		// Focus on window for the actions, and reset for the button in order to window keep it
 		setFocusable(true);
 		copyButton.setFocusable(false);
+		searchButton.setFocusable(false);
 
-		// Ajout du conteneur
+		// Container adding
 		this.setContentPane(container);
 
-		// Fenêtre visible
+		// Window displaying
 		this.setVisible(true);
 
-		// Ajout de la lecture de la souris
+		// Mouse and key listening for actions
 		this.addMouseListener(this);
 		this.addKeyListener(this);
 	}
 
 	/**
-	 * Utile pour tester que le programme fonctionne
-	 * @return
+	 * Locking/unlocking moving actions
 	 */
-	public String getRes() {
-		return labelRes.getText();
-	}
-
-	/**
-	 * Verrouille les boutons selon l'image
-	 * et met à jour les booléens pour "verrouiller" les touches clavier
-	 */
-	public void verouillageDeverouillageBoutonsDirections() {
+	public void movingActionLockingUnlocking() {
 		if (pan.getHeightNumber() == 0) {
-			enabledHaut = false;		
+			enabledTop = false;
 		} else {
-			enabledHaut = true;		
+			enabledTop = true;
 		}
 		if (pan.getWidthNumber() == 0) {
-			enabledGauche = false;		
+			enabledLeft = false;
 		} else {
-			enabledGauche = true;		
+			enabledLeft = true;
 		}
 		if (pan.getHeightNumber() == pan.getRealHeight()
 				/ (pan.getDisplayingRealImageHeight() / 2) - 2) {
-			enabledBas = false;		
+			enabledBottom = false;
 		} else {
-			enabledBas = true;		
+			enabledBottom = true;
 		}
 		if (pan.getWidthNumber() == pan.getRealWidth()
 				/ (pan.getDisplayingRealImageWidth() / 2) - 2) {
-			enabledDroit = false;		
+			enabledRight = false;
 		} else {
-			enabledDroit = true;		
+			enabledRight = true;
 		}
 	}
 
-	// ---------------- Actions souris ---------------------------
+	// ---------------- Mouse actions ---------------------------
 	@Override
-	public void mouseClicked(MouseEvent arg0) {	
-		int premier_pixel_y = PREMIER_PIXEL_Y + labelText.getHeight();
-		if (arg0.getX() < pan.getImageWidth() + PREMIER_PIXEL_X
-				&& arg0.getY() < pan.getImageHeight() + premier_pixel_y
-				&& arg0.getY() > premier_pixel_y) {
-			/*Algo : on calcule la position par rapport au pixel en haut à gauche
-			 * de l'image affichée. (On retranche la position du premier pixel
-			 * et on divise par le coefficient de zoom)
-			 * Enfin on ajoute la position du pixel en haut à gauche
+	public void mouseClicked(MouseEvent event) {
+		int premier_pixel_y = FIRST_PIXEL_Y + textLabel.getHeight();
+		if (event.getX() < pan.getImageWidth() + FIRST_PIXEL_X
+				&& event.getY() < pan.getImageHeight() + premier_pixel_y
+				&& event.getY() > premier_pixel_y) {
+			/* Algorithm : calculation of the position relative to the first
+			 * displayed pixel. (Subtraction of the first displaying pixel
+			 * and division by zoom coefficient).
+			 * Finally adding the absolute position of the first displayed pixel.
 			 */
 			int rgb = pan.getRGB(
-					(int)((arg0.getX() - PREMIER_PIXEL_X ) /
+					(int)((event.getX() - FIRST_PIXEL_X ) /
 							((float)pan.getImageWidth() / (float)pan.getDisplayingRealImageWidth()) + 
 							(pan.getWidthNumber() * pan.getDisplayingRealImageWidth() / 2))
-							, (int)((arg0.getY() - premier_pixel_y) /
+							, (int)((event.getY() - premier_pixel_y) /
 									((float)pan.getImageHeight() / (float)pan.getDisplayingRealImageHeight()) +
 									(pan.getHeightNumber() * pan.getDisplayingRealImageHeight() / 2)));
 			/*
-			 * On a fait appel à des cast car 1/2 = 0 alors que
-			 * (float)1/(float)2 = 0.5 On recast en int car on veut un int
+			 * Cast because 1/2 = 0 whereas (float)1/(float)2 = 0.5.
+			 * Cast in integer after because need integer
 			 */
 			int r = rgb >> 16 & 0xff;
 			int g = rgb >> 8 & 0xff;
 			int b = rgb & 0xff;
 			Province province = provinces.getProvince(r, g, b);
 			if (province != null) {
-				labelRes.setText(province.toString());
+				resLabel.setText(province.toString());
 			} else {
-				labelRes.setText("");
+				resLabel.setText("");
 			}
 		} else {
-			labelRes.setText("");
+			resLabel.setText("");
 		}
 	}
 
@@ -241,32 +222,32 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	public void mouseReleased(MouseEvent arg0) {
 	}
 
-	// ---------------- Actions clavier ---------------------------
+	// ---------------- Key actions ---------------------------
 	@Override
 	public void keyPressed(KeyEvent event) {
 		/* Codes :
 		 * 	37 : <-
-		 * 	38 : flèche du haut
+		 * 	38 : top arrow
 		 * 	39 : ->
-		 * 	40 : flèche du bas
+		 * 	40 : bottom arrow
 		 */
 		if (event.getKeyCode() == 37) {
-			if (enabledGauche)
+			if (enabledLeft)
 				actionGauche();
 		} else if (event.getKeyCode() == 38) {
-			if (enabledHaut)
+			if (enabledTop)
 				actionHaut();
 		} else if (event.getKeyCode() == 39) {
-			if (enabledDroit)
+			if (enabledRight)
 				actionDroit();
 		} else if (event.getKeyCode() == 40) {
-			if (enabledBas)
+			if (enabledBottom)
 				actionBas();
 		} else if (event.getKeyChar() == '+') {
-			if (enabledPlus)
+			if (enabledMore)
 				actionPlus();
 		} else if (event.getKeyChar() == '-') {
-			if (enabledMoins)
+			if (enabledLeast)
 				actionMoins();
 		}
 	}
@@ -279,82 +260,82 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	public void keyTyped(KeyEvent event) {
 	}
 
-	// ---------------- Déplacement de l'image ---------------------------
+	// ---------------- Moving actions ---------------------------
 	/**
-	 * Déplacement de l'image vers le haut
+	 * Top moving
 	 */
 	private void actionHaut() {
 		pan.heightNumberLeast();
-		verouillageDeverouillageBoutonsDirections();
+		movingActionLockingUnlocking();
 		this.repaint();
 		miniMap.setRectangle();
 	}
 
 	/**
-	 * Déplacement de l'image vers le bas
+	 * Bottom moving
 	 */
 	private void actionBas() {
 		pan.heightNumberMore();
-		verouillageDeverouillageBoutonsDirections();
+		movingActionLockingUnlocking();
 		this.repaint();	
 		miniMap.setRectangle();
 	}
 
 	/**
-	 * Déplacement de l'image vers la gauche
+	 * Left moving
 	 */
 	private void actionGauche() {
 		pan.widthNumberLeast();
-		verouillageDeverouillageBoutonsDirections();
+		movingActionLockingUnlocking();
 		this.repaint();
 		miniMap.setRectangle();
 	}
 
 	/**
-	 * Déplacement de l'image vers la droite
+	 * Right moving
 	 */
 	private void actionDroit() {
 		pan.widthNumberMore();
-		verouillageDeverouillageBoutonsDirections();
+		movingActionLockingUnlocking();
 		this.repaint();
 		miniMap.setRectangle();
 	}
 
 	/**
-	 * Zoom sur l'image
+	 * Zoom more
 	 */
 	private void actionPlus() {
 		pan.zoomMore();
-		enabledMoins = true;
-		// On bloque le zoom à X256
+		enabledLeast = true;
+		// Block to X256 zoom
 		if (pan.getImageWidth() / pan.getDisplayingRealImageWidth() == 256) {
-			enabledPlus = false;
+			enabledMore = false;
 		}			
-		verouillageDeverouillageBoutonsDirections();
+		movingActionLockingUnlocking();
 		this.repaint();
 		miniMap.setRectangle();
 	}
 
 	/** 
-	 * Dézoom de l'image
+	 * Zoom least
 	 */
 	private void actionMoins() {
 		if (2 * pan.getDisplayingRealImageWidth() > pan.getRealWidth()
 				|| 2 * pan.getDisplayingRealImageHeight() > pan.getRealHeight()) {
-			enabledMoins = false;
+			enabledLeast = false;
 		} else {
 			pan.zoomLeast();
-			enabledPlus = true;			
-			verouillageDeverouillageBoutonsDirections();
+			enabledMore = true;
+			movingActionLockingUnlocking();
 			this.repaint();
 			miniMap.setRectangle();
 		}
 	}
 
-	// ---------------- Actions des boutons ---------------------------
+	// ---------------- Button actions ---------------------------
 	class BoutonCopierListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {			
-			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(labelRes.getText()), null);
+			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(resLabel.getText()), null);
 		}
 	}
 
@@ -364,33 +345,33 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			Province searchProvince = searchDialog.getSearchResult();
 			if (searchProvince != null) {
 				try {
-					// Calcul du barycentre de la province cherchée		
-					Point barycentre = pan.getPosition(searchProvince.getIdentifiantRGB());
-					// On multiple par 4 / pan.getLargeurAfficheImageReelle() pour avoir le double du numéro
-					int numLargeur = (int)barycentre.getX() * 4 / pan.getDisplayingRealImageWidth();
-					// On enlève 1 pour centrer
+					// Calculation of province middle
+					Point middle = pan.getPosition(searchProvince.getIdentifiantRGB());
+					// Multiplying by 4 / pan.getDisplayingRealImageWidth() to have twice width number
+					int numLargeur = (int)middle.getX() * 4 / pan.getDisplayingRealImageWidth();
+					// Subtract 1 to center
 					numLargeur--;
-					// On divise par 2 pour avoir un nombre correct
+					// Dividing by 2 to have the correct number
 					numLargeur /= 2;
-					// Si on dépasse on prend le max
+					// If width number is too big, it become the max
 					if (numLargeur >= pan.getRealWidth()/(pan.getDisplayingRealImageWidth()/2) - 2) {
 						numLargeur = pan.getRealWidth()/(pan.getDisplayingRealImageWidth()/2) - 2;
 					}
-					// On met à jour l'image
+					// Actualize panel
 					pan.setWidthNumber(numLargeur);
-					// On fait de même pour la hauteur
-					int numHauteur = (int)barycentre.getY() * 4 / pan.getDisplayingRealImageHeight();
+					// Same thing with height
+					int numHauteur = (int)middle.getY() * 4 / pan.getDisplayingRealImageHeight();
 					numHauteur--;
 					numHauteur /= 2;
 					if (numHauteur >= pan.getRealHeight()/(pan.getDisplayingRealImageHeight()/2) - 2) {
 						numHauteur = pan.getRealHeight()/(pan.getDisplayingRealImageHeight()/2) - 2;			
 					}
 					pan.setHeightNumber(numHauteur);
-					// On met à jour la fenetre (gestions des touches + affichage)
-					verouillageDeverouillageBoutonsDirections();
+					// Actualize window (key management + displaying)
+					movingActionLockingUnlocking();
 					repaint();
+					// Actualize mini-map rectangle
 					miniMap.setRectangle();
-
 				} catch (IllegalArgumentException e) {
 					// Province not found
 					JOptionPane.showMessageDialog(null, text.provinceNotFound(), text.warningMessage(), JOptionPane.WARNING_MESSAGE);
@@ -402,10 +383,14 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 
 	// ---------------- Testing ---------------------------
 	public int premierPixelX() {
-		return PREMIER_PIXEL_X;
+		return FIRST_PIXEL_X;
 	}
 
 	public int premierPixelY() {
-		return PREMIER_PIXEL_Y + labelText.getHeight();
+		return FIRST_PIXEL_Y + textLabel.getHeight();
+	}
+
+	public String getRes() {
+		return resLabel.getText();
 	}
 }
