@@ -200,7 +200,10 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			int b = rgb & 0xff;
 			Province province = provinces.getProvince(r, g, b);
 			if (province != null) {
+				// Display province name
 				resLabel.setText(province.toString());
+				// Flash the province
+				pan.getPosition(rgb, 1, true);
 			} else {
 				resLabel.setText("");
 			}
@@ -349,7 +352,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			if (searchProvince != null) {
 				try {
 					// Calculation of province middle
-					Point middle = pan.getPosition(searchProvince.getIdentifiantRGB());
+					Point middle = pan.getPosition(searchProvince.getIdentifiantRGB(), 3, false);
 					// Multiplying by 4 / pan.getDisplayingRealImageWidth() to have twice width number
 					int numLargeur = (int)middle.getX() * 4 / pan.getDisplayingRealImageWidth();
 					// Subtract 1 to center

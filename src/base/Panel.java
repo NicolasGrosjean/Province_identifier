@@ -28,10 +28,6 @@ public class Panel extends JPanel {
 	static public int IMAGE_HEIGHT = 512;
 
 	private BufferedImage image;
-	
-	// To flash a province
-	private LinkedList<Point> provincePoints;
-	private int provinceRGB;
 
 	/**
 	 * Real image width
@@ -250,17 +246,31 @@ public class Panel extends JPanel {
 	}
 	
 	/**
-	 * Give middle of the province with this rgb
+	 * Give middle of the province with this rgb and flash the province
 	 * @param rgb
+	 * @param nmbFlashs Number of flash for the province found
+	 * @param window Search the province in the displayingWindow or in all the panel
 	 * @return
 	 */
-	public Point getPosition(int rgb) {
+	public Point getPosition(int rgb, int nmbFlashs, boolean window) {
 		int sumX = 0;
 		int sumY = 0;
 		int nbPoints = 0;
-		provincePoints = new LinkedList<Point>();
-		for (int x = 0; x < realWidth; x++) {
-			for (int y = 0; y < realHeight; y++) {
+		LinkedList<Point> provincePoints = new LinkedList<Point>();
+		int minX, maxX, minY, maxY;
+		if (window) {
+			minX = widthNumber * displayinRealImageWidth / 2;
+			maxX = minX + displayinRealImageWidth;
+			minY = heightNumber * displayingRealImageHeight / 2;
+			maxY = minY + displayingRealImageHeight;
+		} else {
+			minX = 0;
+			maxX = realWidth;
+			minY = 0;
+			maxY = realHeight;
+		}
+		for (int x = minX; x < maxX; x++) {
+			for (int y = minY; y < maxY; y++) {
 				// On chercher une province ayant le même R && G && B
 				if ((image.getRGB(x, y) >> 16 & 0xff) == (rgb >> 16 & 0xff)
 						&& (image.getRGB(x, y) >> 8 & 0xff) == (rgb >> 8 & 0xff)
@@ -269,12 +279,11 @@ public class Panel extends JPanel {
 					sumY += y;
 					nbPoints++;
 					provincePoints.add(new Point(x, y));
-					provinceRGB = rgb;
 				}
 			}
 		}
 		if (nbPoints > 0) {
-			flashProvince(3);
+			flashProvince(nmbFlashs, provincePoints, rgb);
 			return new Point(sumX / nbPoints, sumY / nbPoints);
 		} else {
 			throw new IllegalArgumentException();
@@ -287,7 +296,8 @@ public class Panel extends JPanel {
 	 * (http://forum.paradoxplaza.com/forum/showthread.php?686024-TOOL-CK2-Scenario-Editor)
 	 * @param numFlashes
 	 */
-	public void flashProvince(int numFlashes) {
+	public void flashProvince(int numFlashes, final LinkedList<Point> provincePoints,
+			final int provinceRGB) {
 		ActionListener listener = new ActionListener() {
 			private boolean color = true;
 
@@ -304,13 +314,25 @@ public class Panel extends JPanel {
 				}
 				color = !color;
 				repaint();
+				if (e.getActionCommand() == "last") {
+					// The last flash is finish
+					provincePoints.clear();
+				}
 			}
 		};
 
-		for (int i = 1; i <= numFlashes * 2; i++) {
-			Timer t = new Timer(333 * i, listener);
+		Timer t = null;
+		int last = numFlashes * 2;
+		for (int i = 1; i <= last; i++) {
+			t = new Timer(333 * i, listener);
 			t.setRepeats(false);
+			if (i == last) {
+				t.setActionCommand("last");
+			}
 			t.start();
+		}
+		while (!t.isRunning()) {
+			System.out.println(t.getDelay());
 		}
 	}
 }
