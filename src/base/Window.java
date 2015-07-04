@@ -133,6 +133,9 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		// Container adding
 		this.setContentPane(container);
 
+		// New icon image
+		setIconImage(Toolkit.getDefaultToolkit().getImage("icon.png"));
+
 		// Window displaying
 		this.setVisible(true);
 
