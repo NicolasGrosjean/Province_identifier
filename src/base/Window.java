@@ -378,6 +378,8 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 					repaint();
 					// Actualize mini-map rectangle
 					miniMap.setRectangle();
+					// Actualize selected province
+					resLabel.setText(searchProvince.toString());
 				} catch (IllegalArgumentException e) {
 					// Province not found
 					JOptionPane.showMessageDialog(null, text.provinceNotFound(), text.warningMessage(), JOptionPane.WARNING_MESSAGE);
