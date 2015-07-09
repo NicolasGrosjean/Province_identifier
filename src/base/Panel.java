@@ -26,6 +26,7 @@ public class Panel extends JPanel {
 
 	static public int IMAGE_WIDTH = 1024;
 	static public int IMAGE_HEIGHT = 512;
+	static private int BLACK = 0;
 
 	private BufferedImage image;
 
@@ -84,6 +85,7 @@ public class Panel extends JPanel {
 		realWidth = this.image.getWidth();
 		realHeight = this.image.getHeight();
 		this.text = text;
+		addColorProvinceBorder(BLACK);
 	}
 
 	public Panel(String nomFichierProvince, Text text) throws IOException {
@@ -333,6 +335,20 @@ public class Panel extends JPanel {
 		}
 		while (!t.isRunning()) {
 			System.out.println(t.getDelay());
+		}
+	}
+
+	/**
+	 * 
+	 */
+	private void addColorProvinceBorder(int borderColor) {
+		for (int y = 0; y < realHeight - 1; y++) {
+			for (int x = 0; x < realWidth - 1; x++) {
+				if (image.getRGB(x, y) != image.getRGB(x + 1, y) ||
+						image.getRGB(x, y) != image.getRGB(x, y + 1)) {
+					image.setRGB(x, y, borderColor);
+				}
+			}
 		}
 	}
 }
