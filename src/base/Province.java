@@ -85,6 +85,12 @@ public class Province implements Comparable{
 	 * @param searchName
 	 */
 	public void calculateLevenshteinDistance(String searchName) {
+		// Special value for empty province
+		if (name.equals("")) {
+			levenshteinDistance = Integer.MAX_VALUE;
+			return;
+		}
+
 		int len0 = searchName.length()+1;
 		int len1 = name.length()+1;
 	 
