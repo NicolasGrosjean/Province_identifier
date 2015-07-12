@@ -36,9 +36,8 @@ public class SearchDialog extends JDialog {
 	private Province searchedProvince;
 	private JFormattedTextField idReader;
 	private JTextField nameReader;
-	private boolean nameSearch;
 	private LinkedList<Province> nearestProvinces;
-	private String searchName;
+	private JPanel bottomNameProvinceSearch;
 	private JRadioButton firstProvince;
 	private JRadioButton secondProvince;
 	private JRadioButton thirdProvince;	
@@ -46,14 +45,11 @@ public class SearchDialog extends JDialog {
 	private JRadioButton fifthProvince;
 
 	public SearchDialog(JFrame parent, String title, boolean modal, Text text,
-			ProvinceStorage provinces, boolean nameSearch,
-			LinkedList<Province> nearestProvinces, String searchName) {
+			ProvinceStorage provinces, LinkedList<Province> nearestProvinces) {
 		super(parent, title, modal);
 		this.text = text;
 		this.provinces = provinces;
-		this.nameSearch = nameSearch;
 		this.nearestProvinces = nearestProvinces;
-		this.searchName = searchName;
 		setSize(750, 370);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -92,45 +88,41 @@ public class SearchDialog extends JDialog {
 		JPanel east = new JPanel();
 		JLabel nameProvinceSearchInfo = new JLabel(text.nameProvinceSearchLabel());
 		nameReader = new JTextField();
-		if (searchName != null) {
-			nameReader.setText(searchName);
-		}
 		nameReader.addKeyListener(new NameTextFieldListener()); // To have only letters
 		JButton nameSearchButton = new JButton(text.nameProvinceSearchButton());
 		nameSearchButton.addActionListener(new NameSearchButtonListener());
-		if (nameSearch) {
-			east.setLayout(new GridLayout(4, 1, 5, 5));
-		} else {
-			east.setLayout(new GridLayout(3, 1, 5, 5));
-		}		
+		east.setLayout(new GridLayout(4, 1, 5, 5));
 		east.add(nameProvinceSearchInfo);
 		east.add(nameReader);
 		east.add(nameSearchButton);
 		JPanel newEast = new JPanel();
-		JPanel bottomNameProvinceSearch = new JPanel();
-		if (nameSearch) {		
-			firstProvince = new JRadioButton(nearestProvinces.get(0).toString());
-			secondProvince = new JRadioButton(nearestProvinces.get(1).toString());
-			thirdProvince = new JRadioButton(nearestProvinces.get(2).toString());
-			fourthProvince = new JRadioButton(nearestProvinces.get(3).toString());
-			fifthProvince = new JRadioButton(nearestProvinces.get(4).toString());
-			firstProvince.setSelected(true);
-			ButtonGroup bg = new ButtonGroup();
-			bg.add(firstProvince);
-			bg.add(secondProvince);
-			bg.add(thirdProvince);
-			bg.add(fourthProvince);
-			bg.add(fifthProvince);
-			bottomNameProvinceSearch.setLayout(new GridLayout(6, 1, 5, 5));
-			bottomNameProvinceSearch.add(firstProvince);
-			bottomNameProvinceSearch.add(secondProvince);
-			bottomNameProvinceSearch.add(thirdProvince);
-			bottomNameProvinceSearch.add(fourthProvince);
-			bottomNameProvinceSearch.add(fifthProvince);
-			JButton nameSelectorButton = new JButton(text.nameProvinceSelectionButton());
-			nameSelectorButton.addActionListener(new NameSelectorButtonListener());
-			bottomNameProvinceSearch.add(nameSelectorButton);							
-		}
+		bottomNameProvinceSearch = new JPanel();
+
+		// Bloc for province name search
+		firstProvince = new JRadioButton();
+		secondProvince = new JRadioButton();
+		thirdProvince = new JRadioButton();
+		fourthProvince = new JRadioButton();
+		fifthProvince = new JRadioButton();
+		firstProvince.setSelected(true);
+		ButtonGroup bg = new ButtonGroup();
+		bg.add(firstProvince);
+		bg.add(secondProvince);
+		bg.add(thirdProvince);
+		bg.add(fourthProvince);
+		bg.add(fifthProvince);
+		bottomNameProvinceSearch.setLayout(new GridLayout(6, 1, 5, 5));
+		bottomNameProvinceSearch.add(firstProvince);
+		bottomNameProvinceSearch.add(secondProvince);
+		bottomNameProvinceSearch.add(thirdProvince);
+		bottomNameProvinceSearch.add(fourthProvince);
+		bottomNameProvinceSearch.add(fifthProvince);
+		JButton nameSelectorButton = new JButton(text.nameProvinceSelectionButton());
+		nameSelectorButton.addActionListener(new NameSelectorButtonListener());
+		bottomNameProvinceSearch.add(nameSelectorButton);
+		// No visible because we don't now the search province name
+		bottomNameProvinceSearch.setVisible(false);
+
 		newEast.setLayout(new GridLayout(2, 1, 5, 5));
 		newEast.add(east);
 		newEast.add(bottomNameProvinceSearch);	
@@ -162,15 +154,18 @@ public class SearchDialog extends JDialog {
 
 	class NameSearchButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			searchName = nameReader.getText();
+			String searchName = nameReader.getText();
 			if (searchName.equals("")) {
 				JOptionPane.showMessageDialog(null, text.enterNamePlease(), text.warningMessage(), JOptionPane.WARNING_MESSAGE);
 			} else {
-				// Refresh the SearchDialog but with the 5 nearest province name to the name typed by the user
-				nameSearch = true;
+				// Put the 5 nearest province name to the name typed by the user
 				nearestProvinces = provinces.nearestProvinces(searchName, 5);
-				initComponent();
-				setVisible(true);
+				firstProvince.setText(nearestProvinces.get(0).toString());
+				secondProvince.setText(nearestProvinces.get(1).toString());
+				thirdProvince.setText(nearestProvinces.get(2).toString());
+				fourthProvince.setText(nearestProvinces.get(3).toString());
+				fifthProvince.setText(nearestProvinces.get(4).toString());
+				bottomNameProvinceSearch.setVisible(true);
 			}
 		}
 	}

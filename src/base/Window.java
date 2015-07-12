@@ -347,7 +347,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 
 	class SearchButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {			
-			SearchDialog searchDialog = new SearchDialog(null, text.provinceSearch(), true, text, provinces, false, null, null);
+			SearchDialog searchDialog = new SearchDialog(null, text.provinceSearch(), true, text, provinces, null);
 			Province searchProvince = searchDialog.getSearchResult();
 			if (searchProvince != null) {
 				try {
