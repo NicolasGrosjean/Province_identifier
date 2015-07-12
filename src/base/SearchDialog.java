@@ -138,6 +138,27 @@ public class SearchDialog extends JDialog {
 		setContentPane(container);
 	}
 
+	/**
+	 * Remove no letter character from searchName
+	 */
+	private void checkNameReader() {
+		int i = 0;
+		while (i < nameReader.getText().length()) {
+			if (nameReader.getText().codePointAt(i) < 65 ||
+					(nameReader.getText().codePointAt(i) > 90 &&
+							nameReader.getText().codePointAt(i) < 97) ||
+					(nameReader.getText().codePointAt(i) > 122 &&
+							nameReader.getText().codePointAt(i) < 192) ||
+					(nameReader.getText().codePointAt(i) > 696)) {
+				// In valid char, it will be delete
+				nameReader.setText(nameReader.getText().replace(String.valueOf(nameReader.getText().charAt(i)), ""));
+			} else {
+				// Next char to check
+				i++;
+			}
+		}
+	}
+
 	// ---------------- Button Actions ---------------------------
 	class IdSearchButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
@@ -205,10 +226,7 @@ public class SearchDialog extends JDialog {
 		}
 		@Override
 		public void keyReleased(KeyEvent event) {
-			// We want only letters
-			if(event.getKeyCode() < 65 || event.getKeyCode() > 90) {
-				nameReader.setText(nameReader.getText().replace(String.valueOf(event.getKeyChar()), "")); 
-			}
+			checkNameReader();
 		}
 
 		@Override
