@@ -153,5 +153,17 @@ public abstract class Text {
 	 * @return
 	 */
 	public abstract String invalidRGB();
-	
+
+	/**
+	 * The directory name is not valid
+	 * @param directoryName
+	 * @return
+	 */
+	public abstract String invalidDirectoryName(String directoryName);
+
+	/**
+	 * The directory name is missing
+	 * @return
+	 */
+	public abstract String missingDirectoryName();
 }

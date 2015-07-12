@@ -121,4 +121,14 @@ public class TextFrancais extends Text {
 	public String invalidRGB() {
 		return "Accès au code RGB d'un pixel hors image";
 	}
+
+	@Override
+	public String invalidDirectoryName(String directoryName) {
+		return "ERROR : nom de dossier " + directoryName + " incorrect";
+	}
+
+	@Override
+	public String missingDirectoryName() {
+		return "ERROR : nom de dossier manquant";
+	}
 }

@@ -122,4 +122,13 @@ public class TextEnglish extends Text {
 		return "No province with this RGB code";
 	}
 
+	@Override
+	public String invalidDirectoryName(String directoryName) {
+		return "ERROR : invalid directory name" + directoryName;
+	}
+
+	@Override
+	public String missingDirectoryName() {
+		return "ERROR : missing directory name";
+	}
 }
