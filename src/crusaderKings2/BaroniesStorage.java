@@ -7,8 +7,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+
+import base.Province;
 
 public class BaroniesStorage {
 	private Map<Integer, LinkedList<Barony>> provinceBaronies;
@@ -45,8 +48,10 @@ public class BaroniesStorage {
 						// Read its type and store it
 						String baronyType = scanner.next();
 						baronnies.add(new Barony(word,
-								baronyType.equals("city"), baronyType.equals("castle")));
-					}				
+								baronyType.equals("city"),
+								baronyType.equals("castle"),
+								provinceID));
+					}
 				}
 			}
 
@@ -71,5 +76,26 @@ public class BaroniesStorage {
 	 */
 	public LinkedList<Barony> getBaronies(int provinceId) {
 		return provinceBaronies.get(provinceId);
+	}
+
+	/**
+	 * Give the nearest baronies in term of name from the search name
+	 * @param searchName Name (approximated) of province searched
+	 * @param number Number of provinces in the list
+	 * @return List of the provinces
+	 */
+	public LinkedList<Barony> nearestBaronies(String searchName, int number) {
+		PriorityQueue<Barony> nearestBaronies = new PriorityQueue<Barony>();
+		for (Integer provinceId : provinceBaronies.keySet()) {
+			for (Barony b : provinceBaronies.get(provinceId)) {
+				b.calculateLevenshteinDistance(searchName);
+				nearestBaronies.add(b);
+			}
+		}
+		LinkedList<Barony> res = new LinkedList<Barony>();
+		for (int i = 0; i < number ; i++) {
+			res.addLast(nearestBaronies.remove());
+		}
+		return res;
 	}
 }
