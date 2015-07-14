@@ -166,4 +166,52 @@ public abstract class Text {
 	 * @return
 	 */
 	public abstract String missingDirectoryName();
+
+	/**
+	 * Second part of the title of the dialog to choose language
+	 * @return
+	 */
+	public abstract String chooseLanguageTitle();
+
+	/**
+	 * The language for the software hasn't been chosen
+	 * @return
+	 */
+	public abstract String missingLanguage();
+
+	/**
+	 * Instruction to choose the language
+	 * @return
+	 */
+	public abstract String chooseLanguageInstruction();
+
+	/**
+	 * Name of the French language
+	 * @return
+	 */
+	public abstract String frenchLanguageName();
+
+	/**
+	 * Name of the English language
+	 * @return
+	 */
+	public abstract String englishLanguageName();
+
+	/**
+	 * Text for the validation button
+	 * @return
+	 */
+	public abstract String validateButton();
+
+	/**
+	 * All texts are in French?
+	 * @return
+	 */
+	public abstract boolean isFrenchLanguage();
+
+	/**
+	 * All texts are in English?
+	 * @return
+	 */
+	public abstract boolean isEnglishLanguage();
 }

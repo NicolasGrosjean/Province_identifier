@@ -131,4 +131,44 @@ public class TextEnglish extends Text {
 	public String missingDirectoryName() {
 		return "ERROR : missing directory name";
 	}
+
+	@Override
+	public String chooseLanguageTitle() {
+		return "Choose the language";
+	}
+
+	@Override
+	public String missingLanguage() {
+		return "ERROR : the language of the software hasn't been chosen";
+	}
+
+	@Override
+	public String chooseLanguageInstruction() {
+		return "Please, choose the language of the software";
+	}
+
+	@Override
+	public String frenchLanguageName() {
+		return "French";
+	}
+
+	@Override
+	public String englishLanguageName() {
+		return "English";
+	}
+
+	@Override
+	public String validateButton() {
+		return "Ok";
+	}
+
+	@Override
+	public boolean isFrenchLanguage() {
+		return false;
+	}
+
+	@Override
+	public boolean isEnglishLanguage() {
+		return true;
+	}
 }
