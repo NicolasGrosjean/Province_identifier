@@ -7,17 +7,19 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
+
 import base.Province;
 import base.ProvinceStorage;
 
-public class TestLevenshtein extends TestCase {
+public class TestLevenshtein {
 	private final String nomFichierLecture = "definition.csv";
-	private final String nomFichierProvince = "provinces.bmp";
 	private FileInputStream fichierLecture = null;
 	private ProvinceStorage provinces = new ProvinceStorage();
 
-	private void SetUp() {
+	@Before
+	public void SetUp() {
 		try {
 			// Ouverture du fichier
 			fichierLecture = new FileInputStream(nomFichierLecture);
@@ -58,8 +60,6 @@ public class TestLevenshtein extends TestCase {
 
 		} catch (FileNotFoundException e) {
 			System.out.println("Fichier " + nomFichierLecture + " non trouvé !");
-		} catch (IOException e) {
-			System.out.println("Fichier " + nomFichierProvince + " non trouvé !");
 		} finally {
 			try {
 				if (fichierLecture != null)
@@ -70,10 +70,8 @@ public class TestLevenshtein extends TestCase {
 		}
 	}
 
+	@Test
 	public void testNearestProvinces(){
-		// Initialisation
-		SetUp();
-		
 		LinkedList<Province> nearestProvinces = provinces.nearestProvinces("Troie", 3);
 		for (Province p : nearestProvinces) {
 			System.out.println(p);

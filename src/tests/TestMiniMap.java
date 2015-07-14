@@ -8,23 +8,27 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import text.Text;
 import text.TextFrancais;
 import base.Window;
 import base.MiniMap;
 import base.Panel;
 import base.ProvinceStorage;
-import junit.framework.TestCase;
 
-public class TestMiniMap extends TestCase {
-	private final String nomFichierLecture = "definition.csv";
-	private final String nomFichierProvince = "provinces.bmp";
-	private final Text text = new TextFrancais();
-	private FileInputStream fichierLecture = null;
-	private ProvinceStorage provinces = new ProvinceStorage();
-	private Panel pan;
-	
-	private void SetUp() {
+public class TestMiniMap {
+	private static final String nomFichierLecture = "definition.csv";
+	private static final String nomFichierProvince = "provinces.bmp";
+	private static final Text text = new TextFrancais();
+	private static FileInputStream fichierLecture = null;
+	private static ProvinceStorage provinces = new ProvinceStorage();
+	private static Panel pan;
+
+	@BeforeClass
+	public static void SetUp() {
 		try {
 			// Ouverture du fichier
 			fichierLecture = new FileInputStream(nomFichierLecture);
@@ -79,10 +83,9 @@ public class TestMiniMap extends TestCase {
 			}
 		}
 	}
-	
+
+	@Test
 	public void testMouse() throws IOException {
-		// Initialisation
-		SetUp();
 		MiniMap miniMap = new MiniMap(nomFichierProvince, text, pan);
 		Window windowV2 = new Window(provinces, pan, text, miniMap);	
 		
@@ -93,8 +96,8 @@ public class TestMiniMap extends TestCase {
 		for(MouseListener ml: miniMap.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		assertEquals("Numero de largeur invalide", pan.getWidthNumber(), 0);
-		assertEquals("Numero de hauteur invalide", pan.getHeightNumber(), 0);
+		Assert.assertEquals("Numero de largeur invalide", pan.getWidthNumber(), 0);
+		Assert.assertEquals("Numero de hauteur invalide", pan.getHeightNumber(), 0);
 		
 		// Nouveau clic ...
 		evt.translatePoint((int)((float)pan.getDisplayingRealImageWidth() / pan.getRealWidth()
@@ -102,16 +105,16 @@ public class TestMiniMap extends TestCase {
 		for(MouseListener ml: miniMap.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		assertEquals("Numero de largeur invalide", pan.getWidthNumber(), 1);
-		assertEquals("Numero de hauteur invalide", pan.getHeightNumber(), 0);
+		Assert.assertEquals("Numero de largeur invalide", pan.getWidthNumber(), 1);
+		Assert.assertEquals("Numero de hauteur invalide", pan.getHeightNumber(), 0);
 		
 		evt.translatePoint(0, (int)((float)pan.getDisplayingRealImageHeight() / pan.getRealHeight()
 				 * miniMap.getImageHeight()));	
 		for(MouseListener ml: miniMap.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		assertEquals("Numero de largeur invalide", pan.getWidthNumber(), 1);
-		assertEquals("Numero de hauteur invalide", pan.getHeightNumber(), 1);
+		Assert.assertEquals("Numero de largeur invalide", pan.getWidthNumber(), 1);
+		Assert.assertEquals("Numero de hauteur invalide", pan.getHeightNumber(), 1);
 		
 		// Coin en haut à gauche
 		evt = new MouseEvent(miniMap, MouseEvent.MOUSE_CLICKED, 1, 0, 0, 0, 1, false);
@@ -119,21 +122,22 @@ public class TestMiniMap extends TestCase {
 		for(MouseListener ml: miniMap.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		assertEquals("Numero de largeur invalide", pan.getWidthNumber(),
+		Assert.assertEquals("Numero de largeur invalide", pan.getWidthNumber(),
 				pan.getRealWidth() / (pan.getDisplayingRealImageWidth()/2) - 2);
-		assertEquals("Numero de hauteur invalide", pan.getHeightNumber(), 0);
+		Assert.assertEquals("Numero de hauteur invalide", pan.getHeightNumber(), 0);
 		
 		// Coin en bas à droite
 		evt.translatePoint(0, miniMap.getImageHeight() - 1);	
 		for(MouseListener ml: miniMap.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		assertEquals("Numero de largeur invalide", pan.getWidthNumber(),
+		Assert.assertEquals("Numero de largeur invalide", pan.getWidthNumber(),
 				pan.getRealWidth() / (pan.getDisplayingRealImageWidth()/2) - 2);
-		assertEquals("Numero de hauteur invalide", pan.getHeightNumber(), 
+		Assert.assertEquals("Numero de hauteur invalide", pan.getHeightNumber(), 
 				pan.getRealHeight() /(pan.getDisplayingRealImageHeight()/2) - 2);
 
 		// Close the window
 		windowV2.dispose();
+		windowV2 = null;
 	}
 }
