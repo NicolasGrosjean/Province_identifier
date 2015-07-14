@@ -12,12 +12,16 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import text.Text;
 
@@ -72,6 +76,10 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	// Text
 	private Text text;
 
+	// Open a directory
+	private JFileChooser fileChooser;
+	private JButton openButton = new JButton();
+
 	public Window(ProvinceStorage provinces, Panel panel, Text text, MiniMap miniMap) {
 		this(text.windowTitle(), WINDOW_WIDTH, WINDOW_HEIGHT, provinces,
 				panel, text, miniMap);
@@ -100,7 +108,20 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		container.add(pan, BorderLayout.CENTER);
 		JPanel east = new JPanel();
 		east.setLayout(new GridLayout(2, 1, 5, 5));
-		east.add(new JPanel());
+		//east.add(new JPanel());
+
+		// Use the look and feel of the system
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			//SwingUtilities.updateComponentTreeUI(this);
+		}
+		catch (InstantiationException e) {}
+		catch (ClassNotFoundException e) {}
+		catch (UnsupportedLookAndFeelException e) {}
+		catch (IllegalAccessException e) {}
+		fileChooser = new JFileChooser();
+		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		east.add(openButton);
 		east.add(miniMap);
 		container.add(east, BorderLayout.EAST);
 
@@ -124,6 +145,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		// Button action
 		copyButton.addActionListener(new BoutonCopierListener());
 		searchButton.addActionListener(new SearchButtonListener());
+		openButton.addActionListener(new OpenFile());
 
 		// Focus on window for the actions, and reset for the button in order to window keep it
 		setFocusable(true);
@@ -388,6 +410,14 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		}
 	}
 
+	class OpenFile implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+				File file = fileChooser.getSelectedFile();
+				System.out.println(file.toPath());
+			}
+		}
+	}
 
 	// ---------------- Testing ---------------------------
 	public int premierPixelX() {
