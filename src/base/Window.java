@@ -162,7 +162,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		this.setVisible(true);
 
 		// Mouse and key listening for actions
-		this.addMouseListener(this);
+		pan.addMouseListener(this);
 		this.addKeyListener(this);
 	}
 
@@ -197,20 +197,19 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	// ---------------- Mouse actions ---------------------------
 	@Override
 	public void mouseClicked(MouseEvent event) {
-		int premier_pixel_y = FIRST_PIXEL_Y + textLabel.getHeight();
-		if (event.getX() < pan.getImageWidth() + FIRST_PIXEL_X
-				&& event.getY() < pan.getImageHeight() + premier_pixel_y
-				&& event.getY() > premier_pixel_y) {
+		if (event.getX() < pan.getImageWidth()
+				&& event.getY() < pan.getImageHeight()
+				&& event.getY() > 0) {
 			/* Algorithm : calculation of the position relative to the first
 			 * displayed pixel. (Subtraction of the first displaying pixel
 			 * and division by zoom coefficient).
 			 * Finally adding the absolute position of the first displayed pixel.
 			 */
 			int rgb = pan.getRGB(
-					(int)((event.getX() - FIRST_PIXEL_X ) /
+					(int)(event.getX() /
 							((float)pan.getImageWidth() / (float)pan.getDisplayingRealImageWidth()) + 
 							(pan.getWidthNumber() * pan.getDisplayingRealImageWidth() / 2))
-							, (int)((event.getY() - premier_pixel_y) /
+							, (int)((event.getY()) /
 									((float)pan.getImageHeight() / (float)pan.getDisplayingRealImageHeight()) +
 									(pan.getHeightNumber() * pan.getDisplayingRealImageHeight() / 2)));
 			/*

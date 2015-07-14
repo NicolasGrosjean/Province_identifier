@@ -105,75 +105,75 @@ public class TestWindow {
 		// Initialisation
 		Window window = new Window(provinces, pan, text, new MiniMap(nomFichierProvince, text, pan));
 
-		// Clic de souris
-		MouseEvent evt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, 25, 214, 1, false);
+		// Clic de souris (position par rapport au Panel)
+		MouseEvent evt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, 17, 157, 1, false);
 
 		// Lecture du clic de souris
-		for(MouseListener ml: window.getMouseListeners()){
+		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (25, 214)
+		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (17, 157)
 
 		// Nouveau clic, ...
 		evt.translatePoint(1, 0);
-		for(MouseListener ml: window.getMouseListeners()){
+		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (26, 214)
+		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (18, 157)
 		evt.translatePoint(-1, 1);
-		for(MouseListener ml: window.getMouseListeners()){
+		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (25, 215)
+		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (17, 158)
 		evt.translatePoint(1, 0);
-		for(MouseListener ml: window.getMouseListeners()){
+		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de Tyrifjorden raté", window.getRes(), "1691 - Tyrifjorden"); // (26,215)
+		Assert.assertEquals("Identification de Tyrifjorden raté", window.getRes(), "1691 - Tyrifjorden"); // (18,158)
 
 		// Clic de souris en haut à droite
-		evt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, 1031, 78, 1, false);
-		for(MouseListener ml: window.getMouseListeners()){
+		evt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, 1023, 21, 1, false);
+		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1031, 78)
+		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1023, 21)
 		evt.translatePoint(1, 0);
-		for(MouseListener ml: window.getMouseListeners()){
+		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1032, 78)
+		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1024, 21)
 		evt.translatePoint(0, 1);
-		for(MouseListener ml: window.getMouseListeners()){
+		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1032, 79)
+		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1024, 22)
 		evt.translatePoint(-1, 0);
-		for(MouseListener ml: window.getMouseListeners()){
+		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de North Sea raté", window.getRes(), "1696 - North Sea"); // (1031, 79)
+		Assert.assertEquals("Identification de North Sea raté", window.getRes(), "1696 - North Sea"); // (1023, 22)
 
 		// Clic de souris en bas à droite
-		evt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, 1032, 568, 1, false);
-		for(MouseListener ml: window.getMouseListeners()){
+		evt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, 1024, 511, 1, false);
+		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1032, 568)
+		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1024, 511)
 		evt.translatePoint(0, 1);
-		for(MouseListener ml: window.getMouseListeners()){
+		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1032, 569)
+		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1024, 512)
 		evt.translatePoint(-1, 0);
-		for(MouseListener ml: window.getMouseListeners()){
+		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1031, 569)
+		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1023, 512)
 		evt.translatePoint(0, -1);
-		for(MouseListener ml: window.getMouseListeners()){
+		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de Gulf of Bothnia raté", window.getRes(), "1717 - Gulf of Bothnia"); // (1031, 568)
+		Assert.assertEquals("Identification de Gulf of Bothnia raté", window.getRes(), "1717 - Gulf of Bothnia"); // (1023, 511)
 
 		// Close the window
 		window.dispose();
@@ -242,8 +242,8 @@ public class TestWindow {
 		}
 
 		// On clique en (0, HauteurImage)
-		MouseEvent mevt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, 0, pan.getImageHeight(), 1, false);
-		for(MouseListener ml: window.getMouseListeners()){
+		MouseEvent mevt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, 0-8, pan.getImageHeight()-57, 1, false);
+		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(mevt);
 		}
 		Assert.assertEquals("Identification de North Atlantic raté", window.getRes(), "1694 - North Atlantic");
@@ -283,9 +283,9 @@ public class TestWindow {
 		assertMiniMap(miniMap, i, 0);
 
 		// On clique en (LargeurMax, HauteurMax)
-		mevt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, window.premierPixelX() + pan.getImageWidth() - 1,
-				window.premierPixelY() + pan.getImageHeight() - 1, 1, false);
-		for(MouseListener ml: window.getMouseListeners()){
+		mevt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, pan.getImageWidth() - 1,
+				pan.getImageHeight() - 1, 1, false);
+		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(mevt);
 		}
 		Assert.assertEquals("Identification de Gulf of Bothnia raté", window.getRes(), "1717 - Gulf of Bothnia");
@@ -318,9 +318,9 @@ public class TestWindow {
 		assertMiniMap(miniMap, 0, i);
 		
 		// On clique en (LargeurMax, HauteurMax)
-		mevt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, window.premierPixelX() + pan.getImageWidth() - 1,
-				window.premierPixelY() + pan.getImageHeight() - 1, 1, false);
-		for(MouseListener ml: window.getMouseListeners()){
+		mevt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, pan.getImageWidth() - 1,
+				pan.getImageHeight() - 1, 1, false);
+		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(mevt);
 		}
 		Assert.assertEquals("Identification de Gulf of Bothnia raté", window.getRes(), "1487 - Central Africa");
@@ -343,9 +343,9 @@ public class TestWindow {
 		assertMiniMap(miniMap, 0, i);
 
 		// On clique en (LargeurMax, HauteurMax)
-		mevt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, window.premierPixelX() + pan.getImageWidth() - 1,
-				window.premierPixelY() + pan.getImageHeight() - 1, 1, false);
-		for(MouseListener ml: window.getMouseListeners()){
+		mevt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, pan.getImageWidth() - 1,
+				pan.getImageHeight() - 1, 1, false);
+		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(mevt);
 		}
 		Assert.assertEquals("Identification de Gulf of Bothnia raté", window.getRes(), "1717 - Gulf of Bothnia");
