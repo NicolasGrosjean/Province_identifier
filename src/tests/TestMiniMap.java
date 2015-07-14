@@ -66,7 +66,6 @@ public class TestMiniMap extends TestCase {
 			// Création de l'image à afficher
 			pan = new Panel(nomFichierProvince, text);
 
-			Window windowV2 = new Window(provinces, pan, text, new MiniMap(nomFichierProvince, text, pan));		
 		} catch (FileNotFoundException e) {
 			System.out.println(text.fileNotFound(nomFichierLecture));
 		} catch (IOException e) {
@@ -133,5 +132,8 @@ public class TestMiniMap extends TestCase {
 				pan.getRealWidth() / (pan.getDisplayingRealImageWidth()/2) - 2);
 		assertEquals("Numero de hauteur invalide", pan.getHeightNumber(), 
 				pan.getRealHeight() /(pan.getDisplayingRealImageHeight()/2) - 2);
+
+		// Close the window
+		windowV2.dispose();
 	}
 }
