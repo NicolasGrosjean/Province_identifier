@@ -412,10 +412,11 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 
 	class OpenFile implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+			if (fileChooser.showOpenDialog(Window.this) == JFileChooser.APPROVE_OPTION) {
 				File file = fileChooser.getSelectedFile();
 				System.out.println(file.toPath());
 			}
+			Window.this.requestFocus();
 		}
 	}
 
