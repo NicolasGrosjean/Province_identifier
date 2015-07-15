@@ -13,6 +13,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -23,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import config.WorkingSession;
 import text.Text;
 
 /**
@@ -80,22 +82,16 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	private JFileChooser fileChooser;
 	private JButton openButton = new JButton();
 
-	public Window(ProvinceStorage provinces, Panel panel, Text text, MiniMap miniMap) {
-		this(text.windowTitle(), WINDOW_WIDTH, WINDOW_HEIGHT, provinces,
-				panel, text, miniMap);
+	public Window (Text text) {
+		this(WINDOW_WIDTH, WINDOW_HEIGHT, text);
 	}
 
-	public Window(String title, int width, int height,
-			ProvinceStorage provinces, Panel panel, Text text, MiniMap miniMap) {
-		// Parameter initialization
-		this.provinces = provinces;
-		this.pan = panel;
-		this.miniMap = miniMap;
-		miniMap.setWindow(this);
+	public Window(int width, int height, Text text) {
+		// Language
 		this.text = text;
 
 		// Window
-		this.setTitle(title);		
+		this.setTitle(text.windowTitle());
 		this.setSize(width, height);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null); // center placement
@@ -104,16 +100,42 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		container.setBackground(Color.white);
 		container.setLayout(new BorderLayout());
 
+		// Container adding
+		this.setContentPane(container);
+
+		// New icon image
+		setIconImage(Toolkit.getDefaultToolkit().getImage("icon.png"));
+
+		// Window displaying
+		this.setVisible(true);
+	}
+
+	public Window(ProvinceStorage provinces, Panel panel, Text text,
+			MiniMap miniMap) {
+		this(WINDOW_WIDTH, WINDOW_HEIGHT, provinces, panel, text, miniMap);
+	}
+
+	public Window(int width, int height, ProvinceStorage provinces, Panel panel,
+			Text text, MiniMap miniMap) {
+		this(width, height, text);
+		loadWorkingSession(provinces, panel, miniMap);
+	}
+
+	private void loadWorkingSession(ProvinceStorage provinces, Panel panel, MiniMap miniMap) {
+		// Parameter initialization
+		this.provinces = provinces;
+		this.pan = panel;
+		this.miniMap = miniMap;
+		miniMap.setWindow(this);
+
 		// Map and mini-map adding
 		container.add(pan, BorderLayout.CENTER);
 		JPanel east = new JPanel();
 		east.setLayout(new GridLayout(2, 1, 5, 5));
-		//east.add(new JPanel());
 
 		// Use the look and feel of the system
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			//SwingUtilities.updateComponentTreeUI(this);
 		}
 		catch (InstantiationException e) {}
 		catch (ClassNotFoundException e) {}
@@ -152,18 +174,12 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		copyButton.setFocusable(false);
 		searchButton.setFocusable(false);
 
-		// Container adding
-		this.setContentPane(container);
-
-		// New icon image
-		setIconImage(Toolkit.getDefaultToolkit().getImage("icon.png"));
-
-		// Window displaying
-		this.setVisible(true);
-
 		// Mouse and key listening for actions
 		pan.addMouseListener(this);
 		this.addKeyListener(this);
+
+		// Window displaying new components
+		this.setVisible(true);
 	}
 
 	/**
