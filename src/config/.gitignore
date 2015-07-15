@@ -1,3 +1,9 @@
 /ChooseLanguage.class
 /WorkingSession.class
 /ChooseLanguage$LanguageButtonListener.class
+/MainArguments$FileComparator.class
+/MainArguments.class
+/FileUtils$FileComparator.class
+/FileUtils.class
+/FileSorting$FileComparator.class
+/FileSorting.class
