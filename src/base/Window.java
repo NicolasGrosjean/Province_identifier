@@ -78,10 +78,6 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	// Text
 	private Text text;
 
-	// Open a directory
-	private JFileChooser fileChooser;
-	private JButton openButton = new JButton();
-
 	public Window (Text text) {
 		this(WINDOW_WIDTH, WINDOW_HEIGHT, text);
 	}
@@ -132,18 +128,6 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		container.add(pan, BorderLayout.CENTER);
 		JPanel east = new JPanel();
 		east.setLayout(new GridLayout(2, 1, 5, 5));
-
-		// Use the look and feel of the system
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		}
-		catch (InstantiationException e) {}
-		catch (ClassNotFoundException e) {}
-		catch (UnsupportedLookAndFeelException e) {}
-		catch (IllegalAccessException e) {}
-		fileChooser = new JFileChooser();
-		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		east.add(openButton);
 		east.add(miniMap);
 		container.add(east, BorderLayout.EAST);
 
@@ -167,7 +151,6 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		// Button action
 		copyButton.addActionListener(new BoutonCopierListener());
 		searchButton.addActionListener(new SearchButtonListener());
-		openButton.addActionListener(new OpenFile());
 
 		// Focus on window for the actions, and reset for the button in order to window keep it
 		setFocusable(true);
@@ -422,16 +405,6 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 					JOptionPane.showMessageDialog(null, text.provinceNotFound(), text.warningMessage(), JOptionPane.WARNING_MESSAGE);
 				}
 			}
-		}
-	}
-
-	class OpenFile implements ActionListener {
-		public void actionPerformed(ActionEvent arg0) {
-			if (fileChooser.showOpenDialog(Window.this) == JFileChooser.APPROVE_OPTION) {
-				File file = fileChooser.getSelectedFile();
-				System.out.println(file.toPath());
-			}
-			Window.this.requestFocus();
 		}
 	}
 

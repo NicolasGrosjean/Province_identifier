@@ -18,14 +18,12 @@ import text.TextEnglish;
 import text.TextFrancais;
 
 public class ChooseLanguage extends JDialog {
-	private Text text;
 	private Text language = null;
 	private JRadioButton french;
 	private JRadioButton english;
 
 	public ChooseLanguage(JFrame parent, boolean modal, Text text) {
 		super(parent, text.windowTitle() + " - " + text.chooseLanguageTitle(), modal);
-		this.text = text;
 		setSize(350, 140);
 		setLocationRelativeTo(null);
 		setResizable(false);
