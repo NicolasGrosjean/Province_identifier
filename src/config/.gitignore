@@ -7,3 +7,10 @@
 /FileUtils.class
 /FileSorting$FileComparator.class
 /FileSorting.class
+/WorkingSessionNewDialog.class
+/WorkingSessionNewDialog$OpenFile.class
+/WorkingSessionNewDialog$FileExplorer.class
+/WorkingSessionNewDialog$ExitDialog.class
+/WorkingSessionNewDialog$CancelAction.class
+/WorkingSessionNewDialog$ValidateAction.class
+/CancelAction.class

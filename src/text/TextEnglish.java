@@ -124,7 +124,7 @@ public class TextEnglish extends Text {
 
 	@Override
 	public String invalidDirectoryName(String directoryName) {
-		return "ERROR : invalid directory name" + directoryName;
+		return "ERROR : invalid directory named " + directoryName;
 	}
 
 	@Override
@@ -170,5 +170,40 @@ public class TextEnglish extends Text {
 	@Override
 	public boolean isEnglishLanguage() {
 		return true;
+	}
+
+	@Override
+	public String newWSTitle() {
+		return "New working session";
+	}
+
+	@Override
+	public String workingSessionName() {
+		return "Name of the working session";
+	}
+
+	@Override
+	public String gameDirectory() {
+		return "Game directory";
+	}
+
+	@Override
+	public String modDirectory() {
+		return "[Optional] Repertory of a mod modifying the map";
+	}
+
+	@Override
+	public String error() {
+		return "ERROR";
+	}
+
+	@Override
+	public String missingWorkingSessionName() {
+		return "Please enter a working session name";
+	}
+
+	@Override
+	public String missingGameDirectory() {
+		return "Please select a game directory";
 	}
 }

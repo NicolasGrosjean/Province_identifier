@@ -214,4 +214,46 @@ public abstract class Text {
 	 * @return
 	 */
 	public abstract boolean isEnglishLanguage();
+
+	/**
+	 * Second part of the title of the dialog to create a working session
+	 * @return
+	 */
+	public abstract String newWSTitle();
+
+	/**
+	 * Name of the working session
+	 * @return
+	 */
+	public abstract String workingSessionName();
+
+	/**
+	 * Directory of the game
+	 * @return
+	 */
+	public abstract String gameDirectory();
+
+	/**
+	 * Optional directory for a mod modifying the map
+	 * @return
+	 */
+	public abstract String modDirectory();
+
+	/**
+	 * Error word
+	 * @return
+	 */
+	public abstract String error();
+
+	/**
+	 * The name for the working session is missing
+	 * @return
+	 */
+	public abstract String missingWorkingSessionName();
+
+	/**
+	 * The game directory is missing
+	 * @return
+	 */
+	public abstract String missingGameDirectory();
 }

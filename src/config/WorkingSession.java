@@ -13,6 +13,7 @@ import base.Panel;
 import base.ProvinceStorage;
 
 public class WorkingSession {
+	private String name;
 	private String gameDirectory;
 	private LinkedList<String> modDirectories;
 	private ProvinceStorage provinces;
@@ -25,11 +26,13 @@ public class WorkingSession {
 	 * @param gameDirectory
 	 * @param modDirectories
 	 * @param text
-	 * @throws IOException
+	 * @throws IOException FileNotFoundException for definition.csv not found,
+	 * 					   IOException for provinces.bmp not found
 	 */
-	public WorkingSession(String gameDirectory,
+	public WorkingSession(String name, String gameDirectory,
 			LinkedList<String> modDirectories, Text text)
 					throws IOException {
+		this.name = name;
 		this.gameDirectory = gameDirectory;
 		this.modDirectories = modDirectories;
 		LinkedList<String> allDirectories;
@@ -59,6 +62,10 @@ public class WorkingSession {
 		}
 	}
 
+	public String getName() {
+		return name;
+	}
+
 	public String getGameDirectory() {
 		return gameDirectory;
 	}
@@ -82,7 +89,7 @@ public class WorkingSession {
 	/**
 	 * Read the definitionFileName and create the province storage
 	 * @param definitionFileName
-	 * @throws FileNotFoundException
+	 * @throws FileNotFoundException file name definitionFileName not found
 	 */
 	private void readDefinitionFile(String definitionFileName) throws FileNotFoundException {
 		provinces = new ProvinceStorage();

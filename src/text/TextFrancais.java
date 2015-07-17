@@ -171,4 +171,39 @@ public class TextFrancais extends Text {
 	public boolean isEnglishLanguage() {
 		return false;
 	}
+
+	@Override
+	public String newWSTitle() {
+		return "Nouvelle session de travail";
+	}
+
+	@Override
+	public String workingSessionName() {
+		return "Nom de la session de travail";
+	}
+
+	@Override
+	public String gameDirectory() {
+		return "Répertoire du jeu";
+	}
+
+	@Override
+	public String modDirectory() {
+		return "[Facultatif] Répertoire d'un mod modifiant la carte";
+	}
+
+	@Override
+	public String error() {
+		return "ERREUR";
+	}
+
+	@Override
+	public String missingWorkingSessionName() {
+		return "Veuillez entrer un nom à la session de travail";
+	}
+
+	@Override
+	public String missingGameDirectory() {
+		return "Veuillez sélectionner le répertoire du jeu";
+	}
 }
