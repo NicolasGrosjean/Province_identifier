@@ -206,4 +206,14 @@ public class TextEnglish extends Text {
 	public String missingGameDirectory() {
 		return "Please select a game directory";
 	}
+
+	@Override
+	public String workingSessionMenu() {
+		return "Game/mod";
+	}
+
+	@Override
+	public String newWorkingSessionMenuItem() {
+		return "New";
+	}
 }

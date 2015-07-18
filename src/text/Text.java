@@ -256,4 +256,16 @@ public abstract class Text {
 	 * @return
 	 */
 	public abstract String missingGameDirectory();
+
+	/**
+	 * Text of the working session menu
+	 * @return
+	 */
+	public abstract String workingSessionMenu();
+
+	/**
+	 * Text of the menu item for a new working session
+	 * @return
+	 */
+	public abstract String newWorkingSessionMenuItem();
 }

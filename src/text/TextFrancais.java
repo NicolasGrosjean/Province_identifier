@@ -206,4 +206,14 @@ public class TextFrancais extends Text {
 	public String missingGameDirectory() {
 		return "Veuillez sélectionner le répertoire du jeu";
 	}
+
+	@Override
+	public String workingSessionMenu() {
+		return "Jeu/mod";
+	}
+
+	@Override
+	public String newWorkingSessionMenuItem() {
+		return "Nouveau";
+	}
 }

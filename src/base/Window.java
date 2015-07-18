@@ -12,19 +12,20 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import config.WorkingSession;
+import config.WorkingSessionNewDialog;
 import text.Text;
 
 /**
@@ -42,8 +43,9 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	// Default window size
 	static private int WINDOW_WIDTH = 1024 +  2 * FIRST_PIXEL_X + 256 + 5; 
 	// Width margin : 2 FIRST_PIXEL_X for the  2 border + 256 for the mini-map + 5 for a little extra margin
-	static private int WINDOW_HEIGHT = 512 + FIRST_PIXEL_Y + 26 + 8;
+	static private int WINDOW_HEIGHT = 512 + FIRST_PIXEL_Y + 26 + 22 + 8;
 	// Height margin : FIRST_PIXEL_Y for the top border + 26 for text and buttons + 8 for the bottom border
+	// 													+ 22 for menus 
 
 	// Map image
 	private Panel pan;
@@ -78,6 +80,10 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	// Text
 	private Text text;
 
+	// Menus
+	private JMenu wsMenu;
+	private JMenuItem wsNew;
+
 	public Window (Text text) {
 		this(WINDOW_WIDTH, WINDOW_HEIGHT, text);
 	}
@@ -102,6 +108,15 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		// New icon image
 		setIconImage(Toolkit.getDefaultToolkit().getImage("icon.png"));
 
+		// Menus
+		JMenuBar windowMenuBar = new JMenuBar();
+		wsMenu = new JMenu(text.workingSessionMenu());
+		wsNew = new JMenuItem(text.newWorkingSessionMenuItem());
+		wsNew.addActionListener(new NewWorkingSession());
+		wsMenu.add(wsNew);
+		windowMenuBar.add(wsMenu);
+	    setJMenuBar(windowMenuBar);
+
 		// Window displaying
 		this.setVisible(true);
 	}
@@ -117,6 +132,10 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		loadWorkingSession(provinces, panel, miniMap);
 	}
 
+	private void loadWorkingSession(WorkingSession ws) {
+		loadWorkingSession(ws.getProvinces(), ws.getPanel(), ws.getMiniMap());
+	}
+
 	private void loadWorkingSession(ProvinceStorage provinces, Panel panel, MiniMap miniMap) {
 		// Parameter initialization
 		this.provinces = provinces;
@@ -128,6 +147,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		container.add(pan, BorderLayout.CENTER);
 		JPanel east = new JPanel();
 		east.setLayout(new GridLayout(2, 1, 5, 5));
+		east.add(new JPanel());
 		east.add(miniMap);
 		container.add(east, BorderLayout.EAST);
 
@@ -404,6 +424,26 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 					// Province not found
 					JOptionPane.showMessageDialog(null, text.provinceNotFound(), text.warningMessage(), JOptionPane.WARNING_MESSAGE);
 				}
+			}
+		}
+	}
+
+	// ---------------- Menu actions ----------------------
+	class NewWorkingSession implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			WorkingSessionNewDialog newWSDialog = new WorkingSessionNewDialog(null, true, text);
+			try {
+				WorkingSession newWS = newWSDialog.getWorkingSession();
+				if (newWS !=null) {
+					loadWorkingSession(newWS);
+					newWSDialog.dispose();
+				}
+			} catch (IllegalArgumentException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), text.error(), JOptionPane.ERROR_MESSAGE);
+			} catch (FileNotFoundException e) {
+				JOptionPane.showMessageDialog(null, text.fileNotFound("definition.csv"), text.error(), JOptionPane.ERROR_MESSAGE);
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, text.fileNotFound("provinces.bmp.csv"), text.error(), JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
