@@ -216,4 +216,9 @@ public class TextEnglish extends Text {
 	public String newWorkingSessionMenuItem() {
 		return "New";
 	}
+
+	@Override
+	public String workingSessionOpenRecently() {
+		return "Open recent";
+	}
 }

@@ -3,6 +3,7 @@ package config;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -51,29 +52,34 @@ public class ConfigStorage {
 	 */
 	public ConfigStorage(String configurationFile) {
 		this.configurationFile = configurationFile;
+		Element root = null;
 		try {
 			// Build the XML tree and gather the root
-			Element root = new SAXBuilder().build(new File(configurationFile)).getRootElement();
+			root = new SAXBuilder().build(new File(configurationFile)).getRootElement();
 
 			// Language of the software
 			String language = root.getAttributeValue(languageNameAttribure);
 			text = (language.equals(frenchLanguage))? new TextFrancais() : new TextEnglish();
-
-			// List of working session
-			List<Element> workingSessionsElem = root.getChildren();
-			// Removing to preserve order
-			while (!workingSessionsElem.isEmpty()) {
-				Element wsElem = workingSessionsElem.remove(0);
-				List<Element> modDirectoriesElem = wsElem.getChildren();
-				LinkedList<String> modDirectories = new LinkedList<String>();
-				for (Element modDirElem : modDirectoriesElem) {
-					modDirectories.addFirst(modDirElem.getText());
-				}
+		} catch (JDOMException | IOException e) {
+			// No configuration file
+			return;
+		}
+		// List of working session
+		List<Element> workingSessionsElem = root.getChildren();
+		Iterator<Element> it = workingSessionsElem.iterator();
+		while (it.hasNext()) {
+			Element wsElem = it.next();
+			List<Element> modDirectoriesElem = wsElem.getChildren();
+			LinkedList<String> modDirectories = new LinkedList<String>();
+			for (Element modDirElem : modDirectoriesElem) {
+				modDirectories.addFirst(modDirElem.getText());
+			}
+			try {
 				workingSessions.addFirst(new WorkingSession(wsElem.getAttributeValue(wsNameAttribute),
 						wsElem.getAttributeValue(wsGameDirAttribute), modDirectories, text));
+			} catch (IOException e) {
+				// The working session is now not correct
 			}
-		} catch (JDOMException | IOException e) {
-			text = null;
 		}
 	}
 
@@ -114,12 +120,8 @@ public class ConfigStorage {
 		workingSessions.addFirst(ws);
 	}
 
-	public WorkingSession removeFirst() {
-		return workingSessions.removeFirst();
-	}
-
-	public boolean removeWorkingSession(WorkingSession ws) {
-		return workingSessions.remove(ws);
+	public Iterator<WorkingSession> iterator() {
+		return workingSessions.iterator();
 	}
 
 	/**
@@ -146,14 +148,10 @@ public class ConfigStorage {
 		root.setAttribute(languageAttribute);
 
 		// Adding the working session in order
-		// tmp to save the working session list
-		LinkedList<WorkingSession> tmp = new LinkedList<WorkingSession>();
-		while (!workingSessions.isEmpty()) {
-			WorkingSession ws = workingSessions.removeFirst();
-			tmp.addFirst(ws);
-			root.addContent(workingSessionToElement(ws));
+		Iterator<WorkingSession> it = workingSessions.iterator();
+		while (it.hasNext()) {
+			root.addContent(workingSessionToElement(it.next()));
 		}
-		workingSessions = tmp;
 
 		// Write the configuration file
 		try {

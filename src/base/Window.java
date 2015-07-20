@@ -14,6 +14,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Iterator;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -84,6 +85,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	// Menus
 	private JMenu wsMenu;
 	private JMenuItem wsNew;
+	private JMenuItem wsOpenRecently;
 
 	// Configuration of the software
 	private final ConfigStorage configuration;
@@ -117,11 +119,33 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 
 		// Menus
 		JMenuBar windowMenuBar = new JMenuBar();
+		// New working session
 		wsMenu = new JMenu(text.workingSessionMenu());
 		wsNew = new JMenuItem(text.newWorkingSessionMenuItem());
 		wsNew.addActionListener(new NewWorkingSession());
 		wsMenu.add(wsNew);
 		windowMenuBar.add(wsMenu);
+		// Open recent working session
+		wsOpenRecently = new JMenu(text.workingSessionOpenRecently());
+		if (!configuration.hasWorkingSession()) {
+			// No working session so the menu is not accessible
+			wsOpenRecently.setEnabled(false);
+		} else {
+			// All working session except the first are added
+			boolean first = true;
+			Iterator<WorkingSession> it = configuration.iterator();
+			while (it.hasNext()) {
+				WorkingSession ws = it.next();
+				if (first) {
+					first = false;
+				} else {
+					JMenuItem wsMenuItem = new JMenuItem(ws.getName());
+					wsMenuItem.addActionListener(new OpenRecentWorkingSession(ws));
+					wsOpenRecently.add(wsMenuItem);
+				}
+			}
+		}
+		wsMenu.add(wsOpenRecently);
 	    setJMenuBar(windowMenuBar);
 
 		// Window displaying
@@ -144,6 +168,12 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	}
 
 	private void loadWorkingSession(ProvinceStorage provinces, Panel panel, MiniMap miniMap) {
+		// Cleaning
+		copyButton.removeActionListener(new BoutonCopierListener());
+		// TODO correct bug of listen old components
+		searchButton.removeActionListener(new SearchButtonListener());
+		container.removeAll();
+
 		// Parameter initialization
 		this.provinces = provinces;
 		this.pan = panel;
@@ -189,6 +219,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		this.addKeyListener(this);
 
 		// Window displaying new components
+		repaint();
 		this.setVisible(true);
 	}
 
@@ -444,9 +475,15 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 				if (newWS !=null) {
 					// The user defined a working session
 					loadWorkingSession(newWS);
-					// The working session is correct (i.e didn't an exception)
+
+					// There is one or more working session
+					wsOpenRecently.setEnabled(true);
+
+					// Update the configuration
 					configuration.addFirstWorkingSession(newWS);
 					configuration.saveConfigFile();
+
+					// Close the dialog
 					newWSDialog.dispose();
 				}
 			} catch (IllegalArgumentException e) {
@@ -456,6 +493,22 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, text.fileNotFound("provinces.bmp.csv"), text.error(), JOptionPane.ERROR_MESSAGE);
 			}
+		}
+	}
+
+	class OpenRecentWorkingSession implements ActionListener {
+		private WorkingSession ws;
+
+		OpenRecentWorkingSession(WorkingSession ws) {
+			this.ws = ws;
+		}
+
+		public void actionPerformed(ActionEvent arg0) {
+			loadWorkingSession(ws);
+
+			// Update the configuration
+			configuration.becomeFirst(ws);
+			configuration.saveConfigFile();
 		}
 	}
 

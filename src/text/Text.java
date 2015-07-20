@@ -268,4 +268,10 @@ public abstract class Text {
 	 * @return
 	 */
 	public abstract String newWorkingSessionMenuItem();
+
+	/**
+	 * Menu open a recent working session
+	 * @return
+	 */
+	public abstract String workingSessionOpenRecently();
 }
