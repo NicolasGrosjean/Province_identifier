@@ -1,17 +1,29 @@
 package config;
 
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
 import text.Text;
+import text.TextEnglish;
+import text.TextFrancais;
 
 public class ConfigStorage {
+	private static final String languageNameAttribure = "language";
+	private static final String wsNameAttribute = "name";
+	private static final String wsGameDirAttribute = "gameDirectory";
+	private static final String frenchLanguage = "French";
+
 	/**
 	 * Text language of the software
 	 */
@@ -22,35 +34,87 @@ public class ConfigStorage {
 	 */
 	private LinkedList<WorkingSession> workingSessions = new LinkedList<WorkingSession>();
 
-	public ConfigStorage(Text text) {
+	/**
+	 * File where is load or save the configuration of the software
+	 */
+	private final String configurationFile;
+
+	public ConfigStorage(Text text, String configurationFile) {
 		this.text = text;
+		this.configurationFile = configurationFile;
 	}
 
-	public ConfigStorage(String configFile) {
-		// TODO
+	/**
+	 * Construct a configuration storage from a XML file named configFile
+	 * text is null in case of error
+	 * @param configFile
+	 */
+	public ConfigStorage(String configurationFile) {
+		this.configurationFile = configurationFile;
+		try {
+			// Build the XML tree and gather the root
+			Element root = new SAXBuilder().build(new File(configurationFile)).getRootElement();
+
+			// Language of the software
+			String language = root.getAttributeValue(languageNameAttribure);
+			text = (language.equals(frenchLanguage))? new TextFrancais() : new TextEnglish();
+
+			// List of working session
+			List<Element> workingSessionsElem = root.getChildren();
+			// Removing to preserve order
+			while (!workingSessionsElem.isEmpty()) {
+				Element wsElem = workingSessionsElem.remove(0);
+				List<Element> modDirectoriesElem = wsElem.getChildren();
+				LinkedList<String> modDirectories = new LinkedList<String>();
+				for (Element modDirElem : modDirectoriesElem) {
+					modDirectories.addFirst(modDirElem.getText());
+				}
+				workingSessions.addFirst(new WorkingSession(wsElem.getAttributeValue(wsNameAttribute),
+						wsElem.getAttributeValue(wsGameDirAttribute), modDirectories, text));
+			}
+		} catch (JDOMException | IOException e) {
+			text = null;
+		}
+	}
+
+	public Text getText() {
+		return text;
 	}
 
 	/**
 	 * Transform a working session to the corresponding Element
 	 * @param ws
 	 */
-	private void workingSessionToElement(WorkingSession ws) {
+	private Element workingSessionToElement(WorkingSession ws) {
 		// Create a working session XML element
 		Element workingSessionElem = new Element("workingSession");
-		workingSessionElem.setAttribute(new Attribute("name", ws.getName()));
-		workingSessionElem.setAttribute(new Attribute("gameDirectory", ws.getGameDirectory()));
+		workingSessionElem.setAttribute(new Attribute(wsNameAttribute, ws.getName()));
+		workingSessionElem.setAttribute(new Attribute(wsGameDirAttribute, ws.getGameDirectory()));
 		for (String modDirectory : ws.getModDirectories()) {
 			Element modDirectoryElem = new Element("modDirectory");
 			modDirectoryElem.setText(modDirectory);
 			workingSessionElem.addContent(modDirectoryElem);
 		}
+		return workingSessionElem;
+	}
+
+	/**
+	 * Say if there are working sessions in the configuration storage
+	 * @return
+	 */
+	public boolean hasWorkingSession() {
+		return !workingSessions.isEmpty();
+	}
+
+	public WorkingSession getFirst() {
+		return workingSessions.getFirst();
 	}
 
 	public void addFirstWorkingSession(WorkingSession ws) {
 		workingSessions.addFirst(ws);
 	}
 
-	public WorkingSession removeFirst(WorkingSession ws) {
+	public WorkingSession removeFirst() {
 		return workingSessions.removeFirst();
 	}
 
@@ -74,11 +138,11 @@ public class ConfigStorage {
 	 * Save the configuration file
 	 * @param configurationFile
 	 */
-	public void saveConfigFile(String configurationFile) {
+	public void saveConfigFile() {
 		// Create the root of XML file with the language attribute
 		Element root = new Element("provinceIdentifier");
-		String language = (text.isFrenchLanguage())? "French": "English";
-		Attribute languageAttribute = new Attribute("language", language);
+		String language = (text.isFrenchLanguage())? frenchLanguage: "English";
+		Attribute languageAttribute = new Attribute(languageNameAttribure, language);
 		root.setAttribute(languageAttribute);
 
 		// Adding the working session in order
@@ -87,7 +151,7 @@ public class ConfigStorage {
 		while (!workingSessions.isEmpty()) {
 			WorkingSession ws = workingSessions.removeFirst();
 			tmp.addFirst(ws);
-			workingSessionToElement(ws);
+			root.addContent(workingSessionToElement(ws));
 		}
 		workingSessions = tmp;
 

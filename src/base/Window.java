@@ -24,6 +24,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import config.ConfigStorage;
 import config.WorkingSession;
 import config.WorkingSessionNewDialog;
 import text.Text;
@@ -84,11 +85,17 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	private JMenu wsMenu;
 	private JMenuItem wsNew;
 
-	public Window (Text text) {
-		this(WINDOW_WIDTH, WINDOW_HEIGHT, text);
+	// Configuration of the software
+	private final ConfigStorage configuration;
+
+	public Window (Text text, ConfigStorage configuration) {
+		this(WINDOW_WIDTH, WINDOW_HEIGHT, text, configuration);
 	}
 
-	public Window(int width, int height, Text text) {
+	public Window(int width, int height, Text text, ConfigStorage configuration) {
+		// Configuration file
+		this.configuration = configuration;
+
 		// Language
 		this.text = text;
 
@@ -122,13 +129,13 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	}
 
 	public Window(ProvinceStorage provinces, Panel panel, Text text,
-			MiniMap miniMap) {
-		this(WINDOW_WIDTH, WINDOW_HEIGHT, provinces, panel, text, miniMap);
+			MiniMap miniMap, ConfigStorage configuration) {
+		this(WINDOW_WIDTH, WINDOW_HEIGHT, provinces, panel, text, miniMap, configuration);
 	}
 
 	public Window(int width, int height, ProvinceStorage provinces, Panel panel,
-			Text text, MiniMap miniMap) {
-		this(width, height, text);
+			Text text, MiniMap miniMap, ConfigStorage configuration) {
+		this(width, height, text, configuration);
 		loadWorkingSession(provinces, panel, miniMap);
 	}
 
@@ -435,7 +442,11 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			try {
 				WorkingSession newWS = newWSDialog.getWorkingSession();
 				if (newWS !=null) {
+					// The user defined a working session
 					loadWorkingSession(newWS);
+					// The working session is correct (i.e didn't an exception)
+					configuration.addFirstWorkingSession(newWS);
+					configuration.saveConfigFile();
 					newWSDialog.dispose();
 				}
 			} catch (IllegalArgumentException e) {

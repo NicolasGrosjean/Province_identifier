@@ -87,7 +87,7 @@ public class TestMiniMap {
 	@Test
 	public void testMouse() throws IOException {
 		MiniMap miniMap = new MiniMap(nomFichierProvince, text, pan);
-		Window windowV2 = new Window(provinces, pan, text, miniMap);	
+		Window windowV2 = new Window(provinces, pan, text, miniMap, null);	
 		
 		// Clic de souris
 		MouseEvent evt = new MouseEvent(miniMap, MouseEvent.MOUSE_CLICKED, 1, 0, 0, 0, 1, false);

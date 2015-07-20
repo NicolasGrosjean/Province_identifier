@@ -93,7 +93,8 @@ public class TestWindow {
 	@Test
 	public void testConstructeur() throws IOException {
 		Panel pan = new Panel(nomFichierProvince, text);
-		new Window(new ProvinceStorage(), pan , text, new MiniMap(nomFichierProvince, text, pan)).dispose();;
+		new Window(new ProvinceStorage(), pan , text,
+				new MiniMap(nomFichierProvince, text, pan), null).dispose();
 	}
 
 	/****************************************************
@@ -103,7 +104,8 @@ public class TestWindow {
 	@Test
 	public void testMouse() throws IOException {
 		// Initialisation
-		Window window = new Window(provinces, pan, text, new MiniMap(nomFichierProvince, text, pan));
+		Window window = new Window(provinces, pan, text,
+				new MiniMap(nomFichierProvince, text, pan), null);
 
 		// Clic de souris (position par rapport au Panel)
 		MouseEvent evt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, 17, 157, 1, false);
@@ -194,7 +196,7 @@ public class TestWindow {
 	public void testIntegration() throws IOException {
 		// Initialisation
 		MiniMap miniMap = new MiniMap(nomFichierProvince, text, pan);
-		Window window = new Window(provinces, pan, text, miniMap);
+		Window window = new Window(provinces, pan, text, miniMap, null);
 
 		// Déplacement tout à droite
 		int i = 1;

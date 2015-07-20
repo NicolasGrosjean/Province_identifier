@@ -1,11 +1,8 @@
 package base;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Scanner;
-import java.util.regex.Pattern;
 
 import config.ChooseLanguage;
+import config.ConfigStorage;
+import config.WorkingSession;
 import text.Text;
 import text.TextEnglish;
 import text.TextFrancais;
@@ -26,17 +23,39 @@ public class Main {
 			defaultText = new TextFrancais();
 		}
 
-		// TODO read config file, choose language if it doesn't exist
-		// Language define by the user
-		ChooseLanguage languageChoiceDialog = new ChooseLanguage(null, true,
-				defaultText);
-		Text text = languageChoiceDialog.getText();
+		// Gather the configuration file
+		final String configurationFile = "config.xml";
+		ConfigStorage configuration = new ConfigStorage(configurationFile);
+		Text text = configuration.getText();
+
 		if (text == null) {
-			languageChoiceDialog.dispose();
-			throw new IllegalArgumentException(defaultText.missingLanguage());
+			// The configuration is invalid (or don't exist)
+			// Language define by the user
+			ChooseLanguage languageChoiceDialog = new ChooseLanguage(null, true,
+					defaultText);
+			text = languageChoiceDialog.getText();
+			if (text == null) {
+				// The user cancels
+				languageChoiceDialog.dispose();
+				throw new IllegalArgumentException(defaultText.missingLanguage());
+			}
+
+			// Create the configuration file
+			configuration = new ConfigStorage(text, configurationFile);
+			configuration.saveConfigFile();
+
+			// Create an empty window
+			new Window(text, configuration);
+		} else {
+			if (configuration.hasWorkingSession()) {
+				// Try to create a window with the first working session
+				WorkingSession ws = configuration.getFirst();
+				new Window(ws.getProvinces(), ws.getPanel(),
+						text, ws.getMiniMap(), configuration);
+			} else {
+				// Create an empty window
+				new Window(text, configuration);
+			}
 		}
-		
-		// TODO read config file, load the last working session
-		Window window = new Window(text);
 	}
 }
