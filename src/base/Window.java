@@ -1,6 +1,7 @@
 package base;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Point;
@@ -15,7 +16,9 @@ import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.LinkedList;
 
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -89,6 +92,10 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 
 	// Configuration of the software
 	private final ConfigStorage configuration;
+
+	// List of listened component to stop listening them
+	private LinkedList<AbstractButton> listenedButton = new LinkedList<>();
+	private LinkedList<Component> listenedComponent = new LinkedList<>();
 
 	public Window (Text text, ConfigStorage configuration) {
 		this(WINDOW_WIDTH, WINDOW_HEIGHT, text, configuration);
@@ -168,10 +175,20 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	}
 
 	private void loadWorkingSession(ProvinceStorage provinces, Panel panel, MiniMap miniMap) {
-		// Cleaning
-		copyButton.removeActionListener(new BoutonCopierListener());
-		// TODO correct bug of listen old components
-		searchButton.removeActionListener(new SearchButtonListener());
+		// Cleaning : removing listener and component which don't need
+		for (AbstractButton absButton : listenedButton) {
+			for(ActionListener al : absButton.getActionListeners()) {
+				absButton.removeActionListener( al );
+		    }
+		}
+		for (Component component : listenedComponent) {
+			for (KeyListener kl : component.getKeyListeners()) {
+				component.removeKeyListener(kl);
+			}
+			for (MouseListener ml : component.getMouseListeners()) {
+				component.removeMouseListener(ml);
+			}
+		}
 		container.removeAll();
 
 		// Parameter initialization
@@ -207,7 +224,9 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 
 		// Button action
 		copyButton.addActionListener(new BoutonCopierListener());
+		listenedButton.add(copyButton);
 		searchButton.addActionListener(new SearchButtonListener());
+		listenedButton.add(searchButton);
 
 		// Focus on window for the actions, and reset for the button in order to window keep it
 		setFocusable(true);
@@ -216,7 +235,9 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 
 		// Mouse and key listening for actions
 		pan.addMouseListener(this);
+		listenedComponent.add(pan);
 		this.addKeyListener(this);
+		listenedComponent.add(this);
 
 		// Window displaying new components
 		repaint();
