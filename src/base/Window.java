@@ -509,6 +509,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 					// Update the configuration
 					configuration.addFirstWorkingSession(newWS);
 					configuration.saveConfigFile();
+					updateOpenRecentlyMenu();
 
 					// Close the dialog
 					newWSDialog.dispose();
