@@ -138,19 +138,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			// No working session so the menu is not accessible
 			wsOpenRecently.setEnabled(false);
 		} else {
-			// All working session except the first are added
-			boolean first = true;
-			Iterator<WorkingSession> it = configuration.iterator();
-			while (it.hasNext()) {
-				WorkingSession ws = it.next();
-				if (first) {
-					first = false;
-				} else {
-					JMenuItem wsMenuItem = new JMenuItem(ws.getName());
-					wsMenuItem.addActionListener(new OpenRecentWorkingSession(ws));
-					wsOpenRecently.add(wsMenuItem);
-				}
-			}
+			updateOpenRecentlyMenu();
 		}
 		wsMenu.add(wsOpenRecently);
 	    setJMenuBar(windowMenuBar);
@@ -242,6 +230,24 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		// Window displaying new components
 		repaint();
 		this.setVisible(true);
+	}
+
+	private void updateOpenRecentlyMenu() {
+		// Cleaning
+		wsOpenRecently.removeAll();
+		// All working session except the first are added
+		boolean first = true;
+		Iterator<WorkingSession> it = configuration.iterator();
+		while (it.hasNext()) {
+			WorkingSession ws = it.next();
+			if (first) {
+				first = false;
+			} else {
+				JMenuItem wsMenuItem = new JMenuItem(ws.getName());
+				wsMenuItem.addActionListener(new OpenRecentWorkingSession(ws));
+				wsOpenRecently.add(wsMenuItem);
+			}
+		}
 	}
 
 	/**
@@ -527,9 +533,10 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		public void actionPerformed(ActionEvent arg0) {
 			loadWorkingSession(ws);
 
-			// Update the configuration
+			// Update the configuration and the menu
 			configuration.becomeFirst(ws);
 			configuration.saveConfigFile();
+			updateOpenRecentlyMenu();
 		}
 	}
 
