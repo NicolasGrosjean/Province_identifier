@@ -75,7 +75,7 @@ public class ConfigStorage {
 				modDirectories.addFirst(modDirElem.getText());
 			}
 			try {
-				workingSessions.addFirst(new WorkingSession(wsElem.getAttributeValue(wsNameAttribute),
+				workingSessions.addLast(new WorkingSession(wsElem.getAttributeValue(wsNameAttribute),
 						wsElem.getAttributeValue(wsGameDirAttribute), modDirectories, text));
 			} catch (IOException e) {
 				// The working session is now not correct
