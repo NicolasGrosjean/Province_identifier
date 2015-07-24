@@ -22,24 +22,25 @@ import javax.swing.UnsupportedLookAndFeelException;
 import text.Text;
 
 public class WorkingSessionNewDialog extends JDialog {
-	private static final String fileExplorerText = "...";
-	private Text text;
-	private JFileChooser fileChooser;
-	private JTextField wsName = new JTextField();
-	private JTextField gameDirectoryTF = new JTextField();
-	private JTextField modDirectory1TF = new JTextField();
-	private JTextField modDirectory2TF = new JTextField();
-	private JTextField modDirectory3TF = new JTextField();
+	protected static final String fileExplorerText = "...";
+	protected Text text;
+	protected JFileChooser fileChooser;
+	protected JTextField wsName = new JTextField();
+	protected JTextField gameDirectoryTF = new JTextField();
+	protected JPanel container;
+	protected JPanel wsNamePanel;
+	protected JPanel gameDirPanel;
+	protected JPanel validCancelPanel;
 
 	/**
 	 * The user click on the validate button
 	 */
-	private boolean validated = false;
+	protected boolean validated = false;
 
 	public WorkingSessionNewDialog(JFrame parent, boolean modal, Text text) {
 		// Create the JDialog
 		super(parent, text.windowTitle() + " - " + text.newWSTitle(), modal);
-		setSize(600, 450);
+		setSize(500, 200);
 		setLocationRelativeTo(null);
 		setResizable(false);
 
@@ -47,9 +48,6 @@ public class WorkingSessionNewDialog extends JDialog {
 
 		// Create all necessary components
 		JButton gameDirectoryFE = new JButton(fileExplorerText);
-		JButton modDirectory1FE = new JButton(fileExplorerText);
-		JButton modDirectory2FE = new JButton(fileExplorerText);
-		JButton modDirectory3FE = new JButton(fileExplorerText);
 		JButton validate = new JButton(text.validateButton());
 		JButton cancel = new JButton(text.cancelButton());
 
@@ -65,45 +63,27 @@ public class WorkingSessionNewDialog extends JDialog {
 		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
 		// Group them by JPanel
-		JPanel pan0 = new JPanel(new BorderLayout());
-		pan0.add(wsName, BorderLayout.CENTER);
-		pan0.setBorder(BorderFactory.createTitledBorder(text.workingSessionName()));
-		JPanel pan1 = new JPanel(new BorderLayout());
-		pan1.add(gameDirectoryTF, BorderLayout.CENTER);
-		pan1.add(gameDirectoryFE, BorderLayout.EAST);
-		pan1.setBorder(BorderFactory.createTitledBorder(text.gameDirectory()));
-		JPanel pan2= new JPanel(new BorderLayout());
-		pan2.add(modDirectory1TF, BorderLayout.CENTER);
-		pan2.add(modDirectory1FE, BorderLayout.EAST);
-		pan2.setBorder(BorderFactory.createTitledBorder(text.modDirectory()));
-		JPanel pan3 = new JPanel(new BorderLayout());
-		pan3.add(modDirectory2TF, BorderLayout.CENTER);
-		pan3.add(modDirectory2FE, BorderLayout.EAST);
-		pan3.setBorder(BorderFactory.createTitledBorder(text.modDirectory()));
-		JPanel pan4 = new JPanel(new BorderLayout());
-		pan4.add(modDirectory3TF, BorderLayout.CENTER);
-		pan4.add(modDirectory3FE, BorderLayout.EAST);
-		pan4.setBorder(BorderFactory.createTitledBorder(text.modDirectory()));
-		JPanel pan5 = new JPanel();
-		pan5.add(validate);
-		pan5.add(cancel);
+		wsNamePanel = new JPanel(new BorderLayout());
+		wsNamePanel.add(wsName, BorderLayout.CENTER);
+		wsNamePanel.setBorder(BorderFactory.createTitledBorder(text.workingSessionName()));
+		gameDirPanel = new JPanel(new BorderLayout());
+		gameDirPanel.add(gameDirectoryTF, BorderLayout.CENTER);
+		gameDirPanel.add(gameDirectoryFE, BorderLayout.EAST);
+		gameDirPanel.setBorder(BorderFactory.createTitledBorder(text.gameDirectory()));
+		validCancelPanel = new JPanel();
+		validCancelPanel.add(validate);
+		validCancelPanel.add(cancel);
 
 		// Add to the container
-		JPanel container = new JPanel();
-		container.setLayout(new GridLayout(6, 1, 5, 5));
-		container.add(pan0);
-		container.add(pan1);
-		container.add(pan2);
-		container.add(pan3);
-		container.add(pan4);
-		container.add(pan5);
+		container = new JPanel();
+		container.setLayout(new GridLayout(3, 1, 5, 5));
+		container.add(wsNamePanel);
+		container.add(gameDirPanel);
+		container.add(validCancelPanel);
 		setContentPane(container);
 
 		// Add FileExplorer actions
 		gameDirectoryFE.addActionListener(new FileExplorer(1));
-		modDirectory1FE.addActionListener(new FileExplorer(2));
-		modDirectory2FE.addActionListener(new FileExplorer(3));
-		modDirectory3FE.addActionListener(new FileExplorer(4));
 
 		// Add validate/cancel listener
 		validate.addActionListener(new ValidateAction());
@@ -118,17 +98,8 @@ public class WorkingSessionNewDialog extends JDialog {
 			// The user cancels the creation of a working session
 			return null;
 		}
-		LinkedList<String> modDirectories = new LinkedList<String>();
-		if (!modDirectory1TF.getText().equals("")) {
-			modDirectories.add(modDirectory1TF.getText());
-		}
-		if (!modDirectory2TF.getText().equals("")) {
-			modDirectories.add(modDirectory1TF.getText());
-		}
-		if (!modDirectory3TF.getText().equals("")) {
-			modDirectories.add(modDirectory1TF.getText());
-		}
-		return new WorkingSession(wsName.getText(), gameDirectoryTF.getText(), modDirectories, text);
+		return new WorkingSession(wsName.getText(), gameDirectoryTF.getText(),
+				null, text, false);
 	}
 
 	class FileExplorer implements ActionListener {
@@ -151,15 +122,6 @@ public class WorkingSessionNewDialog extends JDialog {
 				switch (fileExplorerIndex) {
 				case 1:
 					gameDirectoryTF.setText(file.toString());
-					break;
-				case 2:
-					modDirectory1TF.setText(file.toString());
-					break;
-				case 3:
-					modDirectory2TF.setText(file.toString());
-					break;
-				case 4:
-					modDirectory3TF.setText(file.toString());
 					break;
 				default:
 					throw new IllegalArgumentException("FileExplorer number " + fileExplorerIndex + " does not exists");

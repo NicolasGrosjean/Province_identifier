@@ -188,8 +188,13 @@ public class TextFrancais extends Text {
 	}
 
 	@Override
-	public String modDirectory() {
+	public String mapModDirectory() {
 		return "[Facultatif] Répertoire d'un mod modifiant la carte";
+	}
+
+	@Override
+	public String provincesModDirectory() {
+		return "[Facultatif] Répertoire d'un mod modifiant les attributs des provinces";
 	}
 
 	@Override
@@ -215,6 +220,16 @@ public class TextFrancais extends Text {
 	@Override
 	public String newWorkingSessionMenuItem() {
 		return "Nouveau";
+	}
+
+	@Override
+	public String newWSCKMenuItem() {
+		return "Crusader Kings";
+	}
+
+	@Override
+	public String newWSBasicMenuItem() {
+		return "Autre";
 	}
 
 	@Override

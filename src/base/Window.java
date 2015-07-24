@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 import config.ConfigStorage;
 import config.WorkingSession;
 import config.WorkingSessionNewDialog;
+import config.WorkingSessionNewDialogCK;
 import text.Text;
 
 /**
@@ -86,8 +87,6 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	private Text text;
 
 	// Menus
-	private JMenu wsMenu;
-	private JMenuItem wsNew;
 	private JMenuItem wsOpenRecently;
 
 	// Configuration of the software
@@ -127,9 +126,14 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		// Menus
 		JMenuBar windowMenuBar = new JMenuBar();
 		// New working session
-		wsMenu = new JMenu(text.workingSessionMenu());
-		wsNew = new JMenuItem(text.newWorkingSessionMenuItem());
-		wsNew.addActionListener(new NewWorkingSession());
+		JMenu wsMenu = new JMenu(text.workingSessionMenu());
+		JMenu wsNew = new JMenu(text.newWorkingSessionMenuItem());
+		JMenuItem wsNewCK = new JMenuItem(text.newWSCKMenuItem());
+		JMenuItem wsNewOthers = new JMenuItem(text.newWSBasicMenuItem());
+		wsNewCK.addActionListener(new NewWorkingSession(true));
+		wsNewOthers.addActionListener(new NewWorkingSession(false));
+		wsNew.add(wsNewCK);
+		wsNew.add(wsNewOthers);
 		wsMenu.add(wsNew);
 		windowMenuBar.add(wsMenu);
 		// Open recent working session
@@ -236,6 +240,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		// Cleaning
 		wsOpenRecently.removeAll();
 		// All working session except the first are added
+		wsOpenRecently.setEnabled(configuration.getSize() > 1);
 		boolean first = true;
 		Iterator<WorkingSession> it = configuration.iterator();
 		while (it.hasNext()) {
@@ -495,16 +500,24 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 
 	// ---------------- Menu actions ----------------------
 	class NewWorkingSession implements ActionListener {
+		private boolean ckGame;
+
+		public NewWorkingSession(boolean ckGame) {
+			this.ckGame = ckGame;
+		}
+
 		public void actionPerformed(ActionEvent arg0) {
-			WorkingSessionNewDialog newWSDialog = new WorkingSessionNewDialog(null, true, text);
+			WorkingSessionNewDialog newWSDialog;
+			if (ckGame) {
+				newWSDialog = new WorkingSessionNewDialogCK(null, true, text);
+			} else {
+				newWSDialog = new WorkingSessionNewDialog(null, true, text);
+			}
 			try {
 				WorkingSession newWS = newWSDialog.getWorkingSession();
 				if (newWS !=null) {
 					// The user defined a working session
 					loadWorkingSession(newWS);
-
-					// There is one or more working session
-					wsOpenRecently.setEnabled(true);
 
 					// Update the configuration
 					configuration.addFirstWorkingSession(newWS);

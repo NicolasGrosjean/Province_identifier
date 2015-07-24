@@ -188,8 +188,13 @@ public class TextEnglish extends Text {
 	}
 
 	@Override
-	public String modDirectory() {
+	public String mapModDirectory() {
 		return "[Optional] Repertory of a mod modifying the map";
+	}
+
+	@Override
+	public String provincesModDirectory() {
+		return "[Optional] Repertory of a mod modifying the province attributes";
 	}
 
 	@Override
@@ -215,6 +220,16 @@ public class TextEnglish extends Text {
 	@Override
 	public String newWorkingSessionMenuItem() {
 		return "New";
+	}
+
+	@Override
+	public String newWSCKMenuItem() {
+		return "Crusader Kings";
+	}
+
+	@Override
+	public String newWSBasicMenuItem() {
+		return "Other";
 	}
 
 	@Override

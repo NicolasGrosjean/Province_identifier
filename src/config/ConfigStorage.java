@@ -22,7 +22,8 @@ import text.TextFrancais;
 public class ConfigStorage {
 	private static final String languageNameAttribure = "language";
 	private static final String wsNameAttribute = "name";
-	private static final String wsGameDirAttribute = "gameDirectory";
+	private static final String wsMapDirAttribute = "mapDirectory";
+	private static final String wsCKGameAttribute = "ckGame";
 	private static final String frenchLanguage = "French";
 
 	/**
@@ -76,7 +77,8 @@ public class ConfigStorage {
 			}
 			try {
 				workingSessions.addLast(new WorkingSession(wsElem.getAttributeValue(wsNameAttribute),
-						wsElem.getAttributeValue(wsGameDirAttribute), modDirectories, text));
+						wsElem.getAttributeValue(wsMapDirAttribute), modDirectories, text,
+						wsElem.getAttributeValue(wsCKGameAttribute).equals("true")));
 			} catch (IOException e) {
 				// The working session is now not correct
 			}
@@ -95,11 +97,14 @@ public class ConfigStorage {
 		// Create a working session XML element
 		Element workingSessionElem = new Element("workingSession");
 		workingSessionElem.setAttribute(new Attribute(wsNameAttribute, ws.getName()));
-		workingSessionElem.setAttribute(new Attribute(wsGameDirAttribute, ws.getGameDirectory()));
-		for (String modDirectory : ws.getModDirectories()) {
-			Element modDirectoryElem = new Element("modDirectory");
-			modDirectoryElem.setText(modDirectory);
-			workingSessionElem.addContent(modDirectoryElem);
+		workingSessionElem.setAttribute(new Attribute(wsMapDirAttribute, ws.getMapDirectory()));
+		workingSessionElem.setAttribute(new Attribute(wsCKGameAttribute, String.valueOf(ws.isCKGame())));
+		if (ws.getModDirectories() != null) {
+			for (String modDirectory : ws.getModDirectories()) {
+				Element modDirectoryElem = new Element("anotherDirectory");
+				modDirectoryElem.setText(modDirectory);
+				workingSessionElem.addContent(modDirectoryElem);
+			}
 		}
 		return workingSessionElem;
 	}
@@ -118,6 +123,10 @@ public class ConfigStorage {
 
 	public void addFirstWorkingSession(WorkingSession ws) {
 		workingSessions.addFirst(ws);
+	}
+
+	public int getSize() {
+		return workingSessions.size();
 	}
 
 	public Iterator<WorkingSession> iterator() {

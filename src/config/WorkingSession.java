@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import crusaderKings2.BaroniesStorage;
 import text.Text;
 import base.MiniMap;
 import base.Panel;
@@ -14,60 +15,62 @@ import base.ProvinceStorage;
 
 public class WorkingSession {
 	private String name;
-	private String gameDirectory;
+	private String mapDirectory;
 	private LinkedList<String> modDirectories;
 	private ProvinceStorage provinces;
 	private Panel panel;
 	private MiniMap miniMap;
+	private boolean ckGame;
+
+	// For Crusader Kings 2
+	private BaroniesStorage storedBaronies;
 
 	/**
 	 * Create the province storage, the panel and the mini map
 	 * from the game and mod directories name
-	 * @param gameDirectory
+	 * @param mapDirectory
 	 * @param modDirectories
 	 * @param text
 	 * @throws IOException FileNotFoundException for definition.csv not found,
 	 * 					   IOException for provinces.bmp not found
 	 */
-	public WorkingSession(String name, String gameDirectory,
-			LinkedList<String> modDirectories, Text text)
+	public WorkingSession(String name, String mapDirectory,
+			LinkedList<String> modDirectories, Text text, boolean ckGame)
 					throws IOException {
 		this.name = name;
-		this.gameDirectory = gameDirectory;
+		this.mapDirectory = mapDirectory;
 		this.modDirectories = modDirectories;
+		this.ckGame = ckGame;
 		LinkedList<String> allDirectories;
 		if (modDirectories != null) {
 			allDirectories = new LinkedList<String>(modDirectories);
 		} else {
 			allDirectories = new LinkedList<String>();
 		}
-		allDirectories.add(gameDirectory);
+		allDirectories.add(mapDirectory);
 
-		// Sorting all files of map directory in game and mod directories
-		LinkedList<String> mapFiles = FileSorting.sortFiles(allDirectories, "/map", text);
+		// Map informations
+		readDefinitionFile(mapDirectory + "/map/definition.csv");
+		panel = new Panel(mapDirectory + "/map/provinces.bmp", text);
+		miniMap = new MiniMap(mapDirectory + "/map/provinces.bmp", text, panel);
 
-		// Search the youngest definition.csv and provinces.bmp files
-		boolean definitionFileFound = false;
-		boolean provincesFileFound = false;
-		while (!mapFiles.isEmpty() &&
-				!(definitionFileFound && provincesFileFound)) {
-			String nameFile = mapFiles.removeLast();
-			if (!definitionFileFound && nameFile.contains("definition.csv")) {
-				readDefinitionFile(nameFile);
-			}
-			if (!provincesFileFound && nameFile.contains("provinces.bmp")) {
-				panel = new Panel(nameFile, text);
-				miniMap = new MiniMap(nameFile, text, panel);
-			}
+		// Province attributes for CK games
+		LinkedList<String> provinceFileNames = new LinkedList<String>();
+		LinkedList<String> mainDirectories = new LinkedList<String>();
+		mainDirectories.add(mapDirectory);
+		while (!modDirectories.isEmpty()) {
+			mainDirectories.add(modDirectories.removeFirst());
 		}
+		provinceFileNames = FileSorting.sortFiles(mainDirectories, "/history/provinces/", text);
+		storedBaronies = new BaroniesStorage(provinceFileNames);
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public String getGameDirectory() {
-		return gameDirectory;
+	public String getMapDirectory() {
+		return mapDirectory;
 	}
 
 	public LinkedList<String> getModDirectories() {
@@ -84,6 +87,14 @@ public class WorkingSession {
 
 	public MiniMap getMiniMap() {
 		return miniMap;
+	}
+
+	public boolean isCKGame() {
+		return ckGame;
+	}
+
+	public BaroniesStorage getStoredBaronies() {
+		return storedBaronies;
 	}
 
 	/**

@@ -12,6 +12,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import config.ConfigStorage;
 import text.Text;
 import text.TextFrancais;
 import base.Window;
@@ -87,7 +88,7 @@ public class TestMiniMap {
 	@Test
 	public void testMouse() throws IOException {
 		MiniMap miniMap = new MiniMap(nomFichierProvince, text, pan);
-		Window windowV2 = new Window(provinces, pan, text, miniMap, null);	
+		Window windowV2 = new Window(provinces, pan, text, miniMap, new ConfigStorage("config_test.xml"));
 		
 		// Clic de souris
 		MouseEvent evt = new MouseEvent(miniMap, MouseEvent.MOUSE_CLICKED, 1, 0, 0, 0, 1, false);

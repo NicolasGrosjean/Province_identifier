@@ -237,7 +237,13 @@ public abstract class Text {
 	 * Optional directory for a mod modifying the map
 	 * @return
 	 */
-	public abstract String modDirectory();
+	public abstract String mapModDirectory();
+
+	/**
+	 * Optional directory for a mod modifying the provinces attributes
+	 * @return
+	 */
+	public abstract String provincesModDirectory();
 
 	/**
 	 * Error word
@@ -268,6 +274,18 @@ public abstract class Text {
 	 * @return
 	 */
 	public abstract String newWorkingSessionMenuItem();
+
+	/**
+	 * Text of the menu item for a new CK working session
+	 * @return
+	 */
+	public abstract String newWSCKMenuItem();
+
+	/**
+	 * Text of the menu item for a new basic working session
+	 * @return
+	 */
+	public abstract String newWSBasicMenuItem();
 
 	/**
 	 * Menu open a recent working session

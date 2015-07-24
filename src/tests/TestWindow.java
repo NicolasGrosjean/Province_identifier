@@ -14,6 +14,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import config.ConfigStorage;
 import text.Text;
 import text.TextFrancais;
 import base.Window;
@@ -94,7 +95,8 @@ public class TestWindow {
 	public void testConstructeur() throws IOException {
 		Panel pan = new Panel(nomFichierProvince, text);
 		new Window(new ProvinceStorage(), pan , text,
-				new MiniMap(nomFichierProvince, text, pan), null).dispose();
+				new MiniMap(nomFichierProvince, text, pan),
+				new ConfigStorage("config_test.xml")).dispose();
 	}
 
 	/****************************************************
@@ -105,7 +107,7 @@ public class TestWindow {
 	public void testMouse() throws IOException {
 		// Initialisation
 		Window window = new Window(provinces, pan, text,
-				new MiniMap(nomFichierProvince, text, pan), null);
+				new MiniMap(nomFichierProvince, text, pan), new ConfigStorage("config.xml"));
 
 		// Clic de souris (position par rapport au Panel)
 		MouseEvent evt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, 17, 157, 1, false);
@@ -196,7 +198,7 @@ public class TestWindow {
 	public void testIntegration() throws IOException {
 		// Initialisation
 		MiniMap miniMap = new MiniMap(nomFichierProvince, text, pan);
-		Window window = new Window(provinces, pan, text, miniMap, null);
+		Window window = new Window(provinces, pan, text, miniMap, new ConfigStorage("config.xml"));
 
 		// Déplacement tout à droite
 		int i = 1;

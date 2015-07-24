@@ -30,7 +30,8 @@ public class BaroniesStorage {
 			File provinceFile = new File(provinceFileName);
 			String provinceFileShortName = provinceFileName.substring(
 					provinceFile.getParent().length() + 1, provinceFileName.length());
-			int provinceID = Integer.parseInt(provinceFileShortName.split(" ")[0]);
+			// Province Id is in the name before '-' and '\space'
+			int provinceID = Integer.parseInt(provinceFileShortName.split("-")[0].split(" ")[0]);
 
 			LinkedList<Barony> baronnies = new LinkedList<Barony>();
 
