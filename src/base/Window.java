@@ -2,6 +2,7 @@ package base;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Point;
@@ -19,6 +20,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.swing.AbstractButton;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -32,6 +34,8 @@ import config.ConfigStorage;
 import config.WorkingSession;
 import config.WorkingSessionNewDialog;
 import config.WorkingSessionNewDialogCK;
+import crusaderKings2.BaroniesStorage;
+import crusaderKings2.Barony;
 import text.Text;
 
 /**
@@ -49,9 +53,8 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	// Default window size
 	static private int WINDOW_WIDTH = 1024 +  2 * FIRST_PIXEL_X + 256 + 5; 
 	// Width margin : 2 FIRST_PIXEL_X for the  2 border + 256 for the mini-map + 5 for a little extra margin
-	static private int WINDOW_HEIGHT = 512 + FIRST_PIXEL_Y + 26 + 22 + 8;
-	// Height margin : FIRST_PIXEL_Y for the top border + 26 for text and buttons + 8 for the bottom border
-	// 													+ 22 for menus 
+	static private int WINDOW_HEIGHT = 512 + FIRST_PIXEL_Y + 22 + 8;
+	// Height margin : FIRST_PIXEL_Y for the top border + 22 for menus  + 8 for the bottom border
 
 	// Map image
 	private Panel pan;
@@ -63,8 +66,14 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	private JPanel container = new JPanel();
 
 	// Text displaying
-	private JLabel textLabel = new JLabel();
 	private JLabel resLabel = new JLabel("");
+	private JLabel barony1 = new JLabel("");
+	private JLabel barony2 = new JLabel("");
+	private JLabel barony3 = new JLabel("");
+	private JLabel barony4 = new JLabel("");
+	private JLabel barony5 = new JLabel("");
+	private JLabel barony6 = new JLabel("");
+	private JLabel barony7 = new JLabel("");
 
 	// Copy button
 	private JButton copyButton = new JButton();
@@ -74,6 +83,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 
 	// Province database
 	private ProvinceStorage provinces;
+	private BaroniesStorage baronnies;
 
 	// Action status for navigation (4 moving + 2 zooming actions)
 	private boolean enabledTop = false; // because we start in top
@@ -91,6 +101,9 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 
 	// Configuration of the software
 	private final ConfigStorage configuration;
+
+	// Working session configuration
+	private boolean CkGame;
 
 	// List of listened component to stop listening them
 	private LinkedList<AbstractButton> listenedButton = new LinkedList<>();
@@ -151,22 +164,17 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		this.setVisible(true);
 	}
 
-	public Window(ProvinceStorage provinces, Panel panel, Text text,
-			MiniMap miniMap, ConfigStorage configuration) {
-		this(WINDOW_WIDTH, WINDOW_HEIGHT, provinces, panel, text, miniMap, configuration);
+	public Window(WorkingSession ws, Text text, ConfigStorage configuration) {
+		this(WINDOW_WIDTH, WINDOW_HEIGHT, ws, text, configuration);
 	}
 
-	public Window(int width, int height, ProvinceStorage provinces, Panel panel,
-			Text text, MiniMap miniMap, ConfigStorage configuration) {
+	public Window(int width, int height, WorkingSession ws,
+			Text text, ConfigStorage configuration) {
 		this(width, height, text, configuration);
-		loadWorkingSession(provinces, panel, miniMap);
+		loadWorkingSession(ws);
 	}
 
 	private void loadWorkingSession(WorkingSession ws) {
-		loadWorkingSession(ws.getProvinces(), ws.getPanel(), ws.getMiniMap());
-	}
-
-	private void loadWorkingSession(ProvinceStorage provinces, Panel panel, MiniMap miniMap) {
 		// Cleaning : removing listener and component which don't need
 		for (AbstractButton absButton : listenedButton) {
 			for(ActionListener al : absButton.getActionListeners()) {
@@ -184,35 +192,61 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		container.removeAll();
 
 		// Parameter initialization
-		this.provinces = provinces;
-		this.pan = panel;
-		this.miniMap = miniMap;
+		this.CkGame = ws.isCKGame();
+		this.provinces = ws.getProvinces();
+		this.baronnies = ws.getStoredBaronies();
+		this.pan = ws.getPanel();
+		this.miniMap = ws.getMiniMap();
 		miniMap.setWindow(this);
 
-		// Map and mini-map adding
+		// Map adding
 		container.add(pan, BorderLayout.CENTER);
-		JPanel east = new JPanel();
-		east.setLayout(new GridLayout(2, 1, 5, 5));
-		east.add(new JPanel());
-		east.add(miniMap);
-		container.add(east, BorderLayout.EAST);
 
-		// Text and button adding
+		// Text of clicked province
+		JPanel east = new JPanel(new GridLayout(2, 1, 0, 5));
+		JPanel provincePanel = new JPanel();
+		provincePanel.setLayout(new GridLayout(2, 1, 0, 5));
 		Font police = new Font("Tahoma", Font.BOLD, 14);
-		textLabel.setText(text.clickedProvince());
+		JLabel textLabel = new JLabel(text.clickedProvince());
 		textLabel.setFont(police);
 		textLabel.setForeground(Color.blue);
 		resLabel.setFont(police);
 		resLabel.setForeground(Color.blue);
-		copyButton.setText(text.copyClipboard());
+		provincePanel.add(textLabel);
+		JPanel resPanel = new JPanel();
+		resPanel.add(resLabel);
+		ImageIcon copyIcon = new ImageIcon("copy_icon.png");
+		copyButton.setIcon(copyIcon);
+		copyButton.setPreferredSize(new Dimension(copyIcon.getIconWidth(),
+				copyIcon.getIconHeight()));
+		resPanel.add(copyButton);
+		provincePanel.add(resPanel);
+		if (CkGame) {
+			JPanel baroniesPanel = new JPanel(new GridLayout(8, 1));
+			JLabel baronyLabel = new JLabel("Baronies of the province:");
+			baroniesPanel.add(baronyLabel);
+			baroniesPanel.add(barony1);
+			baroniesPanel.add(barony2);
+			baroniesPanel.add(barony3);
+			baroniesPanel.add(barony4);
+			baroniesPanel.add(barony5);
+			baroniesPanel.add(barony6);
+			baroniesPanel.add(barony7);
+			JPanel northEast = new JPanel(new GridLayout(2, 1));
+			northEast.add(provincePanel);
+			northEast.add(baroniesPanel);
+			east.add(northEast);
+		} else {
+			east.add(provincePanel);
+		}
+
+		// Mini-map adding
+		east.add(miniMap);
+		container.add(east, BorderLayout.EAST);
+
+		/*
 		searchButton.setText(text.provinceSearch());
-		JPanel north = new JPanel();
-		north.setLayout(new GridLayout(1, 4, 5, 5));
-		north.add(textLabel);
-		north.add(resLabel);
-		north.add(copyButton);
-		north.add(searchButton);
-		container.add(north, BorderLayout.NORTH);
+		container.add(north, BorderLayout.NORTH);*/
 
 		// Button action
 		copyButton.addActionListener(new BoutonCopierListener());
@@ -236,6 +270,9 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		this.setVisible(true);
 	}
 
+	/**
+	 * Update the menu open recently according the configurations
+	 */
 	private void updateOpenRecentlyMenu() {
 		// Cleaning
 		wsOpenRecently.removeAll();
@@ -252,6 +289,45 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 				wsMenuItem.addActionListener(new OpenRecentWorkingSession(ws));
 				wsOpenRecently.add(wsMenuItem);
 			}
+		}
+	}
+
+	/**
+	 * Erase the barony names in the window displaying
+	 */
+	private void eraseBaronyNames() {
+		barony1.setText("");
+		barony2.setText("");
+		barony3.setText("");
+		barony4.setText("");
+		barony5.setText("");
+		barony6.setText("");
+		barony7.setText("");
+	}
+
+	/**
+	 * Get the i-th barony label
+	 * @param i
+	 * @return
+	 */
+	private JLabel getBaronyLabel(int i) {
+		switch (i) {
+		case 1 :
+			return barony1;
+		case 2 :
+			return barony2;
+		case 3 :
+			return barony3;
+		case 4 :
+			return barony4;
+		case 5 :
+			return barony5;
+		case 6 :
+			return barony6;
+		case 7 :
+			return barony7;
+		default :
+			throw new IllegalArgumentException("The " + i + "-th barony doesn't exist");
 		}
 	}
 
@@ -312,13 +388,31 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			if (province != null) {
 				// Display province name
 				resLabel.setText(province.toString());
+				if (CkGame) {
+					// Display barony names
+					eraseBaronyNames();
+					LinkedList<Barony> provinceBaronnies = baronnies.getBaronies(province.getId());
+					if (provinceBaronnies != null) {
+						int i = 0;
+						for (Barony barony : provinceBaronnies) {
+							i++;
+							getBaronyLabel(i).setText(barony.getBaronyName().substring(2));
+						}
+					}
+				}
 				// Flash the province
 				pan.getPosition(rgb, 1, true);
 			} else {
 				resLabel.setText("");
+				if (CkGame) {
+					eraseBaronyNames();
+				}
 			}
 		} else {
 			resLabel.setText("");
+			if (CkGame) {
+				eraseBaronyNames();
+			}
 		}
 	}
 
@@ -560,7 +654,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	}
 
 	public int premierPixelY() {
-		return FIRST_PIXEL_Y + textLabel.getHeight();
+		return FIRST_PIXEL_Y;
 	}
 
 	public String getRes() {

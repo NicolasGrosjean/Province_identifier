@@ -50,8 +50,7 @@ public class Main {
 			if (configuration.hasWorkingSession()) {
 				// Try to create a window with the first working session
 				WorkingSession ws = configuration.getFirst();
-				new Window(ws.getProvinces(), ws.getPanel(),
-						text, ws.getMiniMap(), configuration);
+				new Window(ws, text, configuration);
 			} else {
 				// Create an empty window
 				new Window(text, configuration);
