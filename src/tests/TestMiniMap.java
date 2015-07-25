@@ -21,74 +21,21 @@ import base.Panel;
 import base.ProvinceStorage;
 
 public class TestMiniMap {
-	private static final String nomFichierLecture = "definition.csv";
-	private static final String nomFichierProvince = "provinces.bmp";
 	private static final Text text = new TextFrancais();
-	private static FileInputStream fichierLecture = null;
-	private static ProvinceStorage provinces = new ProvinceStorage();
+	private static final String configFile = "config_test.xml";
+	private static ConfigStorage configuration;
 	private static Panel pan;
 
 	@BeforeClass
 	public static void SetUp() {
-		try {
-			// Ouverture du fichier
-			fichierLecture = new FileInputStream(nomFichierLecture);
-
-			// Lecture en délimitant par des ;
-			Scanner scanner = new Scanner(fichierLecture, "ISO-8859-1"); 
-			// ISO-8859-1 pour caractères spéciaux
-			scanner.useDelimiter(Pattern.compile("[;\n]"));
-			
-			// On cherche des entiers
-			while (!scanner.hasNextInt()) {
-				@SuppressWarnings("unused")
-				String useless = scanner.next();
-			}
-
-			while (scanner.hasNextInt()) {
-				// Lecture d'une province			
-				int id = scanner.nextInt();
-				if (!scanner.hasNextInt())
-					break; // Fin de la lecture
-				int r = scanner.nextInt();
-				if (!scanner.hasNextInt())
-					break; // Fin de la lecture
-				int g = scanner.nextInt();	
-				if (!scanner.hasNextInt())
-					break; // Fin de la lecture
-				int b = scanner.nextInt();
-				String nom = scanner.next();
-				while (!scanner.hasNextInt() && scanner.hasNext()) {
-					@SuppressWarnings("unused")
-					String useless = scanner.next();
-				}
-				
-				// Stockage de la province
-				provinces.addProvince(id, r, g, b, nom);
-			}
-			scanner.close();
-			
-			// Création de l'image à afficher
-			pan = new Panel(nomFichierProvince, text);
-
-		} catch (FileNotFoundException e) {
-			System.out.println(text.fileNotFound(nomFichierLecture));
-		} catch (IOException e) {
-			System.out.println(text.fileNotFound(nomFichierLecture));
-		} finally {
-			try {
-				if (fichierLecture != null)
-					fichierLecture.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		configuration = new ConfigStorage(configFile);
+		pan = configuration.getFirst().getPanel();
 	}
 
 	@Test
 	public void testMouse() throws IOException {
-		MiniMap miniMap = new MiniMap(nomFichierProvince, text, pan);
-		Window windowV2 = new Window(provinces, pan, text, miniMap, new ConfigStorage("config_test.xml"));
+		Window window = new Window(configuration.getFirst(), text, configuration);
+		MiniMap miniMap = configuration.getFirst().getMiniMap();
 		
 		// Clic de souris
 		MouseEvent evt = new MouseEvent(miniMap, MouseEvent.MOUSE_CLICKED, 1, 0, 0, 0, 1, false);
@@ -138,7 +85,7 @@ public class TestMiniMap {
 				pan.getRealHeight() /(pan.getDisplayingRealImageHeight()/2) - 2);
 
 		// Close the window
-		windowV2.dispose();
-		windowV2 = null;
+		window.dispose();
+		window = null;
 	}
 }

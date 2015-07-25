@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<provinceIdentifier language="French">
+  <workingSession name="SWMH" mapDirectory="C:\Users\Nicolas\Documents\Paradox Interactive\Crusader Kings II\MOD\swmh2.854" ckGame="true">
+    <anotherDirectory>C:\Jeux\Paradox Interactive\Crusader Kings II</anotherDirectory>
+  </workingSession>
+  <workingSession name="Ck2 Vanille" mapDirectory="C:\Jeux\Paradox Interactive\Crusader Kings II" ckGame="true" />
+</provinceIdentifier>

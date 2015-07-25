@@ -4,11 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Scanner;
-import java.util.regex.Pattern;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -20,7 +16,6 @@ import text.TextFrancais;
 import base.Window;
 import base.MiniMap;
 import base.Panel;
-import base.ProvinceStorage;
 
 /**
  * Unit tests for Window (test d'intégration du point de vue du projet)
@@ -28,75 +23,20 @@ import base.ProvinceStorage;
  *
  */
 public class TestWindow {
-	private static final String nomFichierLecture = "definition.csv";
-	private static final String nomFichierProvince = "provinces.bmp";
 	private static final Text text = new TextFrancais();
-	private static FileInputStream fichierLecture = null;
-	private static ProvinceStorage provinces = new ProvinceStorage();
+	private static final String configFile = "config_test.xml";
+	private static ConfigStorage configuration;
 	private static Panel pan;
 
 	@BeforeClass
 	public static void SetUp() {
-		try {
-			// Ouverture du fichier
-			fichierLecture = new FileInputStream(nomFichierLecture);
-
-			// Lecture en délimitant par des ;
-			Scanner scanner = new Scanner(fichierLecture, "ISO-8859-1"); 
-			// ISO-8859-1 pour caractères spéciaux
-			scanner.useDelimiter(Pattern.compile("[;\n]"));
-
-			// On cherche des entiers
-			while (!scanner.hasNextInt()) {
-				@SuppressWarnings("unused")
-				String useless = scanner.next();
-			}
-
-			while (scanner.hasNextInt()) {
-				// Lecture d'une province			
-				int id = scanner.nextInt();
-				if (!scanner.hasNextInt())
-					break; // Fin de la lecture
-				int r = scanner.nextInt();
-				if (!scanner.hasNextInt())
-					break; // Fin de la lecture
-				int g = scanner.nextInt();	
-				if (!scanner.hasNextInt())
-					break; // Fin de la lecture
-				int b = scanner.nextInt();
-				String nom = scanner.next();
-				while (!scanner.hasNextInt() && scanner.hasNext()) {
-					@SuppressWarnings("unused")
-					String useless = scanner.next();
-				}
-
-				// Stockage de la province
-				provinces.addProvince(id, r, g, b, nom);
-			}
-			scanner.close();
-
-			// Création de l'image à afficher
-			pan = new Panel(nomFichierProvince, text);
-		} catch (FileNotFoundException e) {
-			System.out.println("Fichier " + nomFichierLecture + " non trouvé !");
-		} catch (IOException e) {
-			System.out.println("Fichier " + nomFichierProvince + " non trouvé !");
-		} finally {
-			try {
-				if (fichierLecture != null)
-					fichierLecture.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		configuration = new ConfigStorage(configFile);
+		pan = configuration.getFirst().getPanel();
 	}
 
 	@Test
 	public void testConstructeur() throws IOException {
-		Panel pan = new Panel(nomFichierProvince, text);
-		new Window(new ProvinceStorage(), pan , text,
-				new MiniMap(nomFichierProvince, text, pan),
-				new ConfigStorage("config_test.xml")).dispose();
+		new Window(configuration.getFirst(), text, configuration);
 	}
 
 	/****************************************************
@@ -106,8 +46,7 @@ public class TestWindow {
 	@Test
 	public void testMouse() throws IOException {
 		// Initialisation
-		Window window = new Window(provinces, pan, text,
-				new MiniMap(nomFichierProvince, text, pan), new ConfigStorage("config.xml"));
+		Window window = new Window(configuration.getFirst(), text, configuration);
 
 		// Clic de souris (position par rapport au Panel)
 		MouseEvent evt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, 17, 157, 1, false);
@@ -136,7 +75,7 @@ public class TestWindow {
 		Assert.assertEquals("Identification de Tyrifjorden raté", window.getRes(), "1691 - Tyrifjorden"); // (18,158)
 
 		// Clic de souris en haut à droite
-		evt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, 1023, 21, 1, false);
+		evt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 2, 0, 1023, 21, 1, false);
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
@@ -158,7 +97,7 @@ public class TestWindow {
 		Assert.assertEquals("Identification de North Sea raté", window.getRes(), "1696 - North Sea"); // (1023, 22)
 
 		// Clic de souris en bas à droite
-		evt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, 1024, 511, 1, false);
+		evt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 3, 0, 1024, 511, 1, false);
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
@@ -197,13 +136,13 @@ public class TestWindow {
 	@Test
 	public void testIntegration() throws IOException {
 		// Initialisation
-		MiniMap miniMap = new MiniMap(nomFichierProvince, text, pan);
-		Window window = new Window(provinces, pan, text, miniMap, new ConfigStorage("config.xml"));
+		Window window = new Window(configuration.getFirst(), text, configuration);
+		MiniMap miniMap = configuration.getFirst().getMiniMap();
 
 		// Déplacement tout à droite
 		int i = 1;
 		if (pan.getImageWidth() < pan.getRealWidth()) {
-			KeyEvent evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 1, 0, 39, KeyEvent.CHAR_UNDEFINED);
+			KeyEvent evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 4, 0, 39, KeyEvent.CHAR_UNDEFINED);
 			for(KeyListener kl: window.getKeyListeners()){
 				kl.keyPressed(evt);
 			}
@@ -213,7 +152,7 @@ public class TestWindow {
 		}
 		while (pan.getWidthNumber() * pan.getDisplayingRealImageWidth() / 2  + pan.getDisplayingRealImageWidth()
 				< pan.getRealWidth()) {
-			KeyEvent evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 1, 0, 39, KeyEvent.CHAR_UNDEFINED);
+			KeyEvent evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 5, 0, 39, KeyEvent.CHAR_UNDEFINED);
 			for(KeyListener kl: window.getKeyListeners()){
 				kl.keyPressed(evt);
 			}
@@ -221,7 +160,7 @@ public class TestWindow {
 			assertMiniMap(miniMap, i, 0);
 			i++;
 		}
-		KeyEvent evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 1, 0, 39, KeyEvent.CHAR_UNDEFINED);
+		KeyEvent evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 6, 0, 39, KeyEvent.CHAR_UNDEFINED);
 		for(KeyListener kl: window.getKeyListeners()){
 			kl.keyPressed(evt);
 		}
@@ -234,7 +173,7 @@ public class TestWindow {
 			int hauteurImageReellePrecedente = pan.getDisplayingRealImageHeight();
 			int numLargeurPrecedent = pan.getWidthNumber();
 			int numHauteurPrecedent = pan.getHeightNumber();
-			evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 1, 0, 107, '+');
+			evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 7, 0, 107, '+');
 			for(KeyListener kl: window.getKeyListeners()){
 				kl.keyPressed(evt);
 			}
@@ -246,7 +185,7 @@ public class TestWindow {
 		}
 
 		// On clique en (0, HauteurImage)
-		MouseEvent mevt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, 0-8, pan.getImageHeight()-57, 1, false);
+		MouseEvent mevt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 8, 0, 0-8, pan.getImageHeight()-57, 1, false);
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(mevt);
 		}
@@ -271,7 +210,7 @@ public class TestWindow {
 
 		// Déplacement tout à gauche
 		while (pan.getWidthNumber() > 0) {
-			evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 1, 0, 37, KeyEvent.CHAR_UNDEFINED);
+			evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 9, 0, 37, KeyEvent.CHAR_UNDEFINED);
 			for(KeyListener kl: window.getKeyListeners()){
 				kl.keyPressed(evt);
 			}
@@ -279,7 +218,7 @@ public class TestWindow {
 			Assert.assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), i);
 			assertMiniMap(miniMap, i, 0);
 		}
-		evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 1, 0, 37, KeyEvent.CHAR_UNDEFINED);
+		evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 10, 0, 37, KeyEvent.CHAR_UNDEFINED);
 		for(KeyListener kl: window.getKeyListeners()){
 			kl.keyPressed(evt);
 		}
@@ -287,7 +226,7 @@ public class TestWindow {
 		assertMiniMap(miniMap, i, 0);
 
 		// On clique en (LargeurMax, HauteurMax)
-		mevt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, pan.getImageWidth() - 1,
+		mevt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 11, 0, pan.getImageWidth() - 1,
 				pan.getImageHeight() - 1, 1, false);
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(mevt);
@@ -296,7 +235,7 @@ public class TestWindow {
 
 		// Déplacement tout en bas
 		if (pan.getImageHeight() < pan.getRealHeight()) {
-			evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 1, 0, 40, KeyEvent.CHAR_UNDEFINED);
+			evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 12, 0, 40, KeyEvent.CHAR_UNDEFINED);
 			for(KeyListener kl: window.getKeyListeners()){
 				kl.keyPressed(evt);
 			}
@@ -306,7 +245,7 @@ public class TestWindow {
 		}
 		while (pan.getHeightNumber() * pan.getDisplayingRealImageHeight() / 2  + pan.getDisplayingRealImageHeight()
 				< pan.getRealHeight()) {
-			evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 1, 0, 40, KeyEvent.CHAR_UNDEFINED);
+			evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 13, 0, 40, KeyEvent.CHAR_UNDEFINED);
 			for(KeyListener kl: window.getKeyListeners()){
 				kl.keyPressed(evt);
 			}
@@ -314,7 +253,7 @@ public class TestWindow {
 			Assert.assertEquals("Numéro de hauteur incorrect", pan.getHeightNumber(), i);
 			assertMiniMap(miniMap, 0, i);
 		}
-		evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 1, 0, 40, KeyEvent.CHAR_UNDEFINED);
+		evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 14, 0, 40, KeyEvent.CHAR_UNDEFINED);
 		for(KeyListener kl: window.getKeyListeners()){
 			kl.keyPressed(evt);
 		}
@@ -322,7 +261,7 @@ public class TestWindow {
 		assertMiniMap(miniMap, 0, i);
 		
 		// On clique en (LargeurMax, HauteurMax)
-		mevt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, pan.getImageWidth() - 1,
+		mevt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 15, 0, pan.getImageWidth() - 1,
 				pan.getImageHeight() - 1, 1, false);
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(mevt);
@@ -331,7 +270,7 @@ public class TestWindow {
 		
 		// Déplacement tout en haut
 		while (pan.getHeightNumber() > 0) {
-			evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 1, 0, 38, KeyEvent.CHAR_UNDEFINED);
+			evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 16, 0, 38, KeyEvent.CHAR_UNDEFINED);
 			for(KeyListener kl: window.getKeyListeners()){
 				kl.keyPressed(evt);
 			}
@@ -339,7 +278,7 @@ public class TestWindow {
 			Assert.assertEquals("Numéro de hauteur incorrect", pan.getHeightNumber(), i);
 			assertMiniMap(miniMap, 0, i);
 		}
-		evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 1, 0, 38, KeyEvent.CHAR_UNDEFINED);
+		evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 17, 0, 38, KeyEvent.CHAR_UNDEFINED);
 		for(KeyListener kl: window.getKeyListeners()){
 			kl.keyPressed(evt);
 		}
@@ -347,7 +286,7 @@ public class TestWindow {
 		assertMiniMap(miniMap, 0, i);
 
 		// On clique en (LargeurMax, HauteurMax)
-		mevt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, pan.getImageWidth() - 1,
+		mevt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 18, 0, pan.getImageWidth() - 1,
 				pan.getImageHeight() - 1, 1, false);
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(mevt);
