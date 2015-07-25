@@ -55,14 +55,16 @@ public class WorkingSession {
 		miniMap = new MiniMap(mapDirectory + "/map/provinces.bmp", text, panel);
 
 		// Province attributes for CK games
-		LinkedList<String> provinceFileNames = new LinkedList<String>();
-		LinkedList<String> mainDirectories = new LinkedList<String>();
-		mainDirectories.add(mapDirectory);
-		while (!modDirectories.isEmpty()) {
-			mainDirectories.add(modDirectories.removeFirst());
+		if (ckGame) {
+			LinkedList<String> provinceFileNames = new LinkedList<String>();
+			LinkedList<String> mainDirectories = new LinkedList<String>();
+			mainDirectories.add(mapDirectory);
+			while (!modDirectories.isEmpty()) {
+				mainDirectories.add(modDirectories.removeFirst());
+			}
+			provinceFileNames = FileSorting.sortFiles(mainDirectories, "/history/provinces/", text);
+			storedBaronies = new BaroniesStorage(provinceFileNames);
 		}
-		provinceFileNames = FileSorting.sortFiles(mainDirectories, "/history/provinces/", text);
-		storedBaronies = new BaroniesStorage(provinceFileNames);
 	}
 
 	public String getName() {
