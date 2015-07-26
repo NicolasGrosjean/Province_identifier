@@ -219,6 +219,8 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		copyButton.setIcon(copyIcon);
 		copyButton.setPreferredSize(new Dimension(copyIcon.getIconWidth(),
 				copyIcon.getIconHeight()));
+		copyButton.setToolTipText(text.copyClipboard());
+		copyButton.setEnabled(false);
 		resPanel.add(copyButton);
 		provincePanel.add(resPanel);
 		if (CkGame) {
@@ -388,6 +390,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			if (province != null) {
 				// Display province name
 				resLabel.setText(province.toString());
+				copyButton.setEnabled(true);
 				if (CkGame) {
 					// Display barony names
 					eraseBaronyNames();
@@ -404,12 +407,14 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 				pan.getPosition(rgb, 1, true);
 			} else {
 				resLabel.setText("");
+				copyButton.setEnabled(false);
 				if (CkGame) {
 					eraseBaronyNames();
 				}
 			}
 		} else {
 			resLabel.setText("");
+			copyButton.setEnabled(false);
 			if (CkGame) {
 				eraseBaronyNames();
 			}
