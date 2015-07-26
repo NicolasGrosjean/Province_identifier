@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -35,9 +36,12 @@ public class BaroniesStorage {
 
 			LinkedList<Barony> baronnies = new LinkedList<Barony>();
 
+			// Hash set to guarantee unicity of barony
+			HashSet<String> baronyNameSet = new HashSet<String>();
+
 			fichierLecture = new FileInputStream(provinceFileName);
 			Scanner scanner=new Scanner(fichierLecture, "ISO-8859-1");
-			scanner.useDelimiter(Pattern.compile("[ =\n\t]"));
+			scanner.useDelimiter(Pattern.compile("[=\\s\n\t]"));
 			while (scanner.hasNext()) {
 				String word = scanner.next();
 				if (word.contains("#")) {
@@ -48,10 +52,18 @@ public class BaroniesStorage {
 					if (scanner.hasNext()) {
 						// Read its type and store it
 						String baronyType = scanner.next();
-						baronnies.add(new Barony(word,
-								baronyType.equals("city"),
-								baronyType.equals("castle"),
-								provinceID));
+						while (baronyType.equals("") && scanner.hasNext()) {
+							baronyType = scanner.next();
+						}
+						if ((baronyType.regionMatches(0, "city", 0, 4) ||
+								baronyType.regionMatches(0, "castle", 0, 6) ||
+								baronyType.regionMatches(0, "temple", 0, 6))
+							&& baronyNameSet.add(word)) {
+							baronnies.add(new Barony(word,
+									baronyType.regionMatches(0, "city", 0, 4),
+									baronyType.regionMatches(0, "castle", 0, 6),
+									provinceID));
+						}
 					}
 				}
 			}
