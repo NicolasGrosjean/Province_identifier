@@ -41,13 +41,6 @@ public class WorkingSession {
 		this.mapDirectory = mapDirectory;
 		this.modDirectories = modDirectories;
 		this.ckGame = ckGame;
-		LinkedList<String> allDirectories;
-		if (modDirectories != null) {
-			allDirectories = new LinkedList<String>(modDirectories);
-		} else {
-			allDirectories = new LinkedList<String>();
-		}
-		allDirectories.add(mapDirectory);
 
 		// Map informations
 		readDefinitionFile(mapDirectory + "/map/definition.csv");
@@ -57,12 +50,14 @@ public class WorkingSession {
 		// Province attributes for CK games
 		if (ckGame) {
 			LinkedList<String> provinceFileNames = new LinkedList<String>();
-			LinkedList<String> mainDirectories = new LinkedList<String>();
-			mainDirectories.add(mapDirectory);
-			while (!modDirectories.isEmpty()) {
-				mainDirectories.add(modDirectories.removeFirst());
+			LinkedList<String> allDirectories;
+			if (modDirectories != null) {
+				allDirectories = new LinkedList<String>(modDirectories);
+			} else {
+				allDirectories = new LinkedList<String>();
 			}
-			provinceFileNames = FileSorting.sortFiles(mainDirectories, "/history/provinces/", text);
+			allDirectories.add(mapDirectory);
+			provinceFileNames = FileSorting.sortFiles(allDirectories, "/history/provinces/", text);
 			storedBaronies = new BaroniesStorage(provinceFileNames);
 		}
 	}
