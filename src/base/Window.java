@@ -214,6 +214,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		resLabel.setForeground(Color.blue);
 		provincePanel.add(textLabel);
 		JPanel resPanel = new JPanel();
+		resLabel.setText("");
 		resPanel.add(resLabel);
 		ImageIcon copyIcon = new ImageIcon("copy_icon.png");
 		copyButton.setIcon(copyIcon);
@@ -224,6 +225,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		resPanel.add(copyButton);
 		provincePanel.add(resPanel);
 		if (CkGame) {
+			eraseBaronyNames();
 			JPanel baroniesPanel = new JPanel(new GridLayout(8, 1));
 			JLabel baronyLabel = new JLabel("Baronies of the province:");
 			baroniesPanel.add(baronyLabel);
