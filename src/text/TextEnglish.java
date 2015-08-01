@@ -236,4 +236,24 @@ public class TextEnglish extends Text {
 	public String workingSessionOpenRecently() {
 		return "Open recent";
 	}
+
+	@Override
+	public String provinceBaronies() {
+		return "Baronies of the province:";
+	}
+
+	@Override
+	public String castle() {
+		return "Castle";
+	}
+
+	@Override
+	public String city() {
+		return "City";
+	}
+
+	@Override
+	public String temple() {
+		return "Temple";
+	}
 }

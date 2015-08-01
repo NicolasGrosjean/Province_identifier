@@ -292,4 +292,28 @@ public abstract class Text {
 	 * @return
 	 */
 	public abstract String workingSessionOpenRecently();
+
+	/**
+	 * Text presenting that the following text is the baronies of the province
+	 * @return
+	 */
+	public abstract String provinceBaronies();
+
+	/**
+	 * The barony type castle
+	 * @return
+	 */
+	public abstract String castle();
+
+	/**
+	 * The barony type city
+	 * @return
+	 */
+	public abstract String city();
+
+	/**
+	 * The barony type temple
+	 * @return
+	 */
+	public abstract String temple();
 }

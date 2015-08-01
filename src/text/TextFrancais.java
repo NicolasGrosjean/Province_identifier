@@ -236,4 +236,23 @@ public class TextFrancais extends Text {
 	public String workingSessionOpenRecently() {
 		return "Ouvrir récent";
 	}
+
+	@Override
+	public String provinceBaronies() {
+		return "Baronnies de la province:";
+	}
+	@Override
+	public String castle() {
+		return "Château";
+	}
+
+	@Override
+	public String city() {
+		return "Ville";
+	}
+
+	@Override
+	public String temple() {
+		return "Temple";
+	}
 }

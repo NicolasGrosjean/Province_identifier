@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -204,16 +205,11 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 
 		// Text of clicked province
 		JPanel east = new JPanel(new GridLayout(2, 1, 0, 5));
-		JPanel provincePanel = new JPanel();
-		provincePanel.setLayout(new GridLayout(2, 1, 0, 5));
-		Font police = new Font("Tahoma", Font.BOLD, 14);
-		JLabel textLabel = new JLabel(text.clickedProvince());
-		textLabel.setFont(police);
-		textLabel.setForeground(Color.blue);
-		resLabel.setFont(police);
-		resLabel.setForeground(Color.blue);
-		provincePanel.add(textLabel);
+		Font provinceFont = new Font("Tahoma", Font.BOLD, 14);
+		resLabel.setFont(provinceFont);
+		resLabel.setForeground(new Color(128, 128, 128));
 		JPanel resPanel = new JPanel();
+		resPanel.setBorder(BorderFactory.createTitledBorder(text.clickedProvince()));
 		resLabel.setText("");
 		resPanel.add(resLabel);
 		ImageIcon copyIcon = new ImageIcon("copy_icon.png");
@@ -223,12 +219,18 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		copyButton.setToolTipText(text.copyClipboard());
 		copyButton.setEnabled(false);
 		resPanel.add(copyButton);
-		provincePanel.add(resPanel);
 		if (CkGame) {
 			eraseBaronyNames();
-			JPanel baroniesPanel = new JPanel(new GridLayout(8, 1));
-			JLabel baronyLabel = new JLabel("Baronies of the province:");
-			baroniesPanel.add(baronyLabel);
+			JPanel baroniesPanel = new JPanel(new GridLayout(7, 1));
+			baroniesPanel.setBorder(BorderFactory.createTitledBorder(text.provinceBaronies()));
+			Font baronyFont = new Font("Tahoma", Font.BOLD, 13);
+			barony1.setFont(baronyFont);
+			barony2.setFont(baronyFont);
+			barony3.setFont(baronyFont);
+			barony4.setFont(baronyFont);
+			barony5.setFont(baronyFont);
+			barony6.setFont(baronyFont);
+			barony7.setFont(baronyFont);
 			baroniesPanel.add(barony1);
 			baroniesPanel.add(barony2);
 			baroniesPanel.add(barony3);
@@ -236,12 +238,12 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			baroniesPanel.add(barony5);
 			baroniesPanel.add(barony6);
 			baroniesPanel.add(barony7);
-			JPanel northEast = new JPanel(new GridLayout(2, 1));
-			northEast.add(provincePanel);
+			JPanel northEast = new JPanel(new BorderLayout());
+			northEast.add(resPanel, BorderLayout.NORTH);
 			northEast.add(baroniesPanel);
 			east.add(northEast);
 		} else {
-			east.add(provincePanel);
+			east.add(resPanel);
 		}
 
 		// Mini-map adding
@@ -336,6 +338,31 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	}
 
 	/**
+	 * Set to i-th barony label the text of the barony
+	 * @param i
+	 * @param barony
+	 */
+	private void setBaroniesText(int i, Barony barony) {
+		JLabel baronyLabel = getBaronyLabel(i);
+		// Remove "b_" and replace the new first letter by its upper case (a->A)
+		baronyLabel.setText(barony.getBaronyName().substring(2, 3).toUpperCase()
+				+ barony.getBaronyName().substring(3));
+		if (barony.isCastle()) {
+			baronyLabel.setText(baronyLabel.getText() + " (Castle)");
+			baronyLabel.setForeground(new Color(0, 0, 255));
+		} else if (barony.isCity()) {
+			baronyLabel.setText(baronyLabel.getText() + " (City)");
+			baronyLabel.setForeground(new Color(0, 128, 0));
+		} else if (barony.isTemple()) {
+			baronyLabel.setText(baronyLabel.getText() + " (Temple)");
+			baronyLabel.setForeground(new Color(255, 0, 0));
+		} else {
+			throw new IllegalArgumentException(barony.getBaronyName() + 
+					" is not a castle, a city or a temple.");
+		}
+	}
+
+	/**
 	 * Locking/unlocking moving actions
 	 */
 	public void movingActionLockingUnlocking() {
@@ -401,7 +428,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 						int i = 0;
 						for (Barony barony : provinceBaronnies) {
 							i++;
-							getBaronyLabel(i).setText(barony.getBaronyName().substring(2));
+							setBaroniesText(i, barony);
 						}
 					}
 				}
