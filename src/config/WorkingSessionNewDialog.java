@@ -98,7 +98,7 @@ public class WorkingSessionNewDialog extends JDialog {
 			return null;
 		}
 		return new WorkingSession(wsName.getText(), gameDirectoryTF.getText(),
-				null, null, text, false);
+				null, null, text, false, true);
 	}
 
 	class FileExplorer implements ActionListener {

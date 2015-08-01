@@ -179,7 +179,18 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	public Window(int width, int height, WorkingSession ws,
 			Text text, ConfigStorage configuration) {
 		this(width, height, text, configuration);
-		loadWorkingSession(ws);
+		try {
+			if (!ws.isInit()) {
+				ws.initialize();
+			}
+			loadWorkingSession(ws);
+		} catch (IllegalArgumentException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), text.error(), JOptionPane.ERROR_MESSAGE);
+		} catch (FileNotFoundException e) {
+			JOptionPane.showMessageDialog(null, text.fileNotFound("definition.csv"), text.error(), JOptionPane.ERROR_MESSAGE);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, text.fileNotFound("provinces.bmp"), text.error(), JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	private void loadWorkingSession(WorkingSession ws) {
@@ -688,7 +699,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			} catch (FileNotFoundException e) {
 				JOptionPane.showMessageDialog(null, text.fileNotFound("definition.csv"), text.error(), JOptionPane.ERROR_MESSAGE);
 			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null, text.fileNotFound("provinces.bmp.csv"), text.error(), JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, text.fileNotFound("provinces.bmp"), text.error(), JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -701,12 +712,23 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		}
 
 		public void actionPerformed(ActionEvent arg0) {
-			loadWorkingSession(ws);
+			try {
+				if (!ws.isInit()) {
+					ws.initialize();
+				}
+				loadWorkingSession(ws);
 
-			// Update the configuration and the menu
-			configuration.becomeFirst(ws);
-			configuration.saveConfigFile();
-			updateOpenRecentlyMenu();
+				// Update the configuration and the menu
+				configuration.becomeFirst(ws);
+				configuration.saveConfigFile();
+				updateOpenRecentlyMenu();
+			} catch (IllegalArgumentException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), text.error(), JOptionPane.ERROR_MESSAGE);
+			} catch (FileNotFoundException e) {
+				JOptionPane.showMessageDialog(null, text.fileNotFound("definition.csv"), text.error(), JOptionPane.ERROR_MESSAGE);
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, text.fileNotFound("provinces.bmp"), text.error(), JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 

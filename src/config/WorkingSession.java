@@ -22,7 +22,9 @@ public class WorkingSession {
 	private ProvinceStorage provinces;
 	private Panel panel;
 	private MiniMap miniMap;
+	private Text text;
 	private boolean ckGame;
+	private boolean init;
 
 	// For Crusader Kings 2
 	private BaroniesStorage storedBaronies;
@@ -37,7 +39,7 @@ public class WorkingSession {
 	 * 					   IOException for provinces.bmp not found
 	 */
 	public WorkingSession(String name, String gameDirectory, String mapModDirectory,
-			LinkedList<String> modDirectories, Text text, boolean ckGame)
+			LinkedList<String> modDirectories, Text text, boolean ckGame, boolean init)
 					throws IOException {
 		this.name = name;
 		this.gameDirectory = gameDirectory;
@@ -48,30 +50,40 @@ public class WorkingSession {
 			this.mapDirectory = gameDirectory;
 		}
 		this.modDirectories = modDirectories;
+		this.text = text;
 		this.ckGame = ckGame;
+		this.init = init;
+		if (init) {
+			initialize();
+		}
+	}
 
-		// Map informations
-		readDefinitionFile(mapDirectory + "/map/definition.csv");
-		panel = new Panel(mapDirectory + "/map/provinces.bmp", text);
-		miniMap = new MiniMap(mapDirectory + "/map/provinces.bmp", text, panel);
+	public void initialize() throws IOException {
+		if (!init) {
+			init = true;
+			// Map informations
+			readDefinitionFile(mapDirectory + "/map/definition.csv");
+			panel = new Panel(mapDirectory + "/map/provinces.bmp", text);
+			miniMap = new MiniMap(mapDirectory + "/map/provinces.bmp", text, panel);
 
-		// Province attributes for CK games
-		if (ckGame) {
-			// List the directories with province files
-			// Game directory must be first, then map mod directory (if exists), finally other mods
-			LinkedList<String> provinceFileNames = new LinkedList<String>();
-			LinkedList<String> allDirectories;
-			if (modDirectories != null) {
-				allDirectories = new LinkedList<String>(modDirectories);
-			} else {
-				allDirectories = new LinkedList<String>();
+			// Province attributes for CK games
+			if (ckGame) {
+				// List the directories with province files
+				// Game directory must be first, then map mod directory (if exists), finally other mods
+				LinkedList<String> provinceFileNames = new LinkedList<String>();
+				LinkedList<String> allDirectories;
+				if (modDirectories != null) {
+					allDirectories = new LinkedList<String>(modDirectories);
+				} else {
+					allDirectories = new LinkedList<String>();
+				}
+				if (mapModDirectory != null) {
+					allDirectories.addFirst(mapModDirectory);
+				}
+				allDirectories.addFirst(gameDirectory);
+				provinceFileNames = FileSorting.giveFilesByDirPriority(allDirectories, "/history/provinces/", text);
+				storedBaronies = new BaroniesStorage(provinceFileNames);
 			}
-			if (mapModDirectory != null) {
-				allDirectories.addFirst(mapModDirectory);
-			}
-			allDirectories.addFirst(gameDirectory);
-			provinceFileNames = FileSorting.giveFilesByDirPriority(allDirectories, "/history/provinces/", text);
-			storedBaronies = new BaroniesStorage(provinceFileNames);
 		}
 	}
 
@@ -99,12 +111,24 @@ public class WorkingSession {
 		return provinces;
 	}
 
+	public boolean isInit() {
+		return init;
+	}
+
 	public Panel getPanel() {
-		return panel;
+		if (init) {
+			return panel;
+		} else {
+			throw new IllegalArgumentException("Working session not initialized");
+		}
 	}
 
 	public MiniMap getMiniMap() {
-		return miniMap;
+		if (init) {
+			return miniMap;
+		} else {
+			throw new IllegalArgumentException("Working session not initialized");
+		}
 	}
 
 	public boolean isCKGame() {
@@ -112,7 +136,11 @@ public class WorkingSession {
 	}
 
 	public BaroniesStorage getStoredBaronies() {
-		return storedBaronies;
+		if (init) {
+			return storedBaronies;
+		} else {
+			throw new IllegalArgumentException("Working session not initialized");
+		}
 	}
 
 	/**

@@ -2,11 +2,7 @@ package tests;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Scanner;
-import java.util.regex.Pattern;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -18,7 +14,6 @@ import text.TextFrancais;
 import base.Window;
 import base.MiniMap;
 import base.Panel;
-import base.ProvinceStorage;
 
 public class TestMiniMap {
 	private static final Text text = new TextFrancais();
@@ -27,8 +22,9 @@ public class TestMiniMap {
 	private static Panel pan;
 
 	@BeforeClass
-	public static void SetUp() {
+	public static void SetUp() throws IOException {
 		configuration = new ConfigStorage(configFile);
+		configuration.getFirst().initialize();
 		pan = configuration.getFirst().getPanel();
 	}
 

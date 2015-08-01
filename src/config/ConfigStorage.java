@@ -80,7 +80,7 @@ public class ConfigStorage {
 				workingSessions.addLast(new WorkingSession(wsElem.getAttributeValue(wsNameAttribute),
 						wsElem.getAttributeValue(wsGameDirAttribute),
 						wsElem.getAttributeValue(wsMapModDirAttribute), modDirectories, text,
-						wsElem.getAttributeValue(wsCKGameAttribute).equals("true")));
+						wsElem.getAttributeValue(wsCKGameAttribute).equals("true"), false));
 			} catch (IOException e) {
 				// The working session is now not correct
 			}

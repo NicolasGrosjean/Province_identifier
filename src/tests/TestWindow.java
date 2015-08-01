@@ -29,8 +29,9 @@ public class TestWindow {
 	private static Panel pan;
 
 	@BeforeClass
-	public static void SetUp() {
+	public static void SetUp() throws IOException {
 		configuration = new ConfigStorage(configFile);
+		configuration.getFirst().initialize();
 		pan = configuration.getFirst().getPanel();
 	}
 

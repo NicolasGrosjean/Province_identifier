@@ -49,7 +49,8 @@ public class Main {
 		} else {
 			if (configuration.hasWorkingSession()) {
 				// Try to create a window with the first working session
-				WorkingSession ws = configuration.getFirst();
+				WorkingSession ws;
+				ws = configuration.getFirst();
 				new Window(ws, text, configuration);
 			} else {
 				// Create an empty window
