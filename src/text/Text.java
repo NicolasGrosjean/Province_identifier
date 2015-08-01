@@ -75,7 +75,7 @@ public abstract class Text {
 	 * @return
 	 */
 	public abstract String nameProvinceSearchLabel();
-	
+
 	/**
 	 * Message on the button for the search of province by name
 	 * @return
@@ -93,7 +93,26 @@ public abstract class Text {
 	 * @return
 	 */
 	public abstract String nameProvinceSearchBloc();
+
+
+	/**
+	 * Message on the label for the search of province by barony
+	 * @return
+	 */
+	public abstract String baronyProvinceSearchLabel();
+
+	/**
+	 * Message on the button for the search of province by barony
+	 * @return
+	 */
+	public abstract String baronyProvinceSearchButton();
 	
+	/**
+	 * Message on the button for the selection of barony
+	 * @return
+	 */
+	public abstract String baronyProvinceSelectionButton();
+
 	/**
 	 * Message on the button to cancel
 	 * @return
@@ -316,4 +335,22 @@ public abstract class Text {
 	 * @return
 	 */
 	public abstract String temple();
+
+	/**
+	 * Text of the menu to search a province with its ID
+	 * @return
+	 */
+	public abstract String searchID();
+
+	/**
+	 * Text of the menu to search a province with its name
+	 * @return
+	 */
+	public abstract String searchName();
+
+	/**
+	 * Text of the menu to search a province with one of its baronies
+	 * @return
+	 */
+	public abstract String searchBarony();
 }

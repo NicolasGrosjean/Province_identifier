@@ -63,6 +63,12 @@ public class Barony implements Comparable {
 		return levenshteinDistance;
 	}
 
+	@Override
+	public String toString() {
+		return baronyName.substring(2, 3).toUpperCase()
+				+ baronyName.substring(3);
+	}
+
 	/**
 	 * Calculate the levenshteinDistance between the barony name and the search name
 	 * @param searchName

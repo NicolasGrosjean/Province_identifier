@@ -20,8 +20,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
+import crusaderKings2.BaroniesStorage;
+import crusaderKings2.Barony;
 import text.Text;
 
 /**
@@ -40,20 +43,30 @@ public class SearchDialog extends JDialog {
 	private JPanel bottomNameProvinceSearch;
 	private JRadioButton firstProvince;
 	private JRadioButton secondProvince;
-	private JRadioButton thirdProvince;	
+	private JRadioButton thirdProvince;
 	private JRadioButton fourthProvince;
 	private JRadioButton fifthProvince;
+	private BaroniesStorage baronnies;
+	private JTextField baronyReader;
+	private LinkedList<Barony> nearestBaronies;
+	private JPanel bottomNameBaronySearch;
+	private JRadioButton firstBarony;
+	private JRadioButton secondBarony;
+	private JRadioButton thirdBarony;	
+	private JRadioButton fourthBarony;
+	private JRadioButton fifthBarony;
 
 	public SearchDialog(JFrame parent, String title, boolean modal, Text text,
-			ProvinceStorage provinces, LinkedList<Province> nearestProvinces) {
+			ProvinceStorage provinces, int selectedIndex, boolean ckGame,
+			BaroniesStorage baronnies) {
 		super(parent, title, modal);
 		this.text = text;
 		this.provinces = provinces;
-		this.nearestProvinces = nearestProvinces;
-		setSize(750, 370);
+		this.baronnies = baronnies;
+		setSize(400, 370);
 		setLocationRelativeTo(null);
 		setResizable(false);
-		initComponent();
+		initComponent(selectedIndex, ckGame);
 	}
 
 	public Province getSearchResult() {
@@ -62,43 +75,40 @@ public class SearchDialog extends JDialog {
 		// When user stops use it (when isVisible == false), we return his Province choice
 		return searchedProvince;
 	}
-	private void initComponent(){
+	private void initComponent(int selectedIndex, boolean ckGame){
 		JPanel container = new JPanel();
 		container.setLayout(new BorderLayout());
 
 		// Bloc for ID province search
-		JPanel west = new JPanel();
+		JPanel idPaneSearch = new JPanel();
 		JLabel idProvinceSearchInfo = new JLabel(text.idProvinceSearchLabel());
 		idReader = new JFormattedTextField(NumberFormat.getIntegerInstance());
 		JButton idSearchButton = new JButton(text.idProvinceSearchButton());
 		idSearchButton.addActionListener(new IdSearchButtonListener());
-		west.setLayout(new GridLayout(3, 1, 5, 5));
-		west.add(idProvinceSearchInfo);
-		west.add(idReader);
-		west.add(idSearchButton);
-		west.setBorder(BorderFactory.createTitledBorder(text.idProvinceSearchBloc()));
-		west.setPreferredSize(new Dimension(getWidth() / 2 - 3, 60));
+		idPaneSearch.setLayout(new GridLayout(3, 1, 5, 5));
+		idPaneSearch.add(idProvinceSearchInfo);
+		idPaneSearch.add(idReader);
+		idPaneSearch.add(idSearchButton);
 		// The bloc occupy only a little part of the space
-		JPanel newWest = new JPanel();
-		newWest.setLayout(new GridLayout(2, 1, 5, 5));
-		newWest.add(west);
-		container.add(newWest, BorderLayout.WEST);
+		JPanel newIdPaneSearch = new JPanel();
+		newIdPaneSearch.setLayout(new GridLayout(2, 1, 5, 5));
+		newIdPaneSearch.add(idPaneSearch);
 
-		// Bloc for ID province search
-		JPanel east = new JPanel();
+		// Bloc for name province search
+		JPanel namePaneSearch = new JPanel();
 		JLabel nameProvinceSearchInfo = new JLabel(text.nameProvinceSearchLabel());
 		nameReader = new JTextField();
 		nameReader.addKeyListener(new NameTextFieldListener()); // To have only letters
 		JButton nameSearchButton = new JButton(text.nameProvinceSearchButton());
 		nameSearchButton.addActionListener(new NameSearchButtonListener());
-		east.setLayout(new GridLayout(4, 1, 5, 5));
-		east.add(nameProvinceSearchInfo);
-		east.add(nameReader);
-		east.add(nameSearchButton);
-		JPanel newEast = new JPanel();
+		namePaneSearch.setLayout(new GridLayout(4, 1, 5, 5));
+		namePaneSearch.add(nameProvinceSearchInfo);
+		namePaneSearch.add(nameReader);
+		namePaneSearch.add(nameSearchButton);
+		JPanel newNamePaneSearch = new JPanel();
 		bottomNameProvinceSearch = new JPanel();
 
-		// Bloc for province name search
+		// Bloc for province name search result
 		firstProvince = new JRadioButton();
 		secondProvince = new JRadioButton();
 		thirdProvince = new JRadioButton();
@@ -120,15 +130,68 @@ public class SearchDialog extends JDialog {
 		JButton nameSelectorButton = new JButton(text.nameProvinceSelectionButton());
 		nameSelectorButton.addActionListener(new NameSelectorButtonListener());
 		bottomNameProvinceSearch.add(nameSelectorButton);
-		// No visible because we don't now the search province name
+		// No visible because we don't know the search province name
 		bottomNameProvinceSearch.setVisible(false);
 
-		newEast.setLayout(new GridLayout(2, 1, 5, 5));
-		newEast.add(east);
-		newEast.add(bottomNameProvinceSearch);	
-		newEast.setBorder(BorderFactory.createTitledBorder(text.nameProvinceSearchBloc()));
-		newEast.setPreferredSize(new Dimension(getWidth() / 2 - 3, 60));
-		container.add(newEast, BorderLayout.EAST);
+		newNamePaneSearch.setLayout(new GridLayout(2, 1, 5, 5));
+		newNamePaneSearch.add(namePaneSearch);
+		newNamePaneSearch.add(bottomNameProvinceSearch);
+
+		// Bloc for province search by baronies
+		JPanel newBaronyPaneSearch = null;
+		if (ckGame) {
+			JPanel baronyPaneSearch = new JPanel();
+			JLabel baronyProvinceSearchInfo = new JLabel(text.baronyProvinceSearchLabel());
+			baronyReader = new JTextField();
+			baronyReader.addKeyListener(new NameTextFieldListener()); // To have only letters
+			JButton baronySearchButton = new JButton(text.nameProvinceSearchButton());
+			baronySearchButton.addActionListener(new BaronySearchButtonListener());
+			baronyPaneSearch.setLayout(new GridLayout(4, 1, 5, 5));
+			baronyPaneSearch.add(baronyProvinceSearchInfo);
+			baronyPaneSearch.add(baronyReader);
+			baronyPaneSearch.add(baronySearchButton);
+			newBaronyPaneSearch = new JPanel();
+			bottomNameBaronySearch = new JPanel();
+
+			// Bloc for province name search result
+			firstBarony = new JRadioButton();
+			secondBarony = new JRadioButton();
+			thirdBarony = new JRadioButton();
+			fourthBarony = new JRadioButton();
+			fifthBarony = new JRadioButton();
+			firstBarony.setSelected(true);
+			ButtonGroup bgBarony = new ButtonGroup();
+			bgBarony.add(firstBarony);
+			bgBarony.add(secondBarony);
+			bgBarony.add(thirdBarony);
+			bgBarony.add(fourthBarony);
+			bgBarony.add(fifthBarony);
+			bottomNameBaronySearch.setLayout(new GridLayout(6, 1, 5, 5));
+			bottomNameBaronySearch.add(firstBarony);
+			bottomNameBaronySearch.add(secondBarony);
+			bottomNameBaronySearch.add(thirdBarony);
+			bottomNameBaronySearch.add(fourthBarony);
+			bottomNameBaronySearch.add(fifthBarony);
+			JButton baronySelectorButton = new JButton(text.baronyProvinceSelectionButton());
+			baronySelectorButton.addActionListener(new BaronySelectorButtonListener());
+			bottomNameBaronySearch.add(baronySelectorButton);
+			// No visible because we don't know the search province name
+			bottomNameBaronySearch.setVisible(false);
+
+			newBaronyPaneSearch.setLayout(new GridLayout(2, 1, 5, 5));
+			newBaronyPaneSearch.add(baronyPaneSearch);
+			newBaronyPaneSearch.add(bottomNameBaronySearch);
+		}
+
+		// Present the different search means in tabbed pane
+		JTabbedPane tabPane = new JTabbedPane();
+		tabPane.add(text.searchID(), newIdPaneSearch);
+		tabPane.add(text.searchName(), newNamePaneSearch);
+		if (ckGame) {
+			tabPane.add(text.searchBarony(), newBaronyPaneSearch);
+		}
+		tabPane.setSelectedIndex(selectedIndex);
+		container.add(tabPane);
 
 		// Bloc for cancel
 		JButton cancelButton = new JButton(text.cancelButton());
@@ -204,6 +267,44 @@ public class SearchDialog extends JDialog {
 				searchedProvince = nearestProvinces.get(3);
 			} else if (fifthProvince.isSelected()) {
 				searchedProvince = nearestProvinces.get(4);
+			}
+
+			// End of the dialogue
+			setVisible(false);
+		}
+	}
+
+	class BaronySearchButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			String searchName = baronyReader.getText();
+			if (searchName.equals("")) {
+				JOptionPane.showMessageDialog(null, text.enterNamePlease(), text.warningMessage(), JOptionPane.WARNING_MESSAGE);
+			} else {
+				// Put the 5 nearest province name to the name typed by the user
+				nearestBaronies = baronnies.nearestBaronies(searchName, 5);
+				firstBarony.setText(nearestBaronies.get(0).toString());
+				secondBarony.setText(nearestBaronies.get(1).toString());
+				thirdBarony.setText(nearestBaronies.get(2).toString());
+				fourthBarony.setText(nearestBaronies.get(3).toString());
+				fifthBarony.setText(nearestBaronies.get(4).toString());
+				bottomNameBaronySearch.setVisible(true);
+			}
+		}
+	}
+
+	class BaronySelectorButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			// The searched province is the province selected by the user
+			if (firstBarony.isSelected()) {
+				searchedProvince = provinces.getProvince(nearestBaronies.get(0).getProvinceID());
+			} else if (secondBarony.isSelected()) {
+				searchedProvince = provinces.getProvince(nearestBaronies.get(1).getProvinceID());
+			} else if (thirdBarony.isSelected()) {
+				searchedProvince = provinces.getProvince(nearestBaronies.get(2).getProvinceID());
+			} else if (fourthBarony.isSelected()) {
+				searchedProvince = provinces.getProvince(nearestBaronies.get(3).getProvinceID());
+			} else if (fifthBarony.isSelected()) {
+				searchedProvince = provinces.getProvince(nearestBaronies.get(4).getProvinceID());
 			}
 
 			// End of the dialogue

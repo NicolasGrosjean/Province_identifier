@@ -34,3 +34,6 @@
 /Window$OpenFile.class
 /Window$NewWorkingSession.class
 /Window$OpenRecentWorkingSession.class
+/Window$SearchListener.class
+/SearchDialog$BaronySearchButtonListener.class
+/SearchDialog$BaronySelectorButtonListener.class

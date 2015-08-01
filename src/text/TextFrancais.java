@@ -71,7 +71,22 @@ public class TextFrancais extends Text {
 	public String nameProvinceSearchBloc() {
 		return "Recherche de province par son nom";
 	}
-	
+
+	@Override
+	public String baronyProvinceSearchLabel() {
+		return "Nom (approximatif) de la baronnie à chercher : ";
+	}
+
+	@Override
+	public String baronyProvinceSearchButton() {
+		return "Chercher les baronnies au nom proche de ce nom";
+	}
+
+	@Override
+	public String baronyProvinceSelectionButton() {
+		return "Chercher la baronnie sélectionnée";
+	}
+
 	@Override
 	public String cancelButton() {
 		return "Annuler";
@@ -254,5 +269,20 @@ public class TextFrancais extends Text {
 	@Override
 	public String temple() {
 		return "Temple";
+	}
+
+	@Override
+	public String searchID() {
+		return "Avec son ID";
+	}
+
+	@Override
+	public String searchName() {
+		return "Avec son nom";
+	}
+
+	@Override
+	public String searchBarony() {
+		return "Avec une de ses baronnies";
 	}
 }

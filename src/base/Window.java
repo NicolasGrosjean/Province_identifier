@@ -79,9 +79,6 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	// Copy button
 	private JButton copyButton = new JButton();
 
-	// Search button
-	private JButton searchButton = new JButton();
-
 	// Province database
 	private ProvinceStorage provinces;
 	private BaroniesStorage baronnies;
@@ -99,6 +96,8 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 
 	// Menus
 	private JMenuItem wsOpenRecently;
+	private JMenu searchMenu;
+	private JMenuItem searchBarony;
 
 	// Configuration of the software
 	private final ConfigStorage configuration;
@@ -149,7 +148,6 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		wsNew.add(wsNewCK);
 		wsNew.add(wsNewOthers);
 		wsMenu.add(wsNew);
-		windowMenuBar.add(wsMenu);
 		// Open recent working session
 		wsOpenRecently = new JMenu(text.workingSessionOpenRecently());
 		if (!configuration.hasWorkingSession()) {
@@ -159,6 +157,15 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			updateOpenRecentlyMenu();
 		}
 		wsMenu.add(wsOpenRecently);
+		windowMenuBar.add(wsMenu);
+		searchMenu = new JMenu(text.provinceSearch());
+		JMenuItem searchID = new JMenuItem(text.searchID());
+		JMenuItem searchName = new JMenuItem(text.searchName());
+		searchMenu.add(searchID);
+		searchMenu.add(searchName);
+		searchID.addActionListener(new SearchListener(0));
+		searchName.addActionListener(new SearchListener(1));
+		windowMenuBar.add(searchMenu);
 	    setJMenuBar(windowMenuBar);
 
 		// Window displaying
@@ -189,6 +196,10 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			for (MouseListener ml : component.getMouseListeners()) {
 				component.removeMouseListener(ml);
 			}
+		}
+		if (searchBarony != null) {
+			searchMenu.remove(searchBarony);
+			searchBarony = null;
 		}
 		container.removeAll();
 
@@ -250,20 +261,19 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		east.add(miniMap);
 		container.add(east, BorderLayout.EAST);
 
-		/*
-		searchButton.setText(text.provinceSearch());
-		container.add(north, BorderLayout.NORTH);*/
+		if (CkGame) {
+			searchBarony = new JMenuItem(text.searchBarony());
+			searchMenu.add(searchBarony);
+			searchBarony.addActionListener(new SearchListener(2));
+		}
 
 		// Button action
 		copyButton.addActionListener(new BoutonCopierListener());
 		listenedButton.add(copyButton);
-		searchButton.addActionListener(new SearchButtonListener());
-		listenedButton.add(searchButton);
 
 		// Focus on window for the actions, and reset for the button in order to window keep it
 		setFocusable(true);
 		copyButton.setFocusable(false);
-		searchButton.setFocusable(false);
 
 		// Mouse and key listening for actions
 		pan.addMouseListener(this);
@@ -345,8 +355,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	private void setBaroniesText(int i, Barony barony) {
 		JLabel baronyLabel = getBaronyLabel(i);
 		// Remove "b_" and replace the new first letter by its upper case (a->A)
-		baronyLabel.setText(barony.getBaronyName().substring(2, 3).toUpperCase()
-				+ barony.getBaronyName().substring(3));
+		baronyLabel.setText(barony.toString());
 		if (barony.isCastle()) {
 			baronyLabel.setText(baronyLabel.getText() + " (Castle)");
 			baronyLabel.setForeground(new Color(0, 0, 255));
@@ -583,9 +592,16 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		}
 	}
 
-	class SearchButtonListener implements ActionListener {
+	class SearchListener implements ActionListener {
+		private int selectedIndex;
+
+		SearchListener(int selectedIndex) {
+			this.selectedIndex = selectedIndex;
+		}
+
 		public void actionPerformed(ActionEvent arg0) {			
-			SearchDialog searchDialog = new SearchDialog(null, text.provinceSearch(), true, text, provinces, null);
+			SearchDialog searchDialog = new SearchDialog(null, text.provinceSearch(),
+					true, text, provinces, selectedIndex, CkGame, baronnies);
 			Province searchProvince = searchDialog.getSearchResult();
 			if (searchProvince != null) {
 				try {
@@ -618,6 +634,18 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 					miniMap.setRectangle();
 					// Actualize selected province
 					resLabel.setText(searchProvince.toString());
+					if (CkGame) {
+						// Display barony names
+						eraseBaronyNames();
+						LinkedList<Barony> provinceBaronnies = baronnies.getBaronies(searchProvince.getId());
+						if (provinceBaronnies != null) {
+							int i = 0;
+							for (Barony barony : provinceBaronnies) {
+								i++;
+								setBaroniesText(i, barony);
+							}
+						}
+					}
 				} catch (IllegalArgumentException e) {
 					// Province not found
 					JOptionPane.showMessageDialog(null, text.provinceNotFound(), text.warningMessage(), JOptionPane.WARNING_MESSAGE);

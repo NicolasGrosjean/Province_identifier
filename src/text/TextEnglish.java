@@ -54,34 +54,49 @@ public class TextEnglish extends Text {
 	
 	@Override
 	public String nameProvinceSearchLabel() {
-		return "Name (approximate) of province to search : ";
+		return "Name (approximate) of a province to search : ";
 	}
-	
+
 	@Override
 	public String nameProvinceSearchButton() {
 		return "Search the provinces with name near from this name";
 	}
-	
+
 	@Override
 	public String nameProvinceSelectionButton() {
 		return "Search selected province";
 	}
-	
+
+	@Override
+	public String baronyProvinceSearchLabel() {
+		return "Name (approximate) of a barony to search : ";
+	}
+
+	@Override
+	public String baronyProvinceSearchButton() {
+		return "Search the baronies with name near from this name";
+	}
+
+	@Override
+	public String baronyProvinceSelectionButton() {
+		return "Search selected barony";
+	}
+
 	@Override
 	public String nameProvinceSearchBloc() {
 		return "Searching province by name";
 	}
-	
+
 	@Override
 	public String cancelButton() {
 		return "Cancel";
 	}
-	
+
 	@Override
 	public String warningMessage() {
 		return "Warning";
 	}
-	
+
 	@Override
 	public String provinceNotFound() {
 		return "Province not found";
@@ -255,5 +270,20 @@ public class TextEnglish extends Text {
 	@Override
 	public String temple() {
 		return "Temple";
+	}
+
+	@Override
+	public String searchID() {
+		return "With its ID";
+	}
+
+	@Override
+	public String searchName() {
+		return "With its name";
+	}
+
+	@Override
+	public String searchBarony() {
+		return "With one of its baronies";
 	}
 }
