@@ -11,14 +11,10 @@ import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import text.Text;
 
@@ -82,21 +78,15 @@ public class WorkingSessionNewDialogCK extends WorkingSessionNewDialog {
 			return null;
 		}
 		LinkedList<String> modDirectories = new LinkedList<String>();
-		String mapDirectory;
-		if (!mapModDirectory.getText().equals("")) {
-			modDirectories.add(gameDirectoryTF.getText());
-			mapDirectory = mapModDirectory.getText();
-		} else {
-			mapDirectory = gameDirectoryTF.getText();
-		}
+		String mapModDir = (mapModDirectory.getText().equals(""))? null : mapModDirectory.getText();
 		if (!modDirectory2TF.getText().equals("")) {
 			modDirectories.add(modDirectory2TF.getText());
 		}
 		if (!modDirectory3TF.getText().equals("")) {
 			modDirectories.add(modDirectory3TF.getText());
 		}
-		return new WorkingSession(wsName.getText(), mapDirectory,
-				modDirectories, text, true);
+		return new WorkingSession(wsName.getText(), gameDirectoryTF.getText(),
+				mapModDir, modDirectories, text, true);
 	}
 
 	class FileExplorer implements ActionListener {

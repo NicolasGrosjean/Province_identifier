@@ -15,6 +15,8 @@ import base.ProvinceStorage;
 
 public class WorkingSession {
 	private String name;
+	private String gameDirectory;
+	private String mapModDirectory;
 	private String mapDirectory;
 	private LinkedList<String> modDirectories;
 	private ProvinceStorage provinces;
@@ -34,11 +36,17 @@ public class WorkingSession {
 	 * @throws IOException FileNotFoundException for definition.csv not found,
 	 * 					   IOException for provinces.bmp not found
 	 */
-	public WorkingSession(String name, String mapDirectory,
+	public WorkingSession(String name, String gameDirectory, String mapModDirectory,
 			LinkedList<String> modDirectories, Text text, boolean ckGame)
 					throws IOException {
 		this.name = name;
-		this.mapDirectory = mapDirectory;
+		this.gameDirectory = gameDirectory;
+		this.mapModDirectory = mapModDirectory;
+		if (mapModDirectory != null) {
+			this.mapDirectory = mapModDirectory;
+		} else {
+			this.mapDirectory = gameDirectory;
+		}
 		this.modDirectories = modDirectories;
 		this.ckGame = ckGame;
 
@@ -49,6 +57,8 @@ public class WorkingSession {
 
 		// Province attributes for CK games
 		if (ckGame) {
+			// List the directories with province files
+			// Game directory must be first, then map mod directory (if exists), finally other mods
 			LinkedList<String> provinceFileNames = new LinkedList<String>();
 			LinkedList<String> allDirectories;
 			if (modDirectories != null) {
@@ -56,14 +66,25 @@ public class WorkingSession {
 			} else {
 				allDirectories = new LinkedList<String>();
 			}
-			allDirectories.add(mapDirectory);
-			provinceFileNames = FileSorting.sortFiles(allDirectories, "/history/provinces/", text);
+			if (mapModDirectory != null) {
+				allDirectories.addFirst(mapModDirectory);
+			}
+			allDirectories.addFirst(gameDirectory);
+			provinceFileNames = FileSorting.giveFilesByDirPriority(allDirectories, "/history/provinces/", text);
 			storedBaronies = new BaroniesStorage(provinceFileNames);
 		}
 	}
 
 	public String getName() {
 		return name;
+	}
+
+	public String getGameDirectory() {
+		return gameDirectory;
+	}
+
+	public String getMapModDirectory() {
+		return mapModDirectory;
 	}
 
 	public String getMapDirectory() {

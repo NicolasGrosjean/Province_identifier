@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -99,7 +98,7 @@ public class WorkingSessionNewDialog extends JDialog {
 			return null;
 		}
 		return new WorkingSession(wsName.getText(), gameDirectoryTF.getText(),
-				null, text, false);
+				null, null, text, false);
 	}
 
 	class FileExplorer implements ActionListener {

@@ -69,7 +69,10 @@ public class BaroniesStorage {
 			}
 
 			// Store baronies with the province ID
-			provinceBaronies.put(provinceID, baronnies);
+			if (!baronnies.isEmpty()) {
+				// Besides save place, not is empty condition protect us of province file to erase previous content
+				provinceBaronies.put(provinceID, baronnies);
+			}
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found");
 		} finally {
