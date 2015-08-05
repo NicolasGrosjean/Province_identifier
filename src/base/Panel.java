@@ -75,7 +75,8 @@ public class Panel extends JPanel {
 	 */
 	private Text text;
 	
-	public Panel(String image, int imageWidth, int imageHeight, Text text) throws IOException {
+	public Panel(String image, int imageWidth, int imageHeight, Text text,
+			boolean mirror) throws IOException {
 		this.setImageWidth(imageWidth);
 		this.setImageHeight(imageHeight);
 		this.setDisplayingRealImageWidth(imageWidth);
@@ -85,11 +86,14 @@ public class Panel extends JPanel {
 		realWidth = this.image.getWidth();
 		realHeight = this.image.getHeight();
 		this.text = text;
+		if (mirror) {
+			mirror();
+		}
 		addColorProvinceBorder(BLACK);
 	}
 
-	public Panel(String nomFichierProvince, Text text) throws IOException {
-		this(nomFichierProvince, IMAGE_WIDTH, IMAGE_HEIGHT, text);
+	public Panel(String nomFichierProvince, Text text, boolean mirror) throws IOException {
+		this(nomFichierProvince, IMAGE_WIDTH, IMAGE_HEIGHT, text, mirror);
 	}
 
 	public int getRealWidth() {
@@ -146,6 +150,16 @@ public class Panel extends JPanel {
 
 	public int getDisplayingRealImageHeight() {
 		return displayingRealImageHeight;
+	}
+
+	public void mirror() {
+		for (int x = 0; x < realWidth; x++) {
+			for (int y = 0; y < realHeight / 2; y++) {
+				int tmp = image.getRGB(x, y);
+				image.setRGB(x, y, image.getRGB(x, realHeight - 1 - y));
+				image.setRGB(x, realHeight - 1 - y, tmp);
+			}
+		}
 	}
 
 	public void zoomMore() {

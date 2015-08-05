@@ -122,11 +122,10 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 
 		// Window
 		this.setTitle(text.windowTitle());
-		this.setSize(width, height);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLocationRelativeTo(null); // center placement
 
 		// Object container
+		container.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
 		container.setBackground(Color.white);
 		container.setLayout(new BorderLayout());
 
@@ -169,6 +168,8 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	    setJMenuBar(windowMenuBar);
 
 		// Window displaying
+	    pack();
+	    setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
 
@@ -221,6 +222,8 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		this.pan = ws.getPanel();
 		this.miniMap = ws.getMiniMap();
 		miniMap.setWindow(this);
+		container.setPreferredSize(new Dimension(pan.getImageWidth() +  2 * FIRST_PIXEL_X + 256 + 5,
+				pan.getImageHeight() + FIRST_PIXEL_Y + 22 + 8));
 
 		// Map adding
 		container.add(pan, BorderLayout.CENTER);
@@ -293,6 +296,8 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		listenedComponent.add(this);
 
 		// Window displaying new components
+		pack();
+		setLocationRelativeTo(null);
 		repaint();
 		this.setVisible(true);
 	}
@@ -468,6 +473,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 				eraseBaronyNames();
 			}
 		}
+		container.repaint();
 	}
 
 	@Override
@@ -531,7 +537,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	private void actionHaut() {
 		pan.heightNumberLeast();
 		movingActionLockingUnlocking();
-		this.repaint();
+		container.repaint();
 		miniMap.setRectangle();
 	}
 
@@ -541,7 +547,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	private void actionBas() {
 		pan.heightNumberMore();
 		movingActionLockingUnlocking();
-		this.repaint();	
+		container.repaint();
 		miniMap.setRectangle();
 	}
 
@@ -551,7 +557,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	private void actionGauche() {
 		pan.widthNumberLeast();
 		movingActionLockingUnlocking();
-		this.repaint();
+		container.repaint();
 		miniMap.setRectangle();
 	}
 
@@ -561,7 +567,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	private void actionDroit() {
 		pan.widthNumberMore();
 		movingActionLockingUnlocking();
-		this.repaint();
+		container.repaint();
 		miniMap.setRectangle();
 	}
 
@@ -576,7 +582,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			enabledMore = false;
 		}			
 		movingActionLockingUnlocking();
-		this.repaint();
+		container.repaint();
 		miniMap.setRectangle();
 	}
 
@@ -591,7 +597,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			pan.zoomLeast();
 			enabledMore = true;
 			movingActionLockingUnlocking();
-			this.repaint();
+			container.repaint();
 			miniMap.setRectangle();
 		}
 	}
@@ -640,7 +646,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 					pan.setHeightNumber(numHauteur);
 					// Actualize window (key management + displaying)
 					movingActionLockingUnlocking();
-					repaint();
+					container.repaint();
 					// Actualize mini-map rectangle
 					miniMap.setRectangle();
 					// Actualize selected province

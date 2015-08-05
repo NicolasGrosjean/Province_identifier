@@ -62,7 +62,8 @@ public class MiniMap extends JPanel implements MouseListener {
 	 */
 	private Text text;
 	
-	public MiniMap(String image, int imageWidth, int imageHeight, Text text, Panel pan) throws IOException {
+	public MiniMap(String image, int imageWidth, int imageHeight, Text text, Panel pan,
+			boolean mirror) throws IOException {
 		this.setImageWidth(imageWidth);
 		this.setImageHeight(imageHeight);
 		setPreferredSize(new Dimension(imageWidth, imageHeight));
@@ -72,12 +73,15 @@ public class MiniMap extends JPanel implements MouseListener {
 		this.image = ImageIO.read(file);
 		realWidth = this.image.getWidth();
 		realHeight = this.image.getHeight();
+		if (mirror) {
+			mirror();
+		}
 		this.setRectangle(); // Must be here because use pan
 		this.addMouseListener(this);
 	}
 	
-	public MiniMap(String image, Text text, Panel pan) throws IOException {
-		this(image, IMAGE_WIDTH, IMAGE_HEIGHT, text, pan);
+	public MiniMap(String image, Text text, Panel pan, boolean mirror) throws IOException {
+		this(image, IMAGE_WIDTH, IMAGE_HEIGHT, text, pan, mirror);
 	}
 	
 	public int getImageWidth() {
@@ -140,7 +144,17 @@ public class MiniMap extends JPanel implements MouseListener {
 		g2d.setStroke(new BasicStroke(3));
 		g2d.drawRect(rectX, rectY, rectWidth, rectHeight);
 	}
-	
+
+	public void mirror() {
+		for (int x = 0; x < realWidth; x++) {
+			for (int y = 0; y < realHeight / 2; y++) {
+				int tmp = image.getRGB(x, y);
+				image.setRGB(x, y, image.getRGB(x, realHeight - 1 - y));
+				image.setRGB(x, realHeight - 1 - y, tmp);
+			}
+		}
+	}
+
 	// --------------------- Mouse actions ---------------------------
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
