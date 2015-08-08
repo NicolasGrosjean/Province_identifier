@@ -96,6 +96,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	private Text text;
 
 	// Menus
+	private JMenuItem wsReload;
 	private JMenuItem wsOpenRecently;
 	private JMenu searchMenu;
 	private JMenuItem searchBarony;
@@ -157,6 +158,9 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			updateOpenRecentlyMenu();
 		}
 		wsMenu.add(wsOpenRecently);
+		wsReload = new JMenuItem(text.reloadWSMenu());
+		wsReload.setVisible(false);
+		wsMenu.add(wsReload);
 		windowMenuBar.add(wsMenu);
 		searchMenu = new JMenu(text.provinceSearch());
 		JMenuItem searchID = new JMenuItem(text.searchID());
@@ -190,10 +194,13 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		} catch (IllegalArgumentException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), text.error(), JOptionPane.ERROR_MESSAGE);
 		} catch (FileNotFoundException e) {
-			JOptionPane.showMessageDialog(null, text.fileNotFound("definition.csv"), text.error(), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, text.fileNotFound(e.getMessage()), text.error(), JOptionPane.ERROR_MESSAGE);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, text.fileNotFound("provinces.bmp"), text.error(), JOptionPane.ERROR_MESSAGE);
 		}
+		// Update reload working session menu
+		wsReload.addActionListener(new ReloadWorkingSession(ws));
+		wsReload.setVisible(true);
 		WaitingBar.stop();
 		enableMenus(true);
 	}
@@ -213,6 +220,9 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 				component.removeMouseListener(ml);
 			}
 		}
+		for(ActionListener al : wsReload.getActionListeners()) {
+			wsReload.removeActionListener(al);
+	    }
 		if (searchBarony != null) {
 			searchMenu.remove(searchBarony);
 			searchBarony = null;
@@ -279,11 +289,16 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		east.add(miniMap);
 		container.add(east, BorderLayout.EAST);
 
+		// Update search barony menu item
 		if (CkGame) {
 			searchBarony = new JMenuItem(text.searchBarony());
 			searchMenu.add(searchBarony);
 			searchBarony.addActionListener(new SearchListener(2));
 		}
+
+		// Update reload working session menu
+		wsReload.addActionListener(new ReloadWorkingSession(ws));
+		wsReload.setVisible(true);
 
 		// Button action
 		copyButton.addActionListener(new BoutonCopierListener());
@@ -737,7 +752,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			} catch (IllegalArgumentException e) {
 				JOptionPane.showMessageDialog(null, e.getMessage(), text.error(), JOptionPane.ERROR_MESSAGE);
 			} catch (FileNotFoundException e) {
-				JOptionPane.showMessageDialog(null, text.fileNotFound("definition.csv"), text.error(), JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, text.fileNotFound(e.getMessage()), text.error(), JOptionPane.ERROR_MESSAGE);
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, text.fileNotFound("provinces.bmp"), text.error(), JOptionPane.ERROR_MESSAGE);
 			}
@@ -765,7 +780,31 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			} catch (IllegalArgumentException e) {
 				JOptionPane.showMessageDialog(null, e.getMessage(), text.error(), JOptionPane.ERROR_MESSAGE);
 			} catch (FileNotFoundException e) {
-				JOptionPane.showMessageDialog(null, text.fileNotFound("definition.csv"), text.error(), JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, text.fileNotFound(e.getMessage()), text.error(), JOptionPane.ERROR_MESSAGE);
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, text.fileNotFound("provinces.bmp"), text.error(), JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+
+	class ReloadWorkingSession implements ActionListener {
+		private WorkingSession ws;
+
+		ReloadWorkingSession(WorkingSession ws) {
+			this.ws = ws;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			try {
+				if (!ws.isInit()) {
+					ws.initialize();
+				}
+				loadWorkingSession(ws);
+			} catch (IllegalArgumentException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), text.error(), JOptionPane.ERROR_MESSAGE);
+			} catch (FileNotFoundException e) {
+				JOptionPane.showMessageDialog(null, text.fileNotFound(e.getMessage()), text.error(), JOptionPane.ERROR_MESSAGE);
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, text.fileNotFound("provinces.bmp"), text.error(), JOptionPane.ERROR_MESSAGE);
 			}

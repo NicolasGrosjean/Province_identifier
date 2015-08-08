@@ -253,6 +253,11 @@ public class TextFrancais extends Text {
 	}
 
 	@Override
+	public String reloadWSMenu() {
+		return "Recharger les fichiers de jeu/mod";
+	}
+
+	@Override
 	public String provinceBaronies() {
 		return "Baronnies de la province:";
 	}

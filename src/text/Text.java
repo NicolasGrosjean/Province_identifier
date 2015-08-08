@@ -313,6 +313,12 @@ public abstract class Text {
 	public abstract String workingSessionOpenRecently();
 
 	/**
+	 * Menu to reload the current working session
+	 * @return
+	 */
+	public abstract String reloadWSMenu();
+
+	/**
 	 * Text presenting that the following text is the baronies of the province
 	 * @return
 	 */

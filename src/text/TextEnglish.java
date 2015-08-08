@@ -253,6 +253,11 @@ public class TextEnglish extends Text {
 	}
 
 	@Override
+	public String reloadWSMenu() {
+		return "Reload game/mod files";
+	}
+
+	@Override
 	public String provinceBaronies() {
 		return "Baronies of the province:";
 	}

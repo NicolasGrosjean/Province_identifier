@@ -39,3 +39,5 @@
 /SearchDialog$BaronySelectorButtonListener.class
 /Window$LoadWS.class
 /Window$WaitingProgressBar.class
+/Window$ReLoadWorkingSession.class
+/Window$ReloadWorkingSession.class
