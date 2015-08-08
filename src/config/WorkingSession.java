@@ -52,7 +52,7 @@ public class WorkingSession {
 		this.modDirectories = modDirectories;
 		this.text = text;
 		this.ckGame = ckGame;
-		this.init = init;
+		this.init = false; // the working session is not yet initialised
 		if (init) {
 			initialize();
 		}
