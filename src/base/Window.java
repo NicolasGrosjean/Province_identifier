@@ -181,6 +181,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	public Window(int width, int height, WorkingSession ws,
 			Text text, ConfigStorage configuration) {
 		this(width, height, text, configuration);
+		enableMenus(false);
 		WaitingProgressBar WaitingBar = new WaitingProgressBar();
 		new Thread(WaitingBar).run();
 		try {
@@ -194,6 +195,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			JOptionPane.showMessageDialog(null, text.fileNotFound("provinces.bmp"), text.error(), JOptionPane.ERROR_MESSAGE);
 		}
 		WaitingBar.stop();
+		enableMenus(true);
 	}
 
 	private void loadWorkingSession(WorkingSession ws) {
@@ -414,6 +416,16 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			enabledRight = false;
 		} else {
 			enabledRight = true;
+		}
+	}
+
+	/**
+	 * SetEnabled(enabled) at all the Menus
+	 * @param enabled
+	 */
+	private void enableMenus(boolean enabled) {
+		for (int i = 0; i < getJMenuBar().getMenuCount(); i++) {
+			getJMenuBar().getMenu(i).setEnabled(enabled);
 		}
 	}
 
