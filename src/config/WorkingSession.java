@@ -60,7 +60,6 @@ public class WorkingSession {
 
 	public void initialize() throws IOException {
 		if (!init) {
-			init = true;
 			// Map informations
 			readDefinitionFile(mapDirectory + "/map/definition.csv");			
 			if (ckGame) {
@@ -91,6 +90,9 @@ public class WorkingSession {
 				provinceFileNames = FileSorting.giveFilesByDirPriority(allDirectories, "/history/provinces/", text);
 				storedBaronies = new BaroniesStorage(provinceFileNames);
 			}
+
+			// The working session is correctly initialized
+			init = true;
 		}
 	}
 
@@ -206,7 +208,7 @@ public class WorkingSession {
 				e.printStackTrace();
 			}
 			if (exceptionCaught) {
-				throw new FileNotFoundException();
+				throw new FileNotFoundException(definitionFileName);
 			}
 		}
 	}
