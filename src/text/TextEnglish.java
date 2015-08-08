@@ -291,4 +291,9 @@ public class TextEnglish extends Text {
 	public String searchBarony() {
 		return "With one of its baronies";
 	}
+
+	@Override
+	public String xSymmetry() {
+		return "Apply to the map a symmetry about the X axis";
+	}
 }

@@ -25,6 +25,7 @@ public class WorkingSession {
 	private Text text;
 	private boolean ckGame;
 	private boolean init;
+	private boolean xSymetry;
 
 	// For Crusader Kings 2
 	private BaroniesStorage storedBaronies;
@@ -39,8 +40,8 @@ public class WorkingSession {
 	 * 					   IOException for provinces.bmp not found
 	 */
 	public WorkingSession(String name, String gameDirectory, String mapModDirectory,
-			LinkedList<String> modDirectories, Text text, boolean ckGame, boolean init)
-					throws IOException {
+			LinkedList<String> modDirectories, Text text, boolean ckGame, boolean init,
+			boolean xSymetry) throws IOException {
 		this.name = name;
 		this.gameDirectory = gameDirectory;
 		this.mapModDirectory = mapModDirectory;
@@ -52,6 +53,7 @@ public class WorkingSession {
 		this.modDirectories = modDirectories;
 		this.text = text;
 		this.ckGame = ckGame;
+		this.xSymetry = xSymetry;
 		this.init = false; // the working session is not yet initialised
 		if (init) {
 			initialize();
@@ -66,10 +68,9 @@ public class WorkingSession {
 				panel = new Panel(mapDirectory + "/map/provinces.bmp", text, false);
 				miniMap = new MiniMap(mapDirectory + "/map/provinces.bmp", text, panel, false);
 			} else {
-				// TODO add a field for the mirror
 				// TODO In Panel, calculate the image size according the real size
-				panel = new Panel(mapDirectory + "/map/provinces.bmp", 1404, 540, text, true);
-				miniMap = new MiniMap(mapDirectory + "/map/provinces.bmp", text, panel, true);
+				panel = new Panel(mapDirectory + "/map/provinces.bmp", 1404, 540, text, xSymetry);
+				miniMap = new MiniMap(mapDirectory + "/map/provinces.bmp", text, panel, xSymetry);
 			}
 
 			// Province attributes for CK games
@@ -142,6 +143,10 @@ public class WorkingSession {
 
 	public boolean isCKGame() {
 		return ckGame;
+	}
+
+	public boolean isxSymetry() {
+		return xSymetry;
 	}
 
 	public BaroniesStorage getStoredBaronies() {

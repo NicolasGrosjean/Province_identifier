@@ -25,6 +25,7 @@ public class ConfigStorage {
 	private static final String wsGameDirAttribute = "gameDirectory";
 	private static final String wsMapModDirAttribute = "mapModDirectory";
 	private static final String wsCKGameAttribute = "ckGame";
+	private static final String xSymetryAttribute = "xSymetry";
 	private static final String frenchLanguage = "French";
 
 	/**
@@ -80,7 +81,8 @@ public class ConfigStorage {
 				workingSessions.addLast(new WorkingSession(wsElem.getAttributeValue(wsNameAttribute),
 						wsElem.getAttributeValue(wsGameDirAttribute),
 						wsElem.getAttributeValue(wsMapModDirAttribute), modDirectories, text,
-						wsElem.getAttributeValue(wsCKGameAttribute).equals("true"), false));
+						wsElem.getAttributeValue(wsCKGameAttribute).equals("true"), false,
+						Boolean.valueOf(wsElem.getAttributeValue(xSymetryAttribute))));
 			} catch (IOException e) {
 				// The working session is now not correct
 			}
@@ -104,6 +106,7 @@ public class ConfigStorage {
 			workingSessionElem.setAttribute(new Attribute(wsMapModDirAttribute, ws.getMapModDirectory()));
 		}
 		workingSessionElem.setAttribute(new Attribute(wsCKGameAttribute, String.valueOf(ws.isCKGame())));
+		workingSessionElem.setAttribute(new Attribute(xSymetryAttribute, Boolean.toString(ws.isxSymetry())));
 		if (ws.getModDirectories() != null) {
 			for (String modDirectory : ws.getModDirectories()) {
 				Element modDirectoryElem = new Element("anotherDirectory");

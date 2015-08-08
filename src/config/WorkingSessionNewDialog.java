@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -30,6 +31,8 @@ public class WorkingSessionNewDialog extends JDialog {
 	protected JPanel wsNamePanel;
 	protected JPanel gameDirPanel;
 	protected JPanel validCancelPanel;
+	
+	private JCheckBox xSymmetry;
 
 	/**
 	 * The user click on the validate button
@@ -39,7 +42,7 @@ public class WorkingSessionNewDialog extends JDialog {
 	public WorkingSessionNewDialog(JFrame parent, boolean modal, Text text) {
 		// Create the JDialog
 		super(parent, text.windowTitle() + " - " + text.newWSTitle(), modal);
-		setSize(500, 200);
+		setSize(500, 220);
 		setLocationRelativeTo(null);
 		setResizable(false);
 
@@ -69,16 +72,20 @@ public class WorkingSessionNewDialog extends JDialog {
 		gameDirPanel.add(gameDirectoryTF, BorderLayout.CENTER);
 		gameDirPanel.add(gameDirectoryFE, BorderLayout.EAST);
 		gameDirPanel.setBorder(BorderFactory.createTitledBorder(text.gameDirectory()));
+		JPanel xSymetryPanel = new JPanel();
+		xSymmetry = new JCheckBox(text.xSymmetry());
+		xSymetryPanel.add(xSymmetry);
 		validCancelPanel = new JPanel();
 		validCancelPanel.add(validate);
-		validCancelPanel.add(cancel);
+		validCancelPanel.add(cancel);			
 
 		// Add to the container
 		container = new JPanel();
-		container.setLayout(new GridLayout(3, 1, 5, 5));
+		container.setLayout(new GridLayout(4, 1, 5, 5));
 		container.add(wsNamePanel);
 		container.add(gameDirPanel);
-		container.add(validCancelPanel);
+		container.add(xSymetryPanel);
+		container.add(validCancelPanel);		
 		setContentPane(container);
 
 		// Add FileExplorer actions
@@ -98,7 +105,7 @@ public class WorkingSessionNewDialog extends JDialog {
 			return null;
 		}
 		return new WorkingSession(wsName.getText(), gameDirectoryTF.getText(),
-				null, null, text, false, true);
+				null, null, text, false, true, xSymmetry.isSelected());
 	}
 
 	class FileExplorer implements ActionListener {

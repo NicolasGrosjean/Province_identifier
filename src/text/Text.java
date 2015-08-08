@@ -359,4 +359,10 @@ public abstract class Text {
 	 * @return
 	 */
 	public abstract String searchBarony();
+
+	/**
+	 * Propose to do a symmetry about the X axis of the map
+	 * @return
+	 */
+	public abstract String xSymmetry();
 }

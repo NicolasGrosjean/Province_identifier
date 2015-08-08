@@ -290,4 +290,9 @@ public class TextFrancais extends Text {
 	public String searchBarony() {
 		return "Avec une de ses baronnies";
 	}
+
+	@Override
+	public String xSymmetry() {
+		return "Appliquer à la carte une symétrie par rapport à l'axe X";
+	}
 }

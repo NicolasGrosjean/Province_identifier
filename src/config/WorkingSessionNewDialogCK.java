@@ -86,7 +86,7 @@ public class WorkingSessionNewDialogCK extends WorkingSessionNewDialog {
 			modDirectories.add(modDirectory3TF.getText());
 		}
 		return new WorkingSession(wsName.getText(), gameDirectoryTF.getText(),
-				mapModDir, modDirectories, text, true, true);
+				mapModDir, modDirectories, text, true, true, false);
 	}
 
 	class FileExplorer implements ActionListener {
