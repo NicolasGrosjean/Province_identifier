@@ -373,13 +373,13 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		// Remove "b_" and replace the new first letter by its upper case (a->A)
 		baronyLabel.setText(barony.toString());
 		if (barony.isCastle()) {
-			baronyLabel.setText(baronyLabel.getText() + " (Castle)");
+			baronyLabel.setText(baronyLabel.getText() + " (" + text.castle() + ")");
 			baronyLabel.setForeground(new Color(0, 0, 255));
 		} else if (barony.isCity()) {
-			baronyLabel.setText(baronyLabel.getText() + " (City)");
+			baronyLabel.setText(baronyLabel.getText() + " (" + text.city() + ")");
 			baronyLabel.setForeground(new Color(0, 128, 0));
 		} else if (barony.isTemple()) {
-			baronyLabel.setText(baronyLabel.getText() + " (Temple)");
+			baronyLabel.setText(baronyLabel.getText() + " (" + text.temple() + ")");
 			baronyLabel.setForeground(new Color(255, 0, 0));
 		} else {
 			throw new IllegalArgumentException(barony.getBaronyName() + 
