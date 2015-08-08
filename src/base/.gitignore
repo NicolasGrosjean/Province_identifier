@@ -37,3 +37,5 @@
 /Window$SearchListener.class
 /SearchDialog$BaronySearchButtonListener.class
 /SearchDialog$BaronySelectorButtonListener.class
+/Window$LoadWS.class
+/Window$WaitingProgressBar.class

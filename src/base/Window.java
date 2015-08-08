@@ -23,6 +23,7 @@ import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -30,6 +31,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 
 import config.ConfigStorage;
 import config.WorkingSession;
@@ -46,7 +48,6 @@ import text.Text;
  *
  */
 public class Window extends JFrame implements MouseListener, KeyListener {
-
 	// First pixel position
 	static private int FIRST_PIXEL_X = 8;
 	static private int FIRST_PIXEL_Y = 31;
@@ -180,10 +181,10 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	public Window(int width, int height, WorkingSession ws,
 			Text text, ConfigStorage configuration) {
 		this(width, height, text, configuration);
+		WaitingProgressBar WaitingBar = new WaitingProgressBar();
+		new Thread(WaitingBar).run();
 		try {
-			if (!ws.isInit()) {
-				ws.initialize();
-			}
+			ws.initialize();
 			loadWorkingSession(ws);
 		} catch (IllegalArgumentException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), text.error(), JOptionPane.ERROR_MESSAGE);
@@ -192,6 +193,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, text.fileNotFound("provinces.bmp"), text.error(), JOptionPane.ERROR_MESSAGE);
 		}
+		WaitingBar.stop();
 	}
 
 	private void loadWorkingSession(WorkingSession ws) {
@@ -415,6 +417,26 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		}
 	}
 
+	class WaitingProgressBar implements Runnable {
+		private JDialog wait;
+
+		@Override
+		public void run() {
+			wait = new JDialog(Window.this, false);
+			wait.setUndecorated(true);
+			JProgressBar bar = new JProgressBar();
+			bar.setPreferredSize(new Dimension(500, 50));
+			bar.setIndeterminate(true);
+			wait.add(bar);
+			wait.pack();
+			wait.setLocationRelativeTo(null);
+			wait.setVisible(true);
+		}
+
+		public void stop() {
+			wait.setVisible(false);
+		}
+	}
 	// ---------------- Mouse actions ---------------------------
 	@Override
 	public void mouseClicked(MouseEvent event) {
