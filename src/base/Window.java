@@ -89,8 +89,8 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	private boolean enabledBottom = true;
 	private boolean enabledLeft = false; // because we start in left
 	private boolean enabledRight = true;
-	private boolean enabledMore = true;
-	private boolean enabledLeast = true;
+	private boolean enabledZoomIn = true;
+	private boolean enabledZoomOut = true;
 
 	// Text
 	private Text text;
@@ -563,10 +563,10 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			if (enabledBottom)
 				actionBas();
 		} else if (event.getKeyChar() == '+') {
-			if (enabledMore)
+			if (enabledZoomIn)
 				actionPlus();
 		} else if (event.getKeyChar() == '-') {
-			if (enabledLeast)
+			if (enabledZoomOut)
 				actionMoins();
 		}
 	}
@@ -621,30 +621,30 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	}
 
 	/**
-	 * Zoom more
+	 * Zoom IN
 	 */
 	private void actionPlus() {
-		pan.zoomMore();
-		enabledLeast = true;
+		boolean possibleZoomInNext = pan.zoomIn();
+		enabledZoomOut = true;
 		// Block to X256 zoom
-		if (pan.getImageWidth() / pan.getDisplayingRealImageWidth() == 256) {
-			enabledMore = false;
-		}			
+		if (!possibleZoomInNext || pan.getImageWidth() / pan.getDisplayingRealImageWidth() == 256) {
+			enabledZoomIn = false;
+		}
 		movingActionLockingUnlocking();
 		container.repaint();
 		miniMap.setRectangle();
 	}
 
 	/** 
-	 * Zoom least
+	 * Zoom OUT
 	 */
 	private void actionMoins() {
 		if (2 * pan.getDisplayingRealImageWidth() > pan.getRealWidth()
 				|| 2 * pan.getDisplayingRealImageHeight() > pan.getRealHeight()) {
-			enabledLeast = false;
+			enabledZoomOut = false;
 		} else {
-			pan.zoomLeast();
-			enabledMore = true;
+			pan.zoomOut();
+			enabledZoomIn = true;
 			movingActionLockingUnlocking();
 			container.repaint();
 			miniMap.setRectangle();

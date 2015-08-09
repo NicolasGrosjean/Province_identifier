@@ -171,7 +171,7 @@ public class TestPanneau {
 			int hauteurImageReellePrecedente = pan.getDisplayingRealImageHeight();
 			int numLargeurPrecedent = pan.getWidthNumber();
 			int numHauteurPrecedent = pan.getHeightNumber();
-			pan.zoomMore();
+			pan.zoomIn();
 			Assert.assertEquals("Largeur incorrecte", pan.getDisplayingRealImageWidth(), largeurImageReellePrecedente / 2);
 			Assert.assertEquals("Hauteur incorrecte", pan.getDisplayingRealImageHeight(), hauteurImageReellePrecedente / 2);
 			Assert.assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), numLargeurPrecedent * 2 + 1);
@@ -184,7 +184,7 @@ public class TestPanneau {
 		Panel pan = new Panel(nomFichierProvince, text, false);
 		// On zoome pour être sûr de pouvoir dézoomer après
 		for (int i = 0; i < 3; i++) {
-			pan.zoomMore();
+			pan.zoomIn();
 		}
 		while (pan.getDisplayingRealImageWidth() < pan.getRealWidth()
 				&& pan.getDisplayingRealImageHeight() < pan.getRealHeight()) {
@@ -192,7 +192,7 @@ public class TestPanneau {
 			int hauteurImageReellePrecedente = pan.getDisplayingRealImageHeight();
 			int numLargeurPrecedent = pan.getWidthNumber();
 			int numHauteurPrecedent = pan.getHeightNumber();
-			pan.zoomLeast();
+			pan.zoomOut();
 			Assert.assertEquals("Largeur incorrecte", pan.getDisplayingRealImageWidth(), largeurImageReellePrecedente * 2);
 			Assert.assertEquals("Hauteur incorrecte", pan.getDisplayingRealImageHeight(), hauteurImageReellePrecedente * 2);
 			Assert.assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), (numLargeurPrecedent - 1) / 2);

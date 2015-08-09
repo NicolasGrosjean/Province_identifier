@@ -177,8 +177,12 @@ public class Panel extends JPanel {
 		}
 	}
 
-	public void zoomMore() {
-		// Zooming
+	/**
+	 * Zoom in on the map
+	 * @return if it is possible to zoom in after
+	 */
+	public boolean zoomIn() {
+		// Zoom in
 		displayinRealImageWidth /= 2;
 		displayingRealImageHeight /= 2;
 		widthNumber *= 2;
@@ -186,13 +190,19 @@ public class Panel extends JPanel {
 		// Centering
 		widthNumber++;
 		heightNumber++;
+
+		// Return if it is possible to zoom after this
+		return ((displayinRealImageWidth % 2 == 0) && (displayingRealImageHeight % 2 == 0));
 	}
 
-	public void zoomLeast() {
+	/**
+	 * Zoom out on the map
+	 */
+	public void zoomOut() {
 		// Uncentering
 		widthNumber--;
 		heightNumber--;
-		// Unzooming
+		// Zoom out
 		displayinRealImageWidth *= 2;
 		displayingRealImageHeight *= 2;
 		widthNumber /= 2;
