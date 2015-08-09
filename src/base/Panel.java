@@ -1,6 +1,7 @@
 package base;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -26,6 +27,13 @@ public class Panel extends JPanel {
 
 	static public int IMAGE_WIDTH = 1024;
 	static public int IMAGE_HEIGHT = 512;
+
+	// 2*8 for the  2 border + 256 for the mini-map + 5 for a little extra margin
+	static public int WINDOW_WIDTH_WITHOUT_IMAGE = 277;
+
+	// 31 for the top border + 22 for the menus  + 8 for the bottom border
+	static public int WINDOW_HEIGHT_WITHOUT_IMAGE = 61;
+
 	static private int BLACK = 0;
 
 	private BufferedImage image;
@@ -75,25 +83,32 @@ public class Panel extends JPanel {
 	 */
 	private Text text;
 	
-	public Panel(String image, int imageWidth, int imageHeight, Text text,
-			boolean xSymetry) throws IOException {
-		this.setImageWidth(imageWidth);
-		this.setImageHeight(imageHeight);
-		this.setDisplayingRealImageWidth(imageWidth);
-		this.setDisplayingRealImageHeight(imageHeight);
+	public Panel(String image, Text text, boolean xSymetry) throws IOException {		
 		File file = new File(image);
 		this.image = ImageIO.read(file);
 		realWidth = this.image.getWidth();
 		realHeight = this.image.getHeight();
+
+		// Calculate the maximum size for the map
+		Dimension maximumWindowBounds = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		int maxImageWidth = realWidth;
+		while (maxImageWidth + WINDOW_WIDTH_WITHOUT_IMAGE > maximumWindowBounds.getWidth()) {
+			maxImageWidth /= 2;
+		}
+		this.setImageWidth(maxImageWidth);
+		this.setDisplayingRealImageWidth(maxImageWidth);
+		int maxImageHeight = realHeight;
+		while (maxImageHeight + WINDOW_HEIGHT_WITHOUT_IMAGE > maximumWindowBounds.getHeight()) {
+			maxImageHeight /= 2;
+		}
+		this.setImageHeight(maxImageHeight);
+		this.setDisplayingRealImageHeight(maxImageHeight);
+
 		this.text = text;
 		if (xSymetry) {
 			xSymetry();
 		}
 		addColorProvinceBorder(BLACK);
-	}
-
-	public Panel(String nomFichierProvince, Text text, boolean mirror) throws IOException {
-		this(nomFichierProvince, IMAGE_WIDTH, IMAGE_HEIGHT, text, mirror);
 	}
 
 	public int getRealWidth() {

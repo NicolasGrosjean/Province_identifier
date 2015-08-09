@@ -64,14 +64,8 @@ public class WorkingSession {
 		if (!init) {
 			// Map informations
 			readDefinitionFile(mapDirectory + "/map/definition.csv");			
-			if (ckGame) {
-				panel = new Panel(mapDirectory + "/map/provinces.bmp", text, false);
-				miniMap = new MiniMap(mapDirectory + "/map/provinces.bmp", text, panel, false);
-			} else {
-				// TODO In Panel, calculate the image size according the real size
-				panel = new Panel(mapDirectory + "/map/provinces.bmp", 1404, 540, text, xSymetry);
-				miniMap = new MiniMap(mapDirectory + "/map/provinces.bmp", text, panel, xSymetry);
-			}
+			panel = new Panel(mapDirectory + "/map/provinces.bmp", text, xSymetry);
+			miniMap = new MiniMap(mapDirectory + "/map/provinces.bmp", text, panel, xSymetry);
 
 			// Province attributes for CK games
 			if (ckGame) {
