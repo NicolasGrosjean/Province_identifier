@@ -365,4 +365,40 @@ public abstract class Text {
 	 * @return
 	 */
 	public abstract String xSymmetry();
+
+	/**
+	 * Title of the preferences dialog
+	 * @return
+	 */
+	public abstract String preferencesTitle();
+
+	/**
+	 * Tab pane for color
+	 * @return
+	 */
+	public abstract String color();
+
+	/**
+	 * Sub-title for province color
+	 * @return
+	 */
+	public abstract String provinceColor();
+
+	/**
+	 * Sub-title for castle color
+	 * @return
+	 */
+	public abstract String castleColor();
+
+	/**
+	 * Sub-title for city color
+	 * @return
+	 */
+	public abstract String cityColor();
+
+	/**
+	 * Sub-title for temple color
+	 * @return
+	 */
+	public abstract String templeColor();
 }

@@ -21,6 +21,11 @@ import text.TextFrancais;
 
 public class ConfigStorage {
 	private static final String languageNameAttribure = "language";
+	private static final String provinceRGBAttribute = "provinceCol";
+	private static final String castleRGBAttribute = "castleCol";
+	private static final String cityRGBAttribute = "cityCol";
+	private static final String templeRGBAttribute = "templeCol";
+	private static final String blackBorderAttribute = "blackBorder";
 	private static final String wsNameAttribute = "name";
 	private static final String wsGameDirAttribute = "gameDirectory";
 	private static final String wsMapModDirAttribute = "mapModDirectory";
@@ -37,6 +42,11 @@ public class ConfigStorage {
 	 * List of working sessions
 	 */
 	private LinkedList<WorkingSession> workingSessions = new LinkedList<WorkingSession>();
+
+	/**
+	 * Preferences of the user for the software
+	 */
+	public Preferences preferences;
 
 	/**
 	 * File where is load or save the configuration of the software
@@ -60,9 +70,14 @@ public class ConfigStorage {
 			// Build the XML tree and gather the root
 			root = new SAXBuilder().build(new File(configurationFile)).getRootElement();
 
-			// Language of the software
+			// Preferences of the software
 			String language = root.getAttributeValue(languageNameAttribure);
 			text = (language.equals(frenchLanguage))? new TextFrancais() : new TextEnglish();
+			preferences = new Preferences(Integer.valueOf(root.getAttributeValue(provinceRGBAttribute)),
+					Integer.valueOf(root.getAttributeValue(castleRGBAttribute)),
+					Integer.valueOf(root.getAttributeValue(templeRGBAttribute)),
+					Integer.valueOf(root.getAttributeValue(cityRGBAttribute)),
+					language.equals(frenchLanguage), Boolean.valueOf(root.getAttributeValue(blackBorderAttribute)));
 		} catch (JDOMException | IOException e) {
 			// No configuration file
 			return;
@@ -163,6 +178,11 @@ public class ConfigStorage {
 		String language = (text.isFrenchLanguage())? frenchLanguage: "English";
 		Attribute languageAttribute = new Attribute(languageNameAttribure, language);
 		root.setAttribute(languageAttribute);
+		root.setAttribute(new Attribute(provinceRGBAttribute, String.valueOf(preferences.getProvinceRGB())));
+		root.setAttribute(new Attribute(castleRGBAttribute, String.valueOf(preferences.getCastleRGB())));
+		root.setAttribute(new Attribute(cityRGBAttribute, String.valueOf(preferences.getCityRGB())));
+		root.setAttribute(new Attribute(templeRGBAttribute, String.valueOf(preferences.getTempleRGB())));
+		root.setAttribute(new Attribute(blackBorderAttribute, String.valueOf(preferences.hasBlackBorder)));
 
 		// Adding the working session in order
 		Iterator<WorkingSession> it = workingSessions.iterator();

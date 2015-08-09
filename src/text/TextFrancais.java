@@ -295,4 +295,34 @@ public class TextFrancais extends Text {
 	public String xSymmetry() {
 		return "Appliquer à la carte une symétrie par rapport à l'axe X";
 	}
+
+	@Override
+	public String preferencesTitle() {
+		return "Options";
+	}
+
+	@Override
+	public String color() {
+		return "Couleur";
+	}
+
+	@Override
+	public String provinceColor() {
+		return "Couleur de province";
+	}
+
+	@Override
+	public String castleColor() {
+		return "Couleur de château";
+	}
+
+	@Override
+	public String cityColor() {
+		return "Couleur de ville";
+	}
+
+	@Override
+	public String templeColor() {
+		return "Couleur de temple";
+	}
 }

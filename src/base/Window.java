@@ -34,6 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
 import config.ConfigStorage;
+import config.PreferenceDialog;
 import config.WorkingSession;
 import config.WorkingSessionNewDialog;
 import config.WorkingSessionNewDialogCK;
@@ -100,6 +101,8 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	private JMenuItem wsOpenRecently;
 	private JMenu searchMenu;
 	private JMenuItem searchBarony;
+	private JMenu options;
+	private JMenuItem color;
 
 	// Configuration of the software
 	private final ConfigStorage configuration;
@@ -169,7 +172,14 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		searchMenu.add(searchName);
 		searchID.addActionListener(new SearchListener(0));
 		searchName.addActionListener(new SearchListener(1));
+		searchMenu.setVisible(false);
 		windowMenuBar.add(searchMenu);
+		// TODO finish
+		options = new JMenu("Preferences");
+		color = new JMenuItem("Color");
+		options.add(color);
+		options.setVisible(false);
+		windowMenuBar.add(options);
 	    setJMenuBar(windowMenuBar);
 
 		// Window displaying
@@ -191,6 +201,14 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		try {
 			ws.initialize();
 			loadWorkingSession(ws);
+			// Update reload working session menu
+			wsReload.addActionListener(new ReloadWorkingSession(ws));
+			wsReload.setVisible(true);
+			// We can now search in a working session
+			searchMenu.setVisible(true);
+			// We can now modify preferences
+			options.setVisible(true);
+			color.addActionListener(new PreferencesListener(0, ws));
 		} catch (IllegalArgumentException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), text.error(), JOptionPane.ERROR_MESSAGE);
 		} catch (FileNotFoundException e) {
@@ -198,9 +216,6 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, text.fileNotFound("provinces.bmp"), text.error(), JOptionPane.ERROR_MESSAGE);
 		}
-		// Update reload working session menu
-		wsReload.addActionListener(new ReloadWorkingSession(ws));
-		wsReload.setVisible(true);
 		WaitingBar.stop();
 		enableMenus(true);
 	}
@@ -246,7 +261,9 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		JPanel east = new JPanel(new GridLayout(2, 1, 0, 5));
 		Font provinceFont = new Font("Tahoma", Font.BOLD, 14);
 		resLabel.setFont(provinceFont);
-		resLabel.setForeground(new Color(128, 128, 128));
+		resLabel.setForeground(new Color(configuration.preferences.getProvinceR(),
+				configuration.preferences.getProvinceG(),
+				configuration.preferences.getProvinceB()));
 		JPanel resPanel = new JPanel();
 		resPanel.setBorder(BorderFactory.createTitledBorder(text.clickedProvince()));
 		resLabel.setText("");
@@ -393,13 +410,18 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		baronyLabel.setText(barony.toString());
 		if (barony.isCastle()) {
 			baronyLabel.setText(baronyLabel.getText() + " (" + text.castle() + ")");
-			baronyLabel.setForeground(new Color(0, 0, 255));
+			baronyLabel.setForeground(new Color(configuration.preferences.getCastleR(),
+					configuration.preferences.getCastleG(), configuration.preferences.getCastleB()));
 		} else if (barony.isCity()) {
 			baronyLabel.setText(baronyLabel.getText() + " (" + text.city() + ")");
-			baronyLabel.setForeground(new Color(0, 128, 0));
+			baronyLabel.setForeground(new Color(configuration.preferences.getCityR(),
+					configuration.preferences.getCityG(), configuration.preferences.getCityB()));
 		} else if (barony.isTemple()) {
 			baronyLabel.setText(baronyLabel.getText() + " (" + text.temple() + ")");
-			baronyLabel.setForeground(new Color(255, 0, 0));
+			baronyLabel.setForeground(new Color(configuration.preferences.getTempleR(),
+					configuration.preferences.getTempleG(), configuration.preferences.getTempleB()));
+			System.out.println("TEMPLE : " + configuration.preferences.getTempleR()+","+
+					configuration.preferences.getTempleG()+","+ configuration.preferences.getTempleB());
 		} else {
 			throw new IllegalArgumentException(barony.getBaronyName() + 
 					" is not a castle, a city or a temple.");
@@ -651,6 +673,21 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		}
 	}
 
+	private void reloadWS(WorkingSession ws) {
+		try {
+			if (!ws.isInit()) {
+				ws.initialize();
+			}
+			loadWorkingSession(ws);
+		} catch (IllegalArgumentException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), text.error(), JOptionPane.ERROR_MESSAGE);
+		} catch (FileNotFoundException e) {
+			JOptionPane.showMessageDialog(null, text.fileNotFound(e.getMessage()), text.error(), JOptionPane.ERROR_MESSAGE);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, text.fileNotFound("provinces.bmp"), text.error(), JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
 	// ---------------- Button actions ---------------------------
 	class BoutonCopierListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {			
@@ -796,17 +833,24 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			try {
-				if (!ws.isInit()) {
-					ws.initialize();
-				}
-				loadWorkingSession(ws);
-			} catch (IllegalArgumentException e) {
-				JOptionPane.showMessageDialog(null, e.getMessage(), text.error(), JOptionPane.ERROR_MESSAGE);
-			} catch (FileNotFoundException e) {
-				JOptionPane.showMessageDialog(null, text.fileNotFound(e.getMessage()), text.error(), JOptionPane.ERROR_MESSAGE);
-			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null, text.fileNotFound("provinces.bmp"), text.error(), JOptionPane.ERROR_MESSAGE);
+			reloadWS(ws);
+		}
+	}
+
+	class PreferencesListener implements ActionListener {
+		private int selectedIndex;
+		private WorkingSession ws;
+
+		PreferencesListener(int selectedIndex, WorkingSession ws) {
+			this.selectedIndex = selectedIndex;
+			this.ws = ws;
+		}
+
+		public void actionPerformed(ActionEvent arg0) {
+			PreferenceDialog dialog = new PreferenceDialog(Window.this, text.preferencesTitle(),
+					true, text, selectedIndex, configuration.preferences);
+			if (dialog.setUserPreferences()) {
+				reloadWS(ws);
 			}
 		}
 	}

@@ -296,4 +296,34 @@ public class TextEnglish extends Text {
 	public String xSymmetry() {
 		return "Apply to the map a symmetry about the X axis";
 	}
+
+	@Override
+	public String color() {
+		return "Color";
+	}
+
+	@Override
+	public String preferencesTitle() {
+		return "Preferences";
+	}
+
+	@Override
+	public String provinceColor() {
+		return "Province color";
+	}
+
+	@Override
+	public String castleColor() {
+		return "Castle color";
+	}
+
+	@Override
+	public String cityColor() {
+		return "City color";
+	}
+
+	@Override
+	public String templeColor() {
+		return "Temple color";
+	}
 }
