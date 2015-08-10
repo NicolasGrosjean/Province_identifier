@@ -1,5 +1,7 @@
 package text;
 
+import java.util.LinkedList;
+
 /**
  * Text in french
  * @author Mouchi
@@ -324,5 +326,23 @@ public class TextFrancais extends Text {
 	@Override
 	public String templeColor() {
 		return "Couleur de temple";
+	}
+
+	@Override
+	public String close() {
+		return "Fermer";
+	}
+
+	@Override
+	public String language() {
+		return "Langue";
+	}
+
+	@Override
+	public LinkedList<String> languageChange() {
+		LinkedList<String> result = new LinkedList<String>();
+		result.addLast("Vous devez redémarrer le logiciel");
+		result.addLast("pour que le changement de langue prenne effet");
+		return result;
 	}
 }

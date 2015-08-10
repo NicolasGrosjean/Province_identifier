@@ -1,5 +1,7 @@
 package text;
 
+import java.util.LinkedList;
+
 /**
  * Text in English
  * @author Mouchi
@@ -325,5 +327,23 @@ public class TextEnglish extends Text {
 	@Override
 	public String templeColor() {
 		return "Temple color";
+	}
+
+	@Override
+	public String close() {
+		return "Close";
+	}
+
+	@Override
+	public String language() {
+		return "Language";
+	}
+
+	@Override
+	public LinkedList<String> languageChange() {
+		LinkedList<String> result = new LinkedList<String>();
+		result.addLast("You must restart the software");
+		result.addLast("in order to benefit of language change");
+		return result;
 	}
 }

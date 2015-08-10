@@ -38,7 +38,8 @@ public class ChooseLanguage extends JDialog {
 		container.add(north, BorderLayout.NORTH);
 
 		// Available language to choose
-		english = new JRadioButton(text.englishLanguageName());		french = new JRadioButton(text.frenchLanguageName());		
+		english = new JRadioButton(text.englishLanguageName());
+		french = new JRadioButton(text.frenchLanguageName());
 
 		ButtonGroup language = new ButtonGroup();
 		if (text.isFrenchLanguage()) {
@@ -55,7 +56,7 @@ public class ChooseLanguage extends JDialog {
 		container.add(languagePan, BorderLayout.CENTER);
 
 		// Button to valide its choice
-		JButton languageButton = new JButton("Valider");
+		JButton languageButton = new JButton(text.validateButton());
 		languageButton.addActionListener(new LanguageButtonListener());
 		JPanel south = new JPanel();
 		south.add(languageButton);

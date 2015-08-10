@@ -175,8 +175,8 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		searchMenu.setVisible(false);
 		windowMenuBar.add(searchMenu);
 		// TODO finish
-		options = new JMenu("Preferences");
-		color = new JMenuItem("Color");
+		options = new JMenu(text.preferencesTitle());
+		color = new JMenuItem(text.color());
 		options.add(color);
 		options.setVisible(false);
 		windowMenuBar.add(options);
@@ -420,8 +420,6 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			baronyLabel.setText(baronyLabel.getText() + " (" + text.temple() + ")");
 			baronyLabel.setForeground(new Color(configuration.preferences.getTempleR(),
 					configuration.preferences.getTempleG(), configuration.preferences.getTempleB()));
-			System.out.println("TEMPLE : " + configuration.preferences.getTempleR()+","+
-					configuration.preferences.getTempleG()+","+ configuration.preferences.getTempleB());
 		} else {
 			throw new IllegalArgumentException(barony.getBaronyName() + 
 					" is not a castle, a city or a temple.");
@@ -851,7 +849,20 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 					true, text, selectedIndex, configuration.preferences);
 			if (dialog.setUserPreferences()) {
 				reloadWS(ws);
+			} else {
+				// We reload the color of the result label
+				resLabel.setForeground(new Color(configuration.preferences.getProvinceR(),
+						configuration.preferences.getProvinceG(),
+						configuration.preferences.getProvinceB()));
+				// Reset the selection informations
+				resLabel.setText("");
+				copyButton.setEnabled(false);
+				if (CkGame) {
+					eraseBaronyNames();
+				}
 			}
+			// Save the preferences
+			configuration.saveConfigFile();
 		}
 	}
 

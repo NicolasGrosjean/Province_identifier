@@ -1,5 +1,7 @@
 package text;
 
+import java.util.LinkedList;
+
 /**
  * Class for the text
  * @author Mouchi
@@ -401,4 +403,22 @@ public abstract class Text {
 	 * @return
 	 */
 	public abstract String templeColor();
+
+	/**
+	 * Close button text
+	 * @return
+	 */
+	public abstract String close();
+
+	/**
+	 * Language tab pane
+	 * @return
+	 */
+	public abstract String language();
+
+	/**
+	 * Order for the language change
+	 * @return
+	 */
+	public abstract LinkedList<String> languageChange();
 }
