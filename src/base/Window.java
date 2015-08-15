@@ -33,6 +33,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import config.ConfigStorage;
 import config.PreferenceDialog;
@@ -258,6 +260,15 @@ public class Window extends JFrame implements MouseListener {
 			JOptionPane.showMessageDialog(null, text.fileNotFound("provinces.bmp"), text.error(), JOptionPane.ERROR_MESSAGE);
 		}
 		WaitingBar.stop();
+		// Use the look and feel of the system for fileChooser
+		// Put here in order to have coherence but not no-beautiful waiting bar
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}
+		catch (InstantiationException e) {}
+		catch (ClassNotFoundException e) {}
+		catch (UnsupportedLookAndFeelException e) {}
+		catch (IllegalAccessException e) {}
 		enableMenus(true);
 	}
 

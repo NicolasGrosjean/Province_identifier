@@ -55,14 +55,6 @@ public class WorkingSessionNewDialog extends JDialog {
 		JButton validate = new JButton(text.validateButton());
 		JButton cancel = new JButton(text.cancelButton());
 
-		// Use the look and feel of the system for fileChooser
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		}
-		catch (InstantiationException e) {}
-		catch (ClassNotFoundException e) {}
-		catch (UnsupportedLookAndFeelException e) {}
-		catch (IllegalAccessException e) {}
 		fileChooser = new JFileChooser();
 		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
