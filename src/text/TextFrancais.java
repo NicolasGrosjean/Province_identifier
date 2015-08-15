@@ -355,4 +355,39 @@ public class TextFrancais extends Text {
 	public String blackBorder() {
 		return "Bordure noire autout des provinces";
 	}
+
+	@Override
+	public String navigation() {
+		return "Navigation";
+	}
+
+	@Override
+	public String moveTop() {
+		return "Déplacer haut";
+	}
+
+	@Override
+	public String moveLeft() {
+		return "Déplacer gauche";
+	}
+
+	@Override
+	public String moveBottom() {
+		return "Déplacer bas";
+	}
+
+	@Override
+	public String moveRight() {
+		return "Déplacer droite";
+	}
+
+	@Override
+	public String zoomIn() {
+		return "Zoomer";
+	}
+
+	@Override
+	public String zoomOut() {
+		return "Dézoomer";
+	}
 }

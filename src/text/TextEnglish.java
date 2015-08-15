@@ -356,4 +356,39 @@ public class TextEnglish extends Text {
 	public String blackBorder() {
 		return "Provinces has a black border";
 	}
+
+	@Override
+	public String navigation() {
+		return "Navigation";
+	}
+
+	@Override
+	public String moveTop() {
+		return "Move top";
+	}
+
+	@Override
+	public String moveLeft() {
+		return "Move left";
+	}
+
+	@Override
+	public String moveBottom() {
+		return "Move bottom";
+	}
+
+	@Override
+	public String moveRight() {
+		return "Move right";
+	}
+
+	@Override
+	public String zoomIn() {
+		return "Zoom in";
+	}
+
+	@Override
+	public String zoomOut() {
+		return "Zoom out";
+	}
 }

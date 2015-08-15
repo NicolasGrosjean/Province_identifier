@@ -1,5 +1,7 @@
 package tests;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -143,9 +145,9 @@ public class TestWindow {
 		// Déplacement tout à droite
 		int i = 1;
 		if (pan.getImageWidth() < pan.getRealWidth()) {
-			KeyEvent evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 4, 0, 39, KeyEvent.CHAR_UNDEFINED);
-			for(KeyListener kl: window.getKeyListeners()){
-				kl.keyPressed(evt);
+			ActionEvent actionEvt = new ActionEvent(window, ActionEvent.ACTION_PERFORMED, "", 1, 0);
+			for (ActionListener a: window.getJMenuBar().getMenu(2).getItem(3).getActionListeners()) {
+				a.actionPerformed(actionEvt);
 			}
 			Assert.assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), i);
 			assertMiniMap(miniMap, i, 0);
@@ -153,17 +155,17 @@ public class TestWindow {
 		}
 		while (pan.getWidthNumber() * pan.getDisplayingRealImageWidth() / 2  + pan.getDisplayingRealImageWidth()
 				< pan.getRealWidth()) {
-			KeyEvent evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 5, 0, 39, KeyEvent.CHAR_UNDEFINED);
-			for(KeyListener kl: window.getKeyListeners()){
-				kl.keyPressed(evt);
+			ActionEvent actionEvt = new ActionEvent(window, ActionEvent.ACTION_PERFORMED, "", 1, 0);
+			for (ActionListener a: window.getJMenuBar().getMenu(2).getItem(3).getActionListeners()) {
+				a.actionPerformed(actionEvt);
 			}
 			Assert.assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), i);
 			assertMiniMap(miniMap, i, 0);
 			i++;
 		}
-		KeyEvent evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 6, 0, 39, KeyEvent.CHAR_UNDEFINED);
-		for(KeyListener kl: window.getKeyListeners()){
-			kl.keyPressed(evt);
+		ActionEvent actionEvt = new ActionEvent(window, ActionEvent.ACTION_PERFORMED, "", 1, 0);
+		for (ActionListener a: window.getJMenuBar().getMenu(2).getItem(3).getActionListeners()) {
+			a.actionPerformed(actionEvt);
 		}
 		Assert.assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), --i);
 		assertMiniMap(miniMap, i, 0);
@@ -174,9 +176,9 @@ public class TestWindow {
 			int hauteurImageReellePrecedente = pan.getDisplayingRealImageHeight();
 			int numLargeurPrecedent = pan.getWidthNumber();
 			int numHauteurPrecedent = pan.getHeightNumber();
-			evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 7, 0, 107, '+');
-			for(KeyListener kl: window.getKeyListeners()){
-				kl.keyPressed(evt);
+			actionEvt = new ActionEvent(window, ActionEvent.ACTION_PERFORMED, "", 1, 0);
+			for (ActionListener a: window.getJMenuBar().getMenu(2).getItem(5).getActionListeners()) {
+				a.actionPerformed(actionEvt);
 			}
 			Assert.assertEquals("Largeur incorrecte", pan.getDisplayingRealImageWidth(), largeurImageReellePrecedente / 2);
 			Assert.assertEquals("Hauteur incorrecte", pan.getDisplayingRealImageHeight(), hauteurImageReellePrecedente / 2);
@@ -198,9 +200,9 @@ public class TestWindow {
 			int hauteurImageReellePrecedente = pan.getDisplayingRealImageHeight();
 			int numLargeurPrecedent = pan.getWidthNumber();
 			int numHauteurPrecedent = pan.getHeightNumber();
-			evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 1, 0, 109, '-');
-			for(KeyListener kl: window.getKeyListeners()){
-				kl.keyPressed(evt);
+			actionEvt = new ActionEvent(window, ActionEvent.ACTION_PERFORMED, "", 1, 0);
+			for (ActionListener a: window.getJMenuBar().getMenu(2).getItem(6).getActionListeners()) {
+				a.actionPerformed(actionEvt);
 			}
 			Assert.assertEquals("Largeur incorrecte", pan.getDisplayingRealImageWidth(), largeurImageReellePrecedente * 2);
 			Assert.assertEquals("Hauteur incorrecte", pan.getDisplayingRealImageHeight(), hauteurImageReellePrecedente * 2);
@@ -211,17 +213,17 @@ public class TestWindow {
 
 		// Déplacement tout à gauche
 		while (pan.getWidthNumber() > 0) {
-			evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 9, 0, 37, KeyEvent.CHAR_UNDEFINED);
-			for(KeyListener kl: window.getKeyListeners()){
-				kl.keyPressed(evt);
+			actionEvt = new ActionEvent(window, ActionEvent.ACTION_PERFORMED, "", 1, 0);
+			for (ActionListener a: window.getJMenuBar().getMenu(2).getItem(1).getActionListeners()) {
+				a.actionPerformed(actionEvt);
 			}
 			i--;
 			Assert.assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), i);
 			assertMiniMap(miniMap, i, 0);
 		}
-		evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 10, 0, 37, KeyEvent.CHAR_UNDEFINED);
-		for(KeyListener kl: window.getKeyListeners()){
-			kl.keyPressed(evt);
+		actionEvt = new ActionEvent(window, ActionEvent.ACTION_PERFORMED, "", 1, 0);
+		for (ActionListener a: window.getJMenuBar().getMenu(2).getItem(1).getActionListeners()) {
+			a.actionPerformed(actionEvt);
 		}
 		Assert.assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), i);
 		assertMiniMap(miniMap, i, 0);
@@ -236,9 +238,9 @@ public class TestWindow {
 
 		// Déplacement tout en bas
 		if (pan.getImageHeight() < pan.getRealHeight()) {
-			evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 12, 0, 40, KeyEvent.CHAR_UNDEFINED);
-			for(KeyListener kl: window.getKeyListeners()){
-				kl.keyPressed(evt);
+			actionEvt = new ActionEvent(window, ActionEvent.ACTION_PERFORMED, "", 1, 0);
+			for (ActionListener a: window.getJMenuBar().getMenu(2).getItem(2).getActionListeners()) {
+				a.actionPerformed(actionEvt);
 			}
 			i++;
 			Assert.assertEquals("Numéro de hauteur incorrect", pan.getHeightNumber(), i);
@@ -246,17 +248,17 @@ public class TestWindow {
 		}
 		while (pan.getHeightNumber() * pan.getDisplayingRealImageHeight() / 2  + pan.getDisplayingRealImageHeight()
 				< pan.getRealHeight()) {
-			evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 13, 0, 40, KeyEvent.CHAR_UNDEFINED);
-			for(KeyListener kl: window.getKeyListeners()){
-				kl.keyPressed(evt);
+			actionEvt = new ActionEvent(window, ActionEvent.ACTION_PERFORMED, "", 1, 0);
+			for (ActionListener a: window.getJMenuBar().getMenu(2).getItem(2).getActionListeners()) {
+				a.actionPerformed(actionEvt);
 			}
 			i++;
 			Assert.assertEquals("Numéro de hauteur incorrect", pan.getHeightNumber(), i);
 			assertMiniMap(miniMap, 0, i);
 		}
-		evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 14, 0, 40, KeyEvent.CHAR_UNDEFINED);
-		for(KeyListener kl: window.getKeyListeners()){
-			kl.keyPressed(evt);
+		actionEvt = new ActionEvent(window, ActionEvent.ACTION_PERFORMED, "", 1, 0);
+		for (ActionListener a: window.getJMenuBar().getMenu(2).getItem(2).getActionListeners()) {
+			a.actionPerformed(actionEvt);
 		}
 		Assert.assertEquals("Numéro de hauteur incorrect", pan.getHeightNumber(), i);
 		assertMiniMap(miniMap, 0, i);
@@ -271,17 +273,17 @@ public class TestWindow {
 		
 		// Déplacement tout en haut
 		while (pan.getHeightNumber() > 0) {
-			evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 16, 0, 38, KeyEvent.CHAR_UNDEFINED);
-			for(KeyListener kl: window.getKeyListeners()){
-				kl.keyPressed(evt);
+			actionEvt = new ActionEvent(window, ActionEvent.ACTION_PERFORMED, "", 1, 0);
+			for (ActionListener a: window.getJMenuBar().getMenu(2).getItem(0).getActionListeners()) {
+				a.actionPerformed(actionEvt);
 			}
 			i--;
 			Assert.assertEquals("Numéro de hauteur incorrect", pan.getHeightNumber(), i);
 			assertMiniMap(miniMap, 0, i);
 		}
-		evt = new KeyEvent(window, KeyEvent.KEY_PRESSED, 17, 0, 38, KeyEvent.CHAR_UNDEFINED);
-		for(KeyListener kl: window.getKeyListeners()){
-			kl.keyPressed(evt);
+		actionEvt = new ActionEvent(window, ActionEvent.ACTION_PERFORMED, "", 1, 0);
+		for (ActionListener a: window.getJMenuBar().getMenu(2).getItem(0).getActionListeners()) {
+			a.actionPerformed(actionEvt);
 		}
 		Assert.assertEquals("Numéro de hauteur incorrect", pan.getHeightNumber(), i);
 		assertMiniMap(miniMap, 0, i);

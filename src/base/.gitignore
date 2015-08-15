@@ -42,3 +42,9 @@
 /Window$ReLoadWorkingSession.class
 /Window$ReloadWorkingSession.class
 /Window$PreferencesListener.class
+/Window$ZoomInListener.class
+/Window$ZoomOutListener.class
+/Window$TopListener.class
+/Window$BottomListener.class
+/Window$LeftListener.class
+/Window$RightListener.class

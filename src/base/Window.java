@@ -32,6 +32,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.KeyStroke;
 
 import config.ConfigStorage;
 import config.PreferenceDialog;
@@ -48,7 +49,7 @@ import text.Text;
  * @author Mouchi
  *
  */
-public class Window extends JFrame implements MouseListener, KeyListener {
+public class Window extends JFrame implements MouseListener {
 	// First pixel position
 	static private int FIRST_PIXEL_X = 8;
 	static private int FIRST_PIXEL_Y = 31;
@@ -101,6 +102,13 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	private JMenuItem wsOpenRecently;
 	private JMenu searchMenu;
 	private JMenuItem searchBarony;
+	private JMenu navigation;
+	private JMenuItem top;
+	private JMenuItem left;
+	private JMenuItem bottom;
+	private JMenuItem right;
+	private JMenuItem zoomIn;
+	private JMenuItem zoomOut;
 	private JMenu options;
 	private JMenuItem color;
 	private JMenuItem other;
@@ -175,6 +183,28 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		searchName.addActionListener(new SearchListener(1));
 		searchMenu.setVisible(false);
 		windowMenuBar.add(searchMenu);
+		navigation = new JMenu(text.navigation());
+		top = new JMenuItem(text.moveTop());
+		top.setAccelerator(KeyStroke.getKeyStroke(38, 0));
+		left = new JMenuItem(text.moveLeft());
+		left.setAccelerator(KeyStroke.getKeyStroke(37, 0));
+		bottom = new JMenuItem(text.moveBottom());
+		bottom.setAccelerator(KeyStroke.getKeyStroke(40, 0));
+		right = new JMenuItem(text.moveRight());
+		right.setAccelerator(KeyStroke.getKeyStroke(39, 0));
+		zoomIn = new JMenuItem(text.zoomIn());
+		zoomIn.setAccelerator(KeyStroke.getKeyStroke('+'));
+		zoomOut = new JMenuItem(text.zoomOut());
+		zoomOut.setAccelerator(KeyStroke.getKeyStroke('-'));
+		navigation.add(top);
+		navigation.add(left);
+		navigation.add(bottom);
+		navigation.add(right);
+		navigation.addSeparator();
+		navigation.add(zoomIn);
+		navigation.add(zoomOut);
+		navigation.setVisible(false);
+		windowMenuBar.add(navigation);
 		options = new JMenu(text.preferencesTitle());
 		color = new JMenuItem(text.color());
 		other = new JMenuItem(text.other());
@@ -208,6 +238,14 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			wsReload.setVisible(true);
 			// We can now search in a working session
 			searchMenu.setVisible(true);
+			// We can now use navigation
+			navigation.setVisible(true);
+			top.addActionListener(new TopListener());
+			left.addActionListener(new LeftListener());
+			bottom.addActionListener(new BottomListener());
+			right.addActionListener(new RightListener());
+			zoomIn.addActionListener(new ZoomInListener());
+			zoomOut.addActionListener(new ZoomOutListener());
 			// We can now modify preferences
 			options.setVisible(true);
 			color.addActionListener(new PreferencesListener(0, ws));
@@ -328,10 +366,9 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		setFocusable(true);
 		copyButton.setFocusable(false);
 
-		// Mouse and key listening for actions
+		// Mouse listening for actions
 		pan.addMouseListener(this);
 		listenedComponent.add(pan);
-		this.addKeyListener(this);
 		listenedComponent.add(this);
 
 		// Window displaying new components
@@ -563,44 +600,6 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-	}
-
-	// ---------------- Key actions ---------------------------
-	@Override
-	public void keyPressed(KeyEvent event) {
-		/* Codes :
-		 * 	37 : <-
-		 * 	38 : top arrow
-		 * 	39 : ->
-		 * 	40 : bottom arrow
-		 */
-		if (event.getKeyCode() == 37) {
-			if (enabledLeft)
-				actionGauche();
-		} else if (event.getKeyCode() == 38) {
-			if (enabledTop)
-				actionHaut();
-		} else if (event.getKeyCode() == 39) {
-			if (enabledRight)
-				actionDroit();
-		} else if (event.getKeyCode() == 40) {
-			if (enabledBottom)
-				actionBas();
-		} else if (event.getKeyChar() == '+') {
-			if (enabledZoomIn)
-				actionPlus();
-		} else if (event.getKeyChar() == '-') {
-			if (enabledZoomOut)
-				actionMoins();
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent event) {	 
-	}
-
-	@Override
-	public void keyTyped(KeyEvent event) {
 	}
 
 	// ---------------- Moving actions ---------------------------
@@ -876,6 +875,54 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			}
 			// Save the preferences
 			configuration.saveConfigFile();
+		}
+	}
+
+	class ZoomInListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (enabledZoomIn)
+				actionPlus();
+		}
+	}
+
+	class ZoomOutListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (enabledZoomOut)
+				actionMoins();
+		}
+	}
+
+	class TopListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (enabledTop)
+				actionHaut();
+		}
+	}
+
+	class LeftListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (enabledLeft)
+				actionGauche();
+		}
+	}
+
+	class BottomListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (enabledBottom)
+				actionBas();
+		}
+	}
+
+	class RightListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (enabledRight)
+				actionDroit();
 		}
 	}
 

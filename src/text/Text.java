@@ -432,4 +432,46 @@ public abstract class Text {
 	 * @return
 	 */
 	public abstract String blackBorder();
+
+	/**
+	 * Navigation menu
+	 * @return
+	 */
+	public abstract String navigation();
+
+	/**
+	 * Move top menu item
+	 * @return
+	 */
+	public abstract String moveTop();
+
+	/**
+	 * Move left menu item
+	 * @return
+	 */
+	public abstract String moveLeft();
+
+	/**
+	 * Move bottom menu item
+	 * @return
+	 */
+	public abstract String moveBottom();
+
+	/**
+	 * Move right menu item
+	 * @return
+	 */
+	public abstract String moveRight();
+
+	/**
+	 * Zoom in menu item
+	 * @return
+	 */
+	public abstract String zoomIn();
+
+	/**
+	 * Zoom out top menu item
+	 * @return
+	 */
+	public abstract String zoomOut();
 }
