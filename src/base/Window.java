@@ -351,7 +351,15 @@ public class Window extends JFrame implements MouseListener {
 			northEast.add(baroniesPanel);
 			east.add(northEast);
 		} else {
-			east.add(resPanel);
+			JPanel illustrationPanel = new JPanel();
+			JLabel illustrationLabel = new JLabel(new ImageIcon("Compas_Illustrations.png"));
+			illustrationLabel.setPreferredSize(new Dimension(256, 256));
+			illustrationPanel.add(illustrationLabel);
+			illustrationPanel.setPreferredSize(new Dimension(256, 256));
+			JPanel northEast = new JPanel(new BorderLayout());
+			northEast.add(resPanel, BorderLayout.NORTH);
+			northEast.add(illustrationPanel);
+			east.add(northEast);
 		}
 
 		// Mini-map adding
