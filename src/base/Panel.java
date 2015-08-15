@@ -83,7 +83,7 @@ public class Panel extends JPanel {
 	 */
 	private Text text;
 	
-	public Panel(String image, Text text, boolean xSymetry) throws IOException {		
+	public Panel(String image, Text text, boolean xSymetry, boolean blackBorder) throws IOException {
 		File file = new File(image);
 		this.image = ImageIO.read(file);
 		realWidth = this.image.getWidth();
@@ -108,7 +108,9 @@ public class Panel extends JPanel {
 		if (xSymetry) {
 			xSymetry();
 		}
-		addColorProvinceBorder(BLACK);
+		if (blackBorder) {
+			addColorProvinceBorder(BLACK);
+		}
 	}
 
 	public int getRealWidth() {

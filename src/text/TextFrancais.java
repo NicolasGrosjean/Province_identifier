@@ -345,4 +345,14 @@ public class TextFrancais extends Text {
 		result.addLast("pour que le changement de langue prenne effet");
 		return result;
 	}
+
+	@Override
+	public String other() {
+		return "Autre";
+	}
+
+	@Override
+	public String blackBorder() {
+		return "Bordure noire autout des provinces";
+	}
 }

@@ -23,9 +23,9 @@ public class WorkingSessionNewDialogCK extends WorkingSessionNewDialog {
 	private JTextField modDirectory2TF = new JTextField();
 	private JTextField modDirectory3TF = new JTextField();
 
-	public WorkingSessionNewDialogCK(JFrame parent, boolean modal, Text text) {
+	public WorkingSessionNewDialogCK(JFrame parent, boolean modal, Text text, boolean blackBorder) {
 		// Create the JDialog
-		super(parent, modal, text);
+		super(parent, modal, text, blackBorder);
 		setSize(550, 400);
 
 		// Create all necessary components
@@ -86,7 +86,7 @@ public class WorkingSessionNewDialogCK extends WorkingSessionNewDialog {
 			modDirectories.add(modDirectory3TF.getText());
 		}
 		return new WorkingSession(wsName.getText(), gameDirectoryTF.getText(),
-				mapModDir, modDirectories, text, true, true, false);
+				mapModDir, modDirectories, text, true, true, false, blackBorder);
 	}
 
 	class FileExplorer implements ActionListener {

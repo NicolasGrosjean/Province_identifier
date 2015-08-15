@@ -26,6 +26,7 @@ public class WorkingSession {
 	private boolean ckGame;
 	private boolean init;
 	private boolean xSymetry;
+	private boolean blackBorder;
 
 	// For Crusader Kings 2
 	private BaroniesStorage storedBaronies;
@@ -41,7 +42,7 @@ public class WorkingSession {
 	 */
 	public WorkingSession(String name, String gameDirectory, String mapModDirectory,
 			LinkedList<String> modDirectories, Text text, boolean ckGame, boolean init,
-			boolean xSymetry) throws IOException {
+			boolean xSymetry, boolean blackBorder) throws IOException {
 		this.name = name;
 		this.gameDirectory = gameDirectory;
 		this.mapModDirectory = mapModDirectory;
@@ -54,6 +55,7 @@ public class WorkingSession {
 		this.text = text;
 		this.ckGame = ckGame;
 		this.xSymetry = xSymetry;
+		this.blackBorder = blackBorder;
 		this.init = false; // the working session is not yet initialised
 		if (init) {
 			initialize();
@@ -64,7 +66,7 @@ public class WorkingSession {
 		if (!init) {
 			// Map informations
 			readDefinitionFile(mapDirectory + "/map/definition.csv");			
-			panel = new Panel(mapDirectory + "/map/provinces.bmp", text, xSymetry);
+			panel = new Panel(mapDirectory + "/map/provinces.bmp", text, xSymetry, blackBorder);
 			miniMap = new MiniMap(mapDirectory + "/map/provinces.bmp", text, panel, xSymetry);
 
 			// Province attributes for CK games
@@ -148,6 +150,16 @@ public class WorkingSession {
 			return storedBaronies;
 		} else {
 			throw new IllegalArgumentException("Working session not initialized");
+		}
+	}
+
+	public void updatePan(boolean blackBorder) throws IOException {
+		this.blackBorder = blackBorder;
+		if (!init) {
+			initialize();
+		} else {
+			panel = new Panel(mapDirectory + "/map/provinces.bmp", text, xSymetry, blackBorder);
+			miniMap = new MiniMap(mapDirectory + "/map/provinces.bmp", text, panel, xSymetry);
 		}
 	}
 

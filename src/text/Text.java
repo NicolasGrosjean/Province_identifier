@@ -411,7 +411,7 @@ public abstract class Text {
 	public abstract String close();
 
 	/**
-	 * Language tab pane
+	 * Language panel
 	 * @return
 	 */
 	public abstract String language();
@@ -421,4 +421,15 @@ public abstract class Text {
 	 * @return
 	 */
 	public abstract LinkedList<String> languageChange();
+
+	/**
+	 * Other tab pane
+	 */
+	public abstract String other();
+
+	/**
+	 * Black border check box description
+	 * @return
+	 */
+	public abstract String blackBorder();
 }

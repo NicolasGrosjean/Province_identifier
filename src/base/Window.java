@@ -103,6 +103,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 	private JMenuItem searchBarony;
 	private JMenu options;
 	private JMenuItem color;
+	private JMenuItem other;
 
 	// Configuration of the software
 	private final ConfigStorage configuration;
@@ -174,10 +175,11 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		searchName.addActionListener(new SearchListener(1));
 		searchMenu.setVisible(false);
 		windowMenuBar.add(searchMenu);
-		// TODO finish
 		options = new JMenu(text.preferencesTitle());
 		color = new JMenuItem(text.color());
+		other = new JMenuItem(text.other());
 		options.add(color);
+		options.add(other);
 		options.setVisible(false);
 		windowMenuBar.add(options);
 	    setJMenuBar(windowMenuBar);
@@ -209,6 +211,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			// We can now modify preferences
 			options.setVisible(true);
 			color.addActionListener(new PreferencesListener(0, ws));
+			other.addActionListener(new PreferencesListener(1, ws));
 		} catch (IllegalArgumentException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), text.error(), JOptionPane.ERROR_MESSAGE);
 		} catch (FileNotFoundException e) {
@@ -332,6 +335,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		listenedComponent.add(this);
 
 		// Window displaying new components
+		setTitle(text.windowTitle() + " - " + ws.getName());
 		pack();
 		setLocationRelativeTo(null);
 		repaint();
@@ -671,10 +675,17 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		}
 	}
 
-	private void reloadWS(WorkingSession ws) {
+	/**
+	 * Reload the working session
+	 * @param ws
+	 * @param changePan Change the panel of the working session
+	 */
+	private void reloadWS(WorkingSession ws, boolean changePan) {
 		try {
 			if (!ws.isInit()) {
 				ws.initialize();
+			} else if (changePan) {
+				ws.updatePan(configuration.preferences.hasBlackBorder);
 			}
 			loadWorkingSession(ws);
 		} catch (IllegalArgumentException e) {
@@ -766,9 +777,11 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 		public void actionPerformed(ActionEvent arg0) {
 			WorkingSessionNewDialog newWSDialog;
 			if (ckGame) {
-				newWSDialog = new WorkingSessionNewDialogCK(null, true, text);
+				newWSDialog = new WorkingSessionNewDialogCK(null, true, text,
+						configuration.preferences.hasBlackBorder);
 			} else {
-				newWSDialog = new WorkingSessionNewDialog(null, true, text);
+				newWSDialog = new WorkingSessionNewDialog(null, true, text,
+						configuration.preferences.hasBlackBorder);
 			}
 			try {
 				WorkingSession newWS = newWSDialog.getWorkingSession();
@@ -831,7 +844,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			reloadWS(ws);
+			reloadWS(ws, false);
 		}
 	}
 
@@ -848,7 +861,7 @@ public class Window extends JFrame implements MouseListener, KeyListener {
 			PreferenceDialog dialog = new PreferenceDialog(Window.this, text.preferencesTitle(),
 					true, text, selectedIndex, configuration.preferences);
 			if (dialog.setUserPreferences()) {
-				reloadWS(ws);
+				reloadWS(ws, true);
 			} else {
 				// We reload the color of the result label
 				resLabel.setForeground(new Color(configuration.preferences.getProvinceR(),

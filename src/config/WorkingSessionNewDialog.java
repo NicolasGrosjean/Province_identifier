@@ -31,6 +31,7 @@ public class WorkingSessionNewDialog extends JDialog {
 	protected JPanel wsNamePanel;
 	protected JPanel gameDirPanel;
 	protected JPanel validCancelPanel;
+	protected boolean blackBorder;
 	
 	private JCheckBox xSymmetry;
 
@@ -39,7 +40,7 @@ public class WorkingSessionNewDialog extends JDialog {
 	 */
 	protected boolean validated = false;
 
-	public WorkingSessionNewDialog(JFrame parent, boolean modal, Text text) {
+	public WorkingSessionNewDialog(JFrame parent, boolean modal, Text text, boolean blackBorder) {
 		// Create the JDialog
 		super(parent, text.windowTitle() + " - " + text.newWSTitle(), modal);
 		setSize(500, 220);
@@ -47,6 +48,7 @@ public class WorkingSessionNewDialog extends JDialog {
 		setResizable(false);
 
 		this.text = text;
+		this.blackBorder = blackBorder;
 
 		// Create all necessary components
 		JButton gameDirectoryFE = new JButton(fileExplorerText);
@@ -105,7 +107,7 @@ public class WorkingSessionNewDialog extends JDialog {
 			return null;
 		}
 		return new WorkingSession(wsName.getText(), gameDirectoryTF.getText(),
-				null, null, text, false, true, xSymmetry.isSelected());
+				null, null, text, false, true, xSymmetry.isSelected(), blackBorder);
 	}
 
 	class FileExplorer implements ActionListener {

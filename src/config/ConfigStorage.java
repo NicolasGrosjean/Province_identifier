@@ -97,7 +97,8 @@ public class ConfigStorage {
 						wsElem.getAttributeValue(wsGameDirAttribute),
 						wsElem.getAttributeValue(wsMapModDirAttribute), modDirectories, text,
 						wsElem.getAttributeValue(wsCKGameAttribute).equals("true"), false,
-						Boolean.valueOf(wsElem.getAttributeValue(xSymetryAttribute))));
+						Boolean.valueOf(wsElem.getAttributeValue(xSymetryAttribute)),
+						preferences.hasBlackBorder));
 			} catch (IOException e) {
 				// The working session is now not correct
 			}
@@ -175,7 +176,7 @@ public class ConfigStorage {
 	public void saveConfigFile() {
 		// Create the root of XML file with the language attribute
 		Element root = new Element("provinceIdentifier");
-		String language = (text.isFrenchLanguage())? frenchLanguage: "English";
+		String language = (preferences.isFrench)? frenchLanguage: "English";
 		Attribute languageAttribute = new Attribute(languageNameAttribure, language);
 		root.setAttribute(languageAttribute);
 		root.setAttribute(new Attribute(provinceRGBAttribute, String.valueOf(preferences.getProvinceRGB())));

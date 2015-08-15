@@ -346,4 +346,14 @@ public class TextEnglish extends Text {
 		result.addLast("in order to benefit of language change");
 		return result;
 	}
+
+	@Override
+	public String other() {
+		return "Other";
+	}
+
+	@Override
+	public String blackBorder() {
+		return "Provinces has a black border";
+	}
 }

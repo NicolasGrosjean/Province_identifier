@@ -13,6 +13,7 @@ import java.text.NumberFormat;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
@@ -61,6 +62,7 @@ public class PreferenceDialog extends JDialog {
 	private JLabel templeColorResult;
 
 	private JRadioButton french;
+	private JCheckBox blackBorder;
 
 	public PreferenceDialog(JFrame parent, String title, boolean modal,
 			Text text, int selectedIndex, Preferences preferences) {
@@ -81,11 +83,16 @@ public class PreferenceDialog extends JDialog {
 	public boolean setUserPreferences() {
 		// User can now interact with the dialog box
 		setVisible(true);
+		// We reload if the black border change
+		reloadWSNeeded = (preferences.hasBlackBorder && !blackBorder.isSelected())
+				|| (!preferences.hasBlackBorder && blackBorder.isSelected());
 		// Set the user preferences
 		preferences.setProvinceRGB(provinceRColor, provinceGColor, provinceBColor);
 		preferences.setCastleRGB(castleRColor, castleGColor, castleBColor);
 		preferences.setCityRGB(cityRColor, cityGColor, cityBColor);
 		preferences.setTempleRGB(templeRColor, templeGColor, templeBColor);
+		preferences.isFrench = french.isSelected();
+		preferences.hasBlackBorder = blackBorder.isSelected();
 		preferences.isFrench = french.isSelected();
 		return reloadWSNeeded;
 	}
@@ -263,7 +270,9 @@ public class PreferenceDialog extends JDialog {
 		closeProvincePanel.add(closeProvinceButton);
 		colorPan.add(closeProvincePanel);
 
-		// Language pane
+		// Other pane
+		JPanel otherPan = new JPanel(new GridLayout(3, 1, 5, 5));
+		// Language
 		JLabel languageLabel1 = new JLabel(text.languageChange().getFirst());
 		JLabel languageLabel2 = new JLabel(text.languageChange().getLast());
 		JRadioButton english = new JRadioButton(text.englishLanguageName());
@@ -282,11 +291,27 @@ public class PreferenceDialog extends JDialog {
 		languagePan.add(languageLabel2);
 		languagePan.add(english);
 		languagePan.add(french);
+		languagePan.setBorder(BorderFactory.createTitledBorder(text.language()));
+		otherPan.add(languagePan);
+		// Black border
+		JPanel blackBorderPanel = new JPanel();
+		blackBorder = new JCheckBox(text.blackBorder());
+		blackBorder.setSelected(preferences.hasBlackBorder);
+		blackBorderPanel.add(blackBorder);
+		blackBorderPanel.setBorder(BorderFactory.createTitledBorder(""));
+		otherPan.add(blackBorderPanel);
+
+		// Close button
+		JButton closeOtherButton = new JButton(text.close());
+		closeOtherButton.addActionListener(new CloseButtonListener());
+		JPanel closeOtherPanel = new JPanel();
+		closeOtherPanel.add(closeOtherButton);
+		otherPan.add(closeOtherPanel);
 
 		// Present the different preferences in tabbed pane
 		JTabbedPane tabPane = new JTabbedPane();
 		tabPane.add(text.color(), colorPan);
-		tabPane.add(text.language(), languagePan);
+		tabPane.add(text.other(), otherPan);
 		tabPane.setSelectedIndex(selectedIndex);
 		container.add(tabPane);
 
