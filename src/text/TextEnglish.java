@@ -110,8 +110,13 @@ public class TextEnglish extends Text {
 	}
 	
 	@Override
-	public String enterNamePlease() {
+	public String enterProvinceNamePlease() {
 		return "Please enter a province name (even if it is approximate)";
+	}
+
+	@Override
+	public String enterBaronyNamePlease() {
+		return "Please enter a barony name (even if it is approximate)";
 	}
 	
 	@Override

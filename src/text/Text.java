@@ -140,10 +140,16 @@ public abstract class Text {
 	public abstract String enterIdPlease();
 	
 	/**
-	 * Warning : no name typed
+	 * Warning : no province name typed
 	 * @return
 	 */
-	public abstract String enterNamePlease();
+	public abstract String enterProvinceNamePlease();
+
+	/**
+	 * Warning : no barony name typed
+	 * @return
+	 */
+	public abstract String enterBaronyNamePlease();
 	
 	/**
 	 * Exception invalid width

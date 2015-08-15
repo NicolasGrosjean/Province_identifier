@@ -110,10 +110,15 @@ public class TextFrancais extends Text {
 	}
 	
 	@Override
-	public String enterNamePlease() {
+	public String enterProvinceNamePlease() {
 		return "Veuillez entrer un nom de province (même approximatif)";
 	}
-	
+
+	@Override
+	public String enterBaronyNamePlease() {
+		return "Veuillez entrer un nom de baronnie (même approximatif)";
+	}
+
 	@Override
 	public String invalidWidth() {
 		return "largeur de l'image incorrecte";

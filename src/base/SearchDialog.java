@@ -144,7 +144,7 @@ public class SearchDialog extends JDialog {
 			JLabel baronyProvinceSearchInfo = new JLabel(text.baronyProvinceSearchLabel());
 			baronyReader = new JTextField();
 			baronyReader.addKeyListener(new NameTextFieldListener()); // To have only letters
-			JButton baronySearchButton = new JButton(text.nameProvinceSearchButton());
+			JButton baronySearchButton = new JButton(text.baronyProvinceSelectionButton());
 			baronySearchButton.addActionListener(new BaronySearchButtonListener());
 			baronyPaneSearch.setLayout(new GridLayout(4, 1, 5, 5));
 			baronyPaneSearch.add(baronyProvinceSearchInfo);
@@ -228,11 +228,11 @@ public class SearchDialog extends JDialog {
 			// The searched province is the province with the id typed by the user
 			try {
 				searchedProvince = provinces.getProvince(((Long)idReader.getValue()).intValue());
+				// End of the dialogue
+				setVisible(false);
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, text.enterIdPlease(), text.warningMessage(), JOptionPane.WARNING_MESSAGE);
 			}
-			// End of the dialogue
-			setVisible(false);
 		}
 	}
 
@@ -240,7 +240,7 @@ public class SearchDialog extends JDialog {
 		public void actionPerformed(ActionEvent arg0) {
 			String searchName = nameReader.getText();
 			if (searchName.equals("")) {
-				JOptionPane.showMessageDialog(null, text.enterNamePlease(), text.warningMessage(), JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, text.enterProvinceNamePlease(), text.warningMessage(), JOptionPane.WARNING_MESSAGE);
 			} else {
 				// Put the 5 nearest province name to the name typed by the user
 				nearestProvinces = provinces.nearestProvinces(searchName, 5);
@@ -278,7 +278,7 @@ public class SearchDialog extends JDialog {
 		public void actionPerformed(ActionEvent arg0) {
 			String searchName = baronyReader.getText();
 			if (searchName.equals("")) {
-				JOptionPane.showMessageDialog(null, text.enterNamePlease(), text.warningMessage(), JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, text.enterBaronyNamePlease(), text.warningMessage(), JOptionPane.WARNING_MESSAGE);
 			} else {
 				// Put the 5 nearest province name to the name typed by the user
 				nearestBaronies = baronnies.nearestBaronies(searchName, 5);
