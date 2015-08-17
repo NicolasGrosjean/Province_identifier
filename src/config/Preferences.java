@@ -5,15 +5,17 @@ public class Preferences {
 	private int castleRGB;
 	private int templeRGB;
 	private int cityRGB;
+	private int tribalRGB;
 	public boolean isFrench;
 	public boolean hasBlackBorder;
 
 	public Preferences(int provinceRGB, int castleRGB, int templeRGB,
-			int cityRGB, boolean isFrench, boolean hasBlackBorder) {
+			int cityRGB, int tribalRGB,  boolean isFrench, boolean hasBlackBorder) {
 		this.provinceRGB = provinceRGB;
 		this.castleRGB = castleRGB;
 		this.templeRGB = templeRGB;
 		this.cityRGB = cityRGB;
+		this.tribalRGB = tribalRGB;
 		this.isFrench = isFrench;
 		this.hasBlackBorder = hasBlackBorder;
 	}
@@ -98,4 +100,23 @@ public class Preferences {
 		return cityRGB & 0xff;
 	}
 
+	public int getTribalRGB() {
+		return tribalRGB;
+	}
+
+	public void setTribalRGB(int r, int g, int b) {
+		tribalRGB = ((r & 0xff) << 16) + ((g & 0xff) << 8) + b;
+	}
+
+	public int getTribalR() {
+		return tribalRGB >> 16 & 0xff;
+	}
+
+	public int getTribalG() {
+		return tribalRGB >> 8 & 0xff;
+	}
+
+	public int getTribalB() {
+		return tribalRGB & 0xff;
+	}
 }

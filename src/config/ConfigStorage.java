@@ -25,6 +25,7 @@ public class ConfigStorage {
 	private static final String castleRGBAttribute = "castleCol";
 	private static final String cityRGBAttribute = "cityCol";
 	private static final String templeRGBAttribute = "templeCol";
+	private static final String tribalRGBAttribute = "tribalCol";
 	private static final String blackBorderAttribute = "blackBorder";
 	private static final String wsNameAttribute = "name";
 	private static final String wsGameDirAttribute = "gameDirectory";
@@ -77,6 +78,7 @@ public class ConfigStorage {
 					Integer.valueOf(root.getAttributeValue(castleRGBAttribute)),
 					Integer.valueOf(root.getAttributeValue(templeRGBAttribute)),
 					Integer.valueOf(root.getAttributeValue(cityRGBAttribute)),
+					Integer.valueOf(root.getAttributeValue(tribalRGBAttribute)),
 					language.equals(frenchLanguage), Boolean.valueOf(root.getAttributeValue(blackBorderAttribute)));
 		} catch (JDOMException | IOException e) {
 			// No configuration file
@@ -183,6 +185,7 @@ public class ConfigStorage {
 		root.setAttribute(new Attribute(castleRGBAttribute, String.valueOf(preferences.getCastleRGB())));
 		root.setAttribute(new Attribute(cityRGBAttribute, String.valueOf(preferences.getCityRGB())));
 		root.setAttribute(new Attribute(templeRGBAttribute, String.valueOf(preferences.getTempleRGB())));
+		root.setAttribute(new Attribute(tribalRGBAttribute, String.valueOf(preferences.getTribalRGB())));
 		root.setAttribute(new Attribute(blackBorderAttribute, String.valueOf(preferences.hasBlackBorder)));
 
 		// Adding the working session in order

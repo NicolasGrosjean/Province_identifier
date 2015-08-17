@@ -61,6 +61,14 @@ public class PreferenceDialog extends JDialog {
 	private int templeBColor;
 	private JLabel templeColorResult;
 
+	private JFormattedTextField tribalRColorTF;
+	private JFormattedTextField tribalGColorTF;
+	private JFormattedTextField tribalBColorTF;
+	private int tribalRColor;
+	private int tribalGColor;
+	private int tribalBColor;
+	private JLabel tribalColorResult;
+	
 	private JRadioButton french;
 	private JCheckBox blackBorder;
 
@@ -70,7 +78,7 @@ public class PreferenceDialog extends JDialog {
 		this.text = text;
 		this.preferences = preferences;
 		reloadWSNeeded = false;
-		setSize(400, 370);
+		setSize(400, 450);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		initComponent(selectedIndex);
@@ -91,6 +99,7 @@ public class PreferenceDialog extends JDialog {
 		preferences.setCastleRGB(castleRColor, castleGColor, castleBColor);
 		preferences.setCityRGB(cityRColor, cityGColor, cityBColor);
 		preferences.setTempleRGB(templeRColor, templeGColor, templeBColor);
+		preferences.setTribalRGB(tribalRColor, tribalGColor, tribalBColor);
 		preferences.isFrench = french.isSelected();
 		preferences.hasBlackBorder = blackBorder.isSelected();
 		preferences.isFrench = french.isSelected();
@@ -101,7 +110,7 @@ public class PreferenceDialog extends JDialog {
 		JPanel container = new JPanel(new BorderLayout());
 
 		// Color preferences
-		JPanel colorPan = new JPanel(new GridLayout(5, 1, 5, 5));
+		JPanel colorPan = new JPanel(new GridLayout(6, 1, 5, 5));
 
 		// Province color preferences
 		JPanel provinceColor = new JPanel(new GridLayout(1, 4, 5, 5));
@@ -263,6 +272,46 @@ public class PreferenceDialog extends JDialog {
 		templeColor.setBorder(BorderFactory.createTitledBorder(text.templeColor()));
 		colorPan.add(templeColor);
 
+		// Temple color preferences
+		JPanel tribalColor = new JPanel(new GridLayout(1, 4, 5, 5));
+		JPanel tribalRColorPan = new JPanel();
+		JLabel tribalRColorLab = new JLabel("R:");
+		tribalRColorTF = new JFormattedTextField(NumberFormat.getIntegerInstance());
+		tribalRColor = preferences.getTribalR();
+		tribalRColorTF.setValue(Long.valueOf(tribalRColor));
+		tribalRColorTF.setPreferredSize(new Dimension(30, 30));
+		tribalRColorTF.addKeyListener(new ColorKeyListener());
+		tribalRColorPan.add(tribalRColorLab);
+		tribalRColorPan.add(tribalRColorTF);
+		JPanel tribalGColorPan = new JPanel();
+		JLabel tribalGColorLab = new JLabel("G:");
+		tribalGColorTF = new JFormattedTextField(NumberFormat.getIntegerInstance());
+		tribalGColor = preferences.getTribalG();
+		tribalGColorTF.setValue(Long.valueOf(tribalGColor));
+		tribalGColorTF.setPreferredSize(new Dimension(30, 30));
+		tribalGColorTF.addKeyListener(new ColorKeyListener());
+		tribalGColorPan.add(tribalGColorLab);
+		tribalGColorPan.add(tribalGColorTF);
+		JPanel tribalBColorPan = new JPanel();
+		JLabel tribalBColorLab = new JLabel("B:");
+		tribalBColorTF = new JFormattedTextField(NumberFormat.getIntegerInstance());
+		tribalBColor = preferences.getTribalB();
+		tribalBColorTF.setValue(Long.valueOf(tribalBColor));
+		tribalBColorTF.setPreferredSize(new Dimension(30, 30));
+		tribalBColorTF.addKeyListener(new ColorKeyListener());
+		tribalBColorPan.add(tribalBColorLab);
+		tribalBColorPan.add(tribalBColorTF);
+		tribalColorResult = new JLabel();
+		tribalColorResult.setBackground(new Color(preferences.getTribalRGB()));
+		tribalColorResult.setOpaque(true);
+		tribalColorResult.setBorder(BorderFactory.createLineBorder(Color.black, 5));
+		tribalColor.add(tribalRColorPan);
+		tribalColor.add(tribalGColorPan);
+		tribalColor.add(tribalBColorPan);
+		tribalColor.add(tribalColorResult);
+		tribalColor.setBorder(BorderFactory.createTitledBorder(text.tribalColor()));
+		colorPan.add(tribalColor);
+
 		// Close button
 		JButton closeProvinceButton = new JButton(text.close());
 		closeProvinceButton.addActionListener(new CloseButtonListener());
@@ -351,6 +400,10 @@ public class PreferenceDialog extends JDialog {
 			templeGColor = checkColor(templeGColorTF, templeGColor);
 			templeBColor = checkColor(templeBColorTF, templeBColor);
 			templeColorResult.setBackground(new Color(templeRColor, templeGColor, templeBColor));
+			tribalRColor = checkColor(tribalRColorTF, tribalRColor);
+			tribalGColor = checkColor(tribalGColorTF, tribalGColor);
+			tribalBColor = checkColor(tribalBColorTF, tribalBColor);
+			tribalColorResult.setBackground(new Color(tribalRColor, tribalGColor, tribalBColor));
 		}
 
 		@Override

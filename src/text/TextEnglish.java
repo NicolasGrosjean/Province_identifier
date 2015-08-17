@@ -285,6 +285,11 @@ public class TextEnglish extends Text {
 	}
 
 	@Override
+	public String tribal() {
+		return "Tribal";
+	}
+
+	@Override
 	public String searchID() {
 		return "With its ID";
 	}
@@ -332,6 +337,11 @@ public class TextEnglish extends Text {
 	@Override
 	public String templeColor() {
 		return "Temple color";
+	}
+
+	@Override
+	public String tribalColor() {
+		return "Tribal color";
 	}
 
 	@Override

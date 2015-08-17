@@ -57,11 +57,13 @@ public class BaroniesStorage {
 						}
 						if ((baronyType.regionMatches(0, "city", 0, 4) ||
 								baronyType.regionMatches(0, "castle", 0, 6) ||
-								baronyType.regionMatches(0, "temple", 0, 6))
+								baronyType.regionMatches(0, "temple", 0, 6)||
+								baronyType.regionMatches(0, "tribal", 0, 6))
 							&& baronyNameSet.add(word)) {
 							baronnies.add(new Barony(word,
 									baronyType.regionMatches(0, "city", 0, 4),
 									baronyType.regionMatches(0, "castle", 0, 6),
+									baronyType.regionMatches(0, "tribal", 0, 6),
 									provinceID));
 						}
 					}

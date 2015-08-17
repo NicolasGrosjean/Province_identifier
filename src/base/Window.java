@@ -480,6 +480,10 @@ public class Window extends JFrame implements MouseListener {
 			baronyLabel.setText(baronyLabel.getText() + " (" + text.temple() + ")");
 			baronyLabel.setForeground(new Color(configuration.preferences.getTempleR(),
 					configuration.preferences.getTempleG(), configuration.preferences.getTempleB()));
+		} else if (barony.isTribal()) {
+			baronyLabel.setText(baronyLabel.getText() + " (" + text.tribal() + ")");
+			baronyLabel.setForeground(new Color(configuration.preferences.getTribalR(),
+					configuration.preferences.getTribalG(), configuration.preferences.getTribalB()));
 		} else {
 			throw new IllegalArgumentException(barony.getBaronyName() + 
 					" is not a castle, a city or a temple.");

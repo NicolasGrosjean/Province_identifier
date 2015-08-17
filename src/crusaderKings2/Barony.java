@@ -19,6 +19,11 @@ public class Barony implements Comparable {
 	private boolean castle;
 
 	/**
+	 * The barony is only tribal in the history
+	 */
+	private boolean tribal;
+
+	/**
 	 * ID of the province in which is the barony
 	 */
 	private int provinceID;
@@ -28,7 +33,7 @@ public class Barony implements Comparable {
 	 */
 	private int levenshteinDistance;
 
-	public Barony(String baronyName, boolean city, boolean castle, int provinceID) {
+	public Barony(String baronyName, boolean city, boolean castle, boolean tribal, int provinceID) {
 		super();
 		this.baronyName = new String(baronyName);
 		if (city && castle) {
@@ -36,6 +41,7 @@ public class Barony implements Comparable {
 		}
 		this.city = city;
 		this.castle = castle;
+		this.tribal = tribal;
 		this.provinceID = provinceID;
 	}
 
@@ -52,7 +58,11 @@ public class Barony implements Comparable {
 	}
 
 	public boolean isTemple() {
-		return !city && !castle;
+		return !city && !castle && !tribal;
+	}
+
+	public boolean isTribal() {
+		return tribal;
 	}
 
 	public int getProvinceID() {

@@ -351,6 +351,12 @@ public abstract class Text {
 	public abstract String temple();
 
 	/**
+	 * The barony type tribal
+	 * @return
+	 */
+	public abstract String tribal();
+
+	/**
 	 * Text of the menu to search a province with its ID
 	 * @return
 	 */
@@ -409,6 +415,12 @@ public abstract class Text {
 	 * @return
 	 */
 	public abstract String templeColor();
+
+	/**
+	 * Sub-title for tribal color
+	 * @return
+	 */
+	public abstract String tribalColor();
 
 	/**
 	 * Close button text

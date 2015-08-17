@@ -284,6 +284,11 @@ public class TextFrancais extends Text {
 	}
 
 	@Override
+	public String tribal() {
+		return "Tribal";
+	}
+
+	@Override
 	public String searchID() {
 		return "Avec son ID";
 	}
@@ -331,6 +336,11 @@ public class TextFrancais extends Text {
 	@Override
 	public String templeColor() {
 		return "Couleur de temple";
+	}
+
+	@Override
+	public String tribalColor() {
+		return "Couleur de fief tribal";
 	}
 
 	@Override
