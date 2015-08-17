@@ -34,6 +34,13 @@ public class ConfigStorage {
 	private static final String xSymetryAttribute = "xSymetry";
 	private static final String frenchLanguage = "French";
 
+	private static final int defaultProvinceRGBAttribute = 8421504;
+	private static final int defaultCastleRGBAttribute = 255;
+	private static final int defaultCityRGBAttribute = 32768;
+	private static final int defaultTempleRGBAttribute = 16711680;
+	private static final int defaultTribalRGBAttribute = 0;
+	private static final boolean defaultBlackBorder = true;
+
 	/**
 	 * Text language of the software
 	 */
@@ -57,6 +64,10 @@ public class ConfigStorage {
 	public ConfigStorage(Text text, String configurationFile) {
 		this.text = text;
 		this.configurationFile = configurationFile;
+		preferences = new Preferences(defaultProvinceRGBAttribute,
+				defaultCastleRGBAttribute, defaultTempleRGBAttribute,
+				defaultCityRGBAttribute, defaultTribalRGBAttribute,
+				text.isFrenchLanguage(), defaultBlackBorder);
 	}
 
 	/**
@@ -178,7 +189,8 @@ public class ConfigStorage {
 	public void saveConfigFile() {
 		// Create the root of XML file with the language attribute
 		Element root = new Element("provinceIdentifier");
-		String language = (preferences.isFrench)? frenchLanguage: "English";
+		String language;
+		language = (preferences.isFrench)? frenchLanguage: "English";
 		Attribute languageAttribute = new Attribute(languageNameAttribure, language);
 		root.setAttribute(languageAttribute);
 		root.setAttribute(new Attribute(provinceRGBAttribute, String.valueOf(preferences.getProvinceRGB())));

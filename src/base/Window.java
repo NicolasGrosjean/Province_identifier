@@ -114,6 +114,7 @@ public class Window extends JFrame implements MouseListener {
 	private JMenu options;
 	private JMenuItem color;
 	private JMenuItem other;
+	private boolean init;
 
 	// Configuration of the software
 	private final ConfigStorage configuration;
@@ -215,6 +216,7 @@ public class Window extends JFrame implements MouseListener {
 		options.setVisible(false);
 		windowMenuBar.add(options);
 	    setJMenuBar(windowMenuBar);
+	    init = false;
 
 		// Window displaying
 	    pack();
@@ -235,23 +237,7 @@ public class Window extends JFrame implements MouseListener {
 		try {
 			ws.initialize();
 			loadWorkingSession(ws);
-			// Update reload working session menu
-			wsReload.addActionListener(new ReloadWorkingSession(ws));
-			wsReload.setVisible(true);
-			// We can now search in a working session
-			searchMenu.setVisible(true);
-			// We can now use navigation
-			navigation.setVisible(true);
-			top.addActionListener(new TopListener());
-			left.addActionListener(new LeftListener());
-			bottom.addActionListener(new BottomListener());
-			right.addActionListener(new RightListener());
-			zoomIn.addActionListener(new ZoomInListener());
-			zoomOut.addActionListener(new ZoomOutListener());
-			// We can now modify preferences
-			options.setVisible(true);
-			color.addActionListener(new PreferencesListener(0, ws));
-			other.addActionListener(new PreferencesListener(1, ws));
+			initializeWSNeededMenu(ws);
 		} catch (IllegalArgumentException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), text.error(), JOptionPane.ERROR_MESSAGE);
 		} catch (FileNotFoundException e) {
@@ -389,6 +375,10 @@ public class Window extends JFrame implements MouseListener {
 		pan.addMouseListener(this);
 		listenedComponent.add(pan);
 		listenedComponent.add(this);
+
+		// Initialize some menus if necessary
+		if (!init)
+			initializeWSNeededMenu(ws);
 
 		// Window displaying new components
 		setTitle(text.windowTitle() + " - " + ws.getName());
@@ -717,6 +707,31 @@ public class Window extends JFrame implements MouseListener {
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, text.fileNotFound("provinces.bmp"), text.error(), JOptionPane.ERROR_MESSAGE);
 		}
+	}
+
+	/**
+	 * Initializes the menus which need to have a working session
+	 */
+	private void initializeWSNeededMenu(WorkingSession ws) {
+		// Update reload working session menu
+		wsReload.addActionListener(new ReloadWorkingSession(ws));
+		wsReload.setVisible(true);
+		// We can now search in a working session
+		searchMenu.setVisible(true);
+		// We can now use navigation
+		navigation.setVisible(true);
+		top.addActionListener(new TopListener());
+		left.addActionListener(new LeftListener());
+		bottom.addActionListener(new BottomListener());
+		right.addActionListener(new RightListener());
+		zoomIn.addActionListener(new ZoomInListener());
+		zoomOut.addActionListener(new ZoomOutListener());
+		// We can now modify preferences
+		options.setVisible(true);
+		color.addActionListener(new PreferencesListener(0, ws));
+		other.addActionListener(new PreferencesListener(1, ws));
+		// Now the menus are initialized
+		init = true;
 	}
 
 	// ---------------- Button actions ---------------------------
