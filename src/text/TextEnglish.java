@@ -406,4 +406,9 @@ public class TextEnglish extends Text {
 	public String zoomOut() {
 		return "Zoom out";
 	}
+
+	@Override
+	public String WSInformation() {
+		return "Informations on the game/mod";
+	}
 }

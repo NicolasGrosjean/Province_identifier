@@ -405,4 +405,9 @@ public class TextFrancais extends Text {
 	public String zoomOut() {
 		return "Dézoomer";
 	}
+
+	@Override
+	public String WSInformation() {
+		return "Informations sur le jeu/mod";
+	}
 }

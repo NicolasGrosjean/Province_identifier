@@ -492,4 +492,10 @@ public abstract class Text {
 	 * @return
 	 */
 	public abstract String zoomOut();
+
+	/**
+	 * WS info menu item
+	 * @return
+	 */
+	public abstract String WSInformation();
 }

@@ -101,6 +101,7 @@ public class Window extends JFrame implements MouseListener {
 
 	// Menus
 	private JMenuItem wsReload;
+	private JMenuItem wsInfo;
 	private JMenuItem wsOpenRecently;
 	private JMenu searchMenu;
 	private JMenuItem searchBarony;
@@ -150,7 +151,7 @@ public class Window extends JFrame implements MouseListener {
 		this.setContentPane(container);
 
 		// New icon image
-		setIconImage(Toolkit.getDefaultToolkit().getImage("icon.png"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("ressources/icon.png"));
 
 		// Menus
 		JMenuBar windowMenuBar = new JMenuBar();
@@ -175,7 +176,11 @@ public class Window extends JFrame implements MouseListener {
 		wsMenu.add(wsOpenRecently);
 		wsReload = new JMenuItem(text.reloadWSMenu());
 		wsReload.setVisible(false);
+		wsMenu.addSeparator();
 		wsMenu.add(wsReload);
+		wsInfo = new JMenuItem(text.WSInformation());
+		wsInfo.setVisible(false);
+		wsMenu.add(wsInfo);
 		windowMenuBar.add(wsMenu);
 		searchMenu = new JMenu(text.provinceSearch());
 		JMenuItem searchID = new JMenuItem(text.searchID());
@@ -276,6 +281,9 @@ public class Window extends JFrame implements MouseListener {
 		for(ActionListener al : wsReload.getActionListeners()) {
 			wsReload.removeActionListener(al);
 	    }
+		for(ActionListener al : wsInfo.getActionListeners()) {
+			wsInfo.removeActionListener(al);
+	    }
 		if (searchBarony != null) {
 			searchMenu.remove(searchBarony);
 			searchBarony = null;
@@ -306,7 +314,7 @@ public class Window extends JFrame implements MouseListener {
 		resPanel.setBorder(BorderFactory.createTitledBorder(text.clickedProvince()));
 		resLabel.setText("");
 		resPanel.add(resLabel);
-		ImageIcon copyIcon = new ImageIcon("copy_icon.png");
+		ImageIcon copyIcon = new ImageIcon("ressources/copy_icon.png");
 		copyButton.setIcon(copyIcon);
 		copyButton.setPreferredSize(new Dimension(copyIcon.getIconWidth(),
 				copyIcon.getIconHeight()));
@@ -338,7 +346,7 @@ public class Window extends JFrame implements MouseListener {
 			east.add(northEast);
 		} else {
 			JPanel illustrationPanel = new JPanel();
-			JLabel illustrationLabel = new JLabel(new ImageIcon("Compas_Illustrations.png"));
+			JLabel illustrationLabel = new JLabel(new ImageIcon("ressources/Compas_Illustrations.png"));
 			illustrationLabel.setPreferredSize(new Dimension(256, 256));
 			illustrationPanel.add(illustrationLabel);
 			illustrationPanel.setPreferredSize(new Dimension(256, 256));
@@ -359,9 +367,11 @@ public class Window extends JFrame implements MouseListener {
 			searchBarony.addActionListener(new SearchListener(2));
 		}
 
-		// Update reload working session menu
+		// Update reload working session and info menus
 		wsReload.addActionListener(new ReloadWorkingSession(ws));
 		wsReload.setVisible(true);
+		wsInfo.addActionListener(new WSInfoListener(ws));
+		wsInfo.setVisible(true);
 
 		// Button action
 		copyButton.addActionListener(new BoutonCopierListener());
@@ -961,6 +971,27 @@ public class Window extends JFrame implements MouseListener {
 		public void actionPerformed(ActionEvent e) {
 			if (enabledRight)
 				actionDroit();
+		}
+	}
+
+	class WSInfoListener implements ActionListener {
+		private WorkingSession ws;
+
+		public WSInfoListener(WorkingSession ws) {
+			this.ws = ws;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String message = text.workingSessionName() + " : " + ws.getName() + "\n"
+					+ text.gameDirectory() + " : " + ws.getGameDirectory() + "\n";
+			if (ws.getMapModDirectory() != null)
+					message += text.mapModDirectory() + " : " + ws.getMapModDirectory() + "\n";
+			if (!ws.getModDirectories().isEmpty())
+				for (String modDir : ws.getModDirectories()) {
+					message += text.provincesModDirectory() + " : " + modDir; 
+				}					
+			JOptionPane.showMessageDialog(null, message, text.WSInformation(), JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 

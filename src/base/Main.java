@@ -24,7 +24,7 @@ public class Main {
 		}
 
 		// Gather the configuration file
-		final String configurationFile = "config.xml";
+		final String configurationFile = "ressources/config.xml";
 		ConfigStorage configuration = new ConfigStorage(configurationFile);
 		Text text = configuration.getText();
 
