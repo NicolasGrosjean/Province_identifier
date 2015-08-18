@@ -10,7 +10,6 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -237,7 +236,6 @@ public class Window extends JFrame implements MouseListener {
 		try {
 			ws.initialize();
 			loadWorkingSession(ws);
-			initializeWSNeededMenu(ws);
 		} catch (IllegalArgumentException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), text.error(), JOptionPane.ERROR_MESSAGE);
 		} catch (FileNotFoundException e) {
