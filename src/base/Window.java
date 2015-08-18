@@ -10,6 +10,7 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -183,6 +184,7 @@ public class Window extends JFrame implements MouseListener {
 		searchMenu.add(searchName);
 		searchID.addActionListener(new SearchListener(0));
 		searchName.addActionListener(new SearchListener(1));
+		searchName.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_MASK));
 		searchMenu.setVisible(false);
 		windowMenuBar.add(searchMenu);
 		navigation = new JMenu(text.navigation());
