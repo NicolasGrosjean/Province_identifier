@@ -24,12 +24,12 @@ public class TestBaronies {
 	public static void SetUp() {
 		Text text = new TextFrancais();
 		LinkedList<String> ckDirectory = new LinkedList<String>();
-		ckDirectory.add("C:/Jeux/Paradox Interactive/Crusader Kings II");
+		ckDirectory.add("C:/Jeux/Steam/SteamApps/common/Crusader Kings II");
 		LinkedList<String> swmhDirectories = new LinkedList<String>();
-		swmhDirectories.add("C:/Jeux/Paradox Interactive/Crusader Kings II");
+		swmhDirectories.add("C:/Jeux/Steam/SteamApps/common/Crusader Kings II");
 		swmhDirectories.add("C:/Users/Nicolas/Documents/Paradox Interactive/Crusader Kings II/MOD/swmh2.854");
 		LinkedList<String> lolDirectories = new LinkedList<String>();
-		lolDirectories.add("C:/Jeux/Paradox Interactive/Crusader Kings II");
+		lolDirectories.add("C:/Jeux/Steam/SteamApps/common/Crusader Kings II");
 		lolDirectories.add("C:/Users/Nicolas/Documents/Paradox Interactive/Crusader Kings II/MOD/swmh2.854");
 		ckBaronies = new BaroniesStorage(FileSorting.giveFilesByDirPriority(ckDirectory, "/history/provinces/", text));
 		swmhBaronies = new BaroniesStorage(FileSorting.giveFilesByDirPriority(swmhDirectories, "/history/provinces/", text));

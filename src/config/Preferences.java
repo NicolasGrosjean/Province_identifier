@@ -8,9 +8,11 @@ public class Preferences {
 	private int tribalRGB;
 	public boolean isFrench;
 	public boolean hasBlackBorder;
+	public boolean removeSeaRiver;
 
 	public Preferences(int provinceRGB, int castleRGB, int templeRGB,
-			int cityRGB, int tribalRGB,  boolean isFrench, boolean hasBlackBorder) {
+			int cityRGB, int tribalRGB,  boolean isFrench,
+			boolean hasBlackBorder, boolean removeSeaRiver) {
 		this.provinceRGB = provinceRGB;
 		this.castleRGB = castleRGB;
 		this.templeRGB = templeRGB;
@@ -18,6 +20,7 @@ public class Preferences {
 		this.tribalRGB = tribalRGB;
 		this.isFrench = isFrench;
 		this.hasBlackBorder = hasBlackBorder;
+		this.removeSeaRiver = removeSeaRiver;
 	}
 
 	public int getProvinceRGB() {

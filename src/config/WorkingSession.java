@@ -27,6 +27,7 @@ public class WorkingSession {
 	private boolean init;
 	private boolean xSymetry;
 	private boolean blackBorder;
+	private boolean removeSeaRiver;
 
 	// For Crusader Kings 2
 	private BaroniesStorage storedBaronies;
@@ -42,7 +43,7 @@ public class WorkingSession {
 	 */
 	public WorkingSession(String name, String gameDirectory, String mapModDirectory,
 			LinkedList<String> modDirectories, Text text, boolean ckGame, boolean init,
-			boolean xSymetry, boolean blackBorder) throws IOException {
+			boolean xSymetry, boolean blackBorder, boolean removeSeaRiver) throws IOException {
 		this.name = name;
 		this.gameDirectory = gameDirectory;
 		this.mapModDirectory = mapModDirectory;
@@ -56,6 +57,7 @@ public class WorkingSession {
 		this.ckGame = ckGame;
 		this.xSymetry = xSymetry;
 		this.blackBorder = blackBorder;
+		this.removeSeaRiver = removeSeaRiver;
 		this.init = false; // the working session is not yet initialised
 		if (init) {
 			initialize();
@@ -65,9 +67,12 @@ public class WorkingSession {
 	public void initialize() throws IOException {
 		if (!init) {
 			// Map informations
-			readDefinitionFile(mapDirectory + "/map/definition.csv");			
-			panel = new Panel(mapDirectory + "/map/provinces.bmp", text, xSymetry, blackBorder);
-			miniMap = new MiniMap(mapDirectory + "/map/provinces.bmp", text, panel, xSymetry);
+			readDefinitionFile(mapDirectory + "/map/definition.csv");
+			if (ckGame) {
+				readDefaultMapFile(mapDirectory + "/map/default.map");
+			}
+			panel = new Panel(mapDirectory + "/map/provinces.bmp", text, xSymetry, blackBorder, removeSeaRiver, provinces);
+			miniMap = new MiniMap(mapDirectory + "/map/provinces.bmp", text, panel, xSymetry, removeSeaRiver, provinces);
 
 			// Province attributes for CK games
 			if (ckGame) {
@@ -153,13 +158,14 @@ public class WorkingSession {
 		}
 	}
 
-	public void updatePan(boolean blackBorder) throws IOException {
+	public void updatePan(boolean blackBorder, boolean removeSeaRiver) throws IOException {
 		this.blackBorder = blackBorder;
+		this.removeSeaRiver = removeSeaRiver;
 		if (!init) {
 			initialize();
 		} else {
-			panel = new Panel(mapDirectory + "/map/provinces.bmp", text, xSymetry, blackBorder);
-			miniMap = new MiniMap(mapDirectory + "/map/provinces.bmp", text, panel, xSymetry);
+			panel = new Panel(mapDirectory + "/map/provinces.bmp", text, xSymetry, blackBorder, removeSeaRiver, provinces);
+			miniMap = new MiniMap(mapDirectory + "/map/provinces.bmp", text, panel, xSymetry, removeSeaRiver, provinces);
 		}
 	}
 
@@ -206,7 +212,7 @@ public class WorkingSession {
 				}
 
 				// Store the province
-				provinces.addProvince(id, r, g, b, nom);
+				provinces.addProvince(id, r, g, b, nom, false);
 			}
 			scanner.close();
 		} catch (FileNotFoundException e) {
@@ -220,6 +226,82 @@ public class WorkingSession {
 			}
 			if (exceptionCaught) {
 				throw new FileNotFoundException(definitionFileName);
+			}
+		}
+	}
+
+	private void readDefaultMapFile(String defaultMapFileName) throws FileNotFoundException {
+		FileInputStream fichierLecture = null;
+		boolean exceptionCaught = false;
+		try {
+			// Open file
+			fichierLecture = new FileInputStream(defaultMapFileName);
+
+			// Read by separating with ";"
+			Scanner scanner = new Scanner(fichierLecture, "ISO-8859-1"); 
+			// ISO-8859-1 for special char
+			scanner.useDelimiter(Pattern.compile("[ \n\t]"));
+
+			while (scanner.hasNext()) {
+				String word = scanner.next();
+				if (word.regionMatches(0, "sea_zones", 0, 9)) {
+					while (!scanner.hasNextInt()) {
+						scanner.next();
+					}
+					int beginSeaZone = scanner.nextInt();
+					while (!scanner.hasNextInt()) {
+						scanner.next();
+					}
+					int endSeaZone = scanner.nextInt();
+					for (int id = beginSeaZone; id <= endSeaZone; id++) {
+						provinces.getProvince(id).addSeaRiver();
+					}
+				} else if (word.regionMatches(0, "major_rivers", 0, 12)) {
+					boolean endBlockFound = false;
+					while (!endBlockFound) {
+						while (!endBlockFound && !scanner.hasNextInt()) {
+							endBlockFound = scanner.next().contains("}");
+						}
+						if (!endBlockFound) {
+							provinces.getProvince(scanner.nextInt()).addSeaRiver();
+						}
+					}
+				} else if (word.regionMatches(0, "ocean_region", 0, 12)) {
+					// We don't read the sea_zones in this block, so we skip this block
+
+					// Search the beginning of the block
+					while (! word.contains("{")) {
+						word = scanner.next();
+					}
+					// Counting the number of blocks in which we are
+					int nbBlock = 1;
+					while (scanner.hasNext()) {
+						word = scanner.next();
+						if (nbBlock == 0) {
+							// We have found the end of the ocean_river block
+							break;
+						}
+						if ( word.contains("{")) {
+							nbBlock++;
+						}
+						if (word.contains("}")) {
+							nbBlock--;
+						}
+					}
+				}
+			}
+			scanner.close();
+		} catch (FileNotFoundException e) {
+			exceptionCaught = true;
+		} finally {
+			try {
+				if (fichierLecture != null)
+					fichierLecture.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			if (exceptionCaught) {
+				throw new FileNotFoundException(defaultMapFileName);
 			}
 		}
 	}

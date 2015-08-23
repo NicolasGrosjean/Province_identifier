@@ -27,6 +27,7 @@ public class ConfigStorage {
 	private static final String templeRGBAttribute = "templeCol";
 	private static final String tribalRGBAttribute = "tribalCol";
 	private static final String blackBorderAttribute = "blackBorder";
+	private static final String removeSeaRiverAttribute = "removeSeaRiver";
 	private static final String wsNameAttribute = "name";
 	private static final String wsGameDirAttribute = "gameDirectory";
 	private static final String wsMapModDirAttribute = "mapModDirectory";
@@ -40,6 +41,7 @@ public class ConfigStorage {
 	private static final int defaultTempleRGBAttribute = 16711680;
 	private static final int defaultTribalRGBAttribute = 0;
 	private static final boolean defaultBlackBorder = true;
+	private static final boolean defaultRemoveSeaRiver = false;
 
 	/**
 	 * Text language of the software
@@ -67,7 +69,8 @@ public class ConfigStorage {
 		preferences = new Preferences(defaultProvinceRGBAttribute,
 				defaultCastleRGBAttribute, defaultTempleRGBAttribute,
 				defaultCityRGBAttribute, defaultTribalRGBAttribute,
-				text.isFrenchLanguage(), defaultBlackBorder);
+				text.isFrenchLanguage(), defaultBlackBorder,
+				defaultRemoveSeaRiver);
 	}
 
 	/**
@@ -90,7 +93,9 @@ public class ConfigStorage {
 					Integer.valueOf(root.getAttributeValue(templeRGBAttribute)),
 					Integer.valueOf(root.getAttributeValue(cityRGBAttribute)),
 					Integer.valueOf(root.getAttributeValue(tribalRGBAttribute)),
-					language.equals(frenchLanguage), Boolean.valueOf(root.getAttributeValue(blackBorderAttribute)));
+					language.equals(frenchLanguage),
+					Boolean.valueOf(root.getAttributeValue(blackBorderAttribute)),
+					Boolean.valueOf(root.getAttributeValue(removeSeaRiverAttribute)));
 		} catch (JDOMException | IOException e) {
 			// No configuration file
 			return;
@@ -111,7 +116,8 @@ public class ConfigStorage {
 						wsElem.getAttributeValue(wsMapModDirAttribute), modDirectories, text,
 						wsElem.getAttributeValue(wsCKGameAttribute).equals("true"), false,
 						Boolean.valueOf(wsElem.getAttributeValue(xSymetryAttribute)),
-						preferences.hasBlackBorder));
+						preferences.hasBlackBorder,
+						preferences.removeSeaRiver));
 			} catch (IOException e) {
 				// The working session is now not correct
 			}
@@ -199,6 +205,7 @@ public class ConfigStorage {
 		root.setAttribute(new Attribute(templeRGBAttribute, String.valueOf(preferences.getTempleRGB())));
 		root.setAttribute(new Attribute(tribalRGBAttribute, String.valueOf(preferences.getTribalRGB())));
 		root.setAttribute(new Attribute(blackBorderAttribute, String.valueOf(preferences.hasBlackBorder)));
+		root.setAttribute(new Attribute(removeSeaRiverAttribute, String.valueOf(preferences.removeSeaRiver)));
 
 		// Adding the working session in order
 		Iterator<WorkingSession> it = workingSessions.iterator();

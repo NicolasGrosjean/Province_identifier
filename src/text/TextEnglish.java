@@ -411,4 +411,9 @@ public class TextEnglish extends Text {
 	public String WSInformation() {
 		return "Informations on the game/mod";
 	}
+
+	@Override
+	public String removeSeaRiver() {
+		return "Remove sea and river provinces (only CK working session)";
+	}
 }

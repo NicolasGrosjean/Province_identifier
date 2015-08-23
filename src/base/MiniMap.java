@@ -25,6 +25,8 @@ public class MiniMap extends JPanel implements MouseListener {
 	static public int IMAGE_WIDTH = 256;
 	static public int IMAGE_HEIGHT = 256;
 
+	static private int WHITE = (255 << 16) + (255 << 8) + 255;
+
 	private BufferedImage image;
 	private Panel pan;
 	private Window window;
@@ -63,7 +65,7 @@ public class MiniMap extends JPanel implements MouseListener {
 	private Text text;
 	
 	public MiniMap(String image, int imageWidth, int imageHeight, Text text, Panel pan,
-			boolean mirror) throws IOException {
+			boolean mirror, boolean removeSeaRiver, ProvinceStorage provinces) throws IOException {
 		this.setImageWidth(imageWidth);
 		this.setImageHeight(imageHeight);
 		setPreferredSize(new Dimension(imageWidth, imageHeight));
@@ -76,12 +78,17 @@ public class MiniMap extends JPanel implements MouseListener {
 		if (mirror) {
 			mirror();
 		}
+		if (removeSeaRiver) {
+			removeSeaRiverProvince(provinces);
+		}
 		this.setRectangle(); // Must be here because use pan
 		this.addMouseListener(this);
 	}
 	
-	public MiniMap(String image, Text text, Panel pan, boolean mirror) throws IOException {
-		this(image, IMAGE_WIDTH, IMAGE_HEIGHT, text, pan, mirror);
+	public MiniMap(String image, Text text, Panel pan, boolean mirror,
+			boolean removeSeaRiver, ProvinceStorage provinces) throws IOException {
+		this(image, IMAGE_WIDTH, IMAGE_HEIGHT, text, pan,
+				mirror, removeSeaRiver, provinces);
 	}
 	
 	public int getImageWidth() {
@@ -151,6 +158,23 @@ public class MiniMap extends JPanel implements MouseListener {
 				int tmp = image.getRGB(x, y);
 				image.setRGB(x, y, image.getRGB(x, realHeight - 1 - y));
 				image.setRGB(x, realHeight - 1 - y, tmp);
+			}
+		}
+	}
+
+	/**
+	 * Remove the sea and river province of the map
+	 */
+	private void removeSeaRiverProvince(ProvinceStorage provinces) {
+		for (int y = 0; y < realHeight; y++) {
+			for (int x = 0; x < realWidth; x++) {
+				Province province = provinces.getProvince(
+						(image.getRGB(x, y) & 0xff0000) >> 16,
+						(image.getRGB(x, y) & 0xff00) >> 8,
+						image.getRGB(x, y) & 0xff);
+				if (province != null && province.isSeaRiver()) {
+					image.setRGB(x, y, WHITE);
+				}
 			}
 		}
 	}

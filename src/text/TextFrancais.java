@@ -368,7 +368,7 @@ public class TextFrancais extends Text {
 
 	@Override
 	public String blackBorder() {
-		return "Bordure noire autout des provinces";
+		return "Bordure noire autour des provinces";
 	}
 
 	@Override
@@ -409,5 +409,10 @@ public class TextFrancais extends Text {
 	@Override
 	public String WSInformation() {
 		return "Informations sur le jeu/mod";
+	}
+
+	@Override
+	public String removeSeaRiver() {
+		return "Retirer les provinces maritimes et fluviales (seulement pour les session de travail CK)";
 	}
 }

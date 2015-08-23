@@ -71,6 +71,7 @@ public class PreferenceDialog extends JDialog {
 	
 	private JRadioButton french;
 	private JCheckBox blackBorder;
+	private JCheckBox removeSeaRiver;
 
 	public PreferenceDialog(JFrame parent, String title, boolean modal,
 			Text text, int selectedIndex, Preferences preferences) {
@@ -93,7 +94,9 @@ public class PreferenceDialog extends JDialog {
 		setVisible(true);
 		// We reload if the black border change
 		reloadWSNeeded = (preferences.hasBlackBorder && !blackBorder.isSelected())
-				|| (!preferences.hasBlackBorder && blackBorder.isSelected());
+				|| (!preferences.hasBlackBorder && blackBorder.isSelected())
+				|| (preferences.removeSeaRiver && !removeSeaRiver.isSelected())
+				|| (!preferences.removeSeaRiver && removeSeaRiver.isSelected());
 		// Set the user preferences
 		preferences.setProvinceRGB(provinceRColor, provinceGColor, provinceBColor);
 		preferences.setCastleRGB(castleRColor, castleGColor, castleBColor);
@@ -102,6 +105,7 @@ public class PreferenceDialog extends JDialog {
 		preferences.setTribalRGB(tribalRColor, tribalGColor, tribalBColor);
 		preferences.isFrench = french.isSelected();
 		preferences.hasBlackBorder = blackBorder.isSelected();
+		preferences.removeSeaRiver = removeSeaRiver.isSelected();
 		preferences.isFrench = french.isSelected();
 		return reloadWSNeeded;
 	}
@@ -320,7 +324,7 @@ public class PreferenceDialog extends JDialog {
 		colorPan.add(closeProvincePanel);
 
 		// Other pane
-		JPanel otherPan = new JPanel(new GridLayout(3, 1, 5, 5));
+		JPanel otherPan = new JPanel(new GridLayout(4, 1, 5, 5));
 		// Language
 		JLabel languageLabel1 = new JLabel(text.languageChange().getFirst());
 		JLabel languageLabel2 = new JLabel(text.languageChange().getLast());
@@ -349,6 +353,13 @@ public class PreferenceDialog extends JDialog {
 		blackBorderPanel.add(blackBorder);
 		blackBorderPanel.setBorder(BorderFactory.createTitledBorder(""));
 		otherPan.add(blackBorderPanel);
+		// Remove sea river
+		JPanel removeSeaRiverPanel = new JPanel();
+		removeSeaRiver = new JCheckBox(text.removeSeaRiver());
+		removeSeaRiver.setSelected(preferences.removeSeaRiver);
+		removeSeaRiverPanel.add(removeSeaRiver);
+		removeSeaRiverPanel.setBorder(BorderFactory.createTitledBorder(""));
+		otherPan.add(removeSeaRiverPanel);
 
 		// Close button
 		JButton closeOtherButton = new JButton(text.close());

@@ -54,7 +54,7 @@ public class TestLevenshtein {
 				}
 
 				// Stockage de la province
-				provinces.addProvince(id, r, g, b, nom);
+				provinces.addProvince(id, r, g, b, nom, false);
 			}
 			scanner.close();
 

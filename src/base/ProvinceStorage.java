@@ -42,8 +42,8 @@ public class ProvinceStorage {
 	 * @param b
 	 * @param nom
 	 */
-	public void addProvince(int id, int r, int g, int b, String nom) {
-		Province newProvince = new Province(id, r, g, b, nom);
+	public void addProvince(int id, int r, int g, int b, String nom, boolean seaRiver) {
+		Province newProvince = new Province(id, r, g, b, nom, seaRiver);
 		this.provincesRGB.put(newProvince.getIdentifiantRGB(), newProvince);
 		this.provincesID.put(newProvince.getId(), newProvince);
 		this.provinces.add(newProvince);

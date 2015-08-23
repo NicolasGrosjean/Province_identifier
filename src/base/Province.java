@@ -30,23 +30,37 @@ public class Province implements Comparable{
 	 * Province name
 	 */
 	private String name;
-	
+
+	/**
+	 * The province is a sea or a river province
+	 */
+	private boolean seaRiver;
+
 	/**
 	 * Levenshtein distance between the province name and a province name searched
 	 */
 	private int levenshteinDistance;
 	
-	public Province(int id, int r, int g, int b, String name) {
+	public Province(int id, int r, int g, int b, String name, boolean seaRiver) {
 		super();
 		this.id = id;
 		this.r = r;
 		this.g = g;
 		this.b = b;
 		this.name = name;
+		this.seaRiver = seaRiver;
 	}
 	
 	public int getId() {
 		return id;
+	}
+
+	public boolean isSeaRiver() {
+		return seaRiver;
+	}
+
+	public void addSeaRiver() {
+		seaRiver = true;
 	}
 
 	public int getLevenshteinDistance() {

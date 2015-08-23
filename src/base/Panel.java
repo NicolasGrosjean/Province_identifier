@@ -35,6 +35,7 @@ public class Panel extends JPanel {
 	static public int WINDOW_HEIGHT_WITHOUT_IMAGE = 61;
 
 	static private int BLACK = 0;
+	static private int WHITE = (255 << 16) + (255 << 8) + 255;
 
 	private BufferedImage image;
 
@@ -83,7 +84,8 @@ public class Panel extends JPanel {
 	 */
 	private Text text;
 	
-	public Panel(String image, Text text, boolean xSymetry, boolean blackBorder) throws IOException {
+	public Panel(String image, Text text, boolean xSymetry, boolean blackBorder,
+			boolean removeSeaRiver, ProvinceStorage provinces) throws IOException {
 		File file = new File(image);
 		this.image = ImageIO.read(file);
 		realWidth = this.image.getWidth();
@@ -107,6 +109,10 @@ public class Panel extends JPanel {
 		this.text = text;
 		if (xSymetry) {
 			xSymetry();
+		}
+		// Remove some provinces before to do their border
+		if (removeSeaRiver) {
+			removeSeaRiverProvince(provinces);
 		}
 		if (blackBorder) {
 			addColorProvinceBorder(BLACK);
@@ -380,7 +386,7 @@ public class Panel extends JPanel {
 	}
 
 	/**
-	 * 
+	 * Add a border color between the provinces
 	 */
 	private void addColorProvinceBorder(int borderColor) {
 		for (int y = 0; y < realHeight - 1; y++) {
@@ -388,6 +394,23 @@ public class Panel extends JPanel {
 				if (image.getRGB(x, y) != image.getRGB(x + 1, y) ||
 						image.getRGB(x, y) != image.getRGB(x, y + 1)) {
 					image.setRGB(x, y, borderColor);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Remove the sea and river province of the map
+	 */
+	private void removeSeaRiverProvince(ProvinceStorage provinces) {
+		for (int y = 0; y < realHeight; y++) {
+			for (int x = 0; x < realWidth; x++) {
+				Province province = provinces.getProvince(
+						(image.getRGB(x, y) & 0xff0000) >> 16,
+						(image.getRGB(x, y) & 0xff00) >> 8,
+						image.getRGB(x, y) & 0xff);
+				if (province != null && province.isSeaRiver()) {
+					image.setRGB(x, y, WHITE);
 				}
 			}
 		}

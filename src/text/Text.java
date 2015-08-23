@@ -498,4 +498,10 @@ public abstract class Text {
 	 * @return
 	 */
 	public abstract String WSInformation();
+
+	/**
+	 * Remove sea river check box description
+	 * @return
+	 */
+	public abstract String removeSeaRiver();
 }

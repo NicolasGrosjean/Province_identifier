@@ -25,7 +25,7 @@ public class TestPanneau {
 		
 		// Tente de créer le panneau sur un test inexistant
 		try {
-			new Panel(nomFichierInexistant, text, false, true);
+			new Panel(nomFichierInexistant, text, false, true, false, null);
 			ouvertureFichierOK = false;
 		} catch (IOException e) {
 			System.out.println("OK : Fichier " + nomFichierInexistant + " non trouvé !");
@@ -33,7 +33,7 @@ public class TestPanneau {
 		
 		// Tente de créer le panneau sur le bon fichier
 		try {
-			new Panel(nomFichierProvince, text, false, true);
+			new Panel(nomFichierProvince, text, false, true, false, null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -43,43 +43,43 @@ public class TestPanneau {
 
 	@Test
 	public void testGetLargeurImage() throws IOException {
-		Panel pan = new Panel(nomFichierProvince, text, false, true);
+		Panel pan = new Panel(nomFichierProvince, text, false, true, false, null);
 		Assert.assertEquals("Largeur incorrecte", pan.getImageWidth(), Panel.IMAGE_WIDTH);
 	}
 
 	@Test
 	public void testGetHauteurImage() throws IOException {
-		Panel pan = new Panel(nomFichierProvince, text, false, true);
+		Panel pan = new Panel(nomFichierProvince, text, false, true, false, null);
 		Assert.assertEquals("Heuteur incorrecte", pan.getImageHeight(), Panel.IMAGE_HEIGHT);
 	}
 
 	@Test
 	public void testGetLargeurReduite() throws IOException {
-		Panel pan = new Panel(nomFichierProvince, text, false, true);
+		Panel pan = new Panel(nomFichierProvince, text, false, true, false, null);
 		Assert.assertEquals("Largeur incorrecte", pan.getDisplayingRealImageWidth(), Panel.IMAGE_WIDTH);
 	}
 
 	@Test
 	public void testGetHauteurReduite() throws IOException {
-		Panel pan = new Panel(nomFichierProvince, text, false, true);
+		Panel pan = new Panel(nomFichierProvince, text, false, true, false, null);
 		Assert.assertEquals("Heuteur incorrecte", pan.getDisplayingRealImageHeight(), Panel.IMAGE_HEIGHT);
 	}	
 
 	@Test
 	public void testGetNumLargeur() throws IOException {
-		Panel pan = new Panel(nomFichierProvince, text, false, true);
+		Panel pan = new Panel(nomFichierProvince, text, false, true, false, null);
 		Assert.assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), 0);
 	}
 
 	@Test
 	public void testGetNumHauteur() throws IOException {
-		Panel pan = new Panel(nomFichierProvince, text, false, true);
+		Panel pan = new Panel(nomFichierProvince, text, false, true, false, null);
 		Assert.assertEquals("Numéro de hauteur incorrect", pan.getHeightNumber(), 0);
 	}
 
 	@Test
 	public void testNumLargeurPlus() throws IOException {
-		Panel pan = new Panel(nomFichierProvince, text, false, true);
+		Panel pan = new Panel(nomFichierProvince, text, false, true, false, null);
 		int i = 1;
 		if (pan.getImageWidth() < pan.getRealWidth()) {
 			pan.widthNumberMore();
@@ -101,7 +101,7 @@ public class TestPanneau {
 
 	@Test
 	public void testNumHauteurPlus() throws IOException {
-		Panel pan = new Panel(nomFichierProvince, text, false, true);
+		Panel pan = new Panel(nomFichierProvince, text, false, true, false, null);
 		int i = 1;
 		if (pan.getImageHeight() < pan.getRealHeight()) {
 			pan.heightNumberMore();
@@ -123,7 +123,7 @@ public class TestPanneau {
 
 	@Test
 	public void testNumLargeurMoins() throws IOException {
-		Panel pan = new Panel(nomFichierProvince, text, false, true);
+		Panel pan = new Panel(nomFichierProvince, text, false, true, false, null);
 		int i = 0;
 		while (pan.getWidthNumber() * pan.getDisplayingRealImageWidth() / 2  + pan.getDisplayingRealImageWidth()
 				< pan.getRealWidth()) {
@@ -144,7 +144,7 @@ public class TestPanneau {
 
 	@Test
 	public void testNumHauteurMoins() throws IOException {
-		Panel pan = new Panel(nomFichierProvince, text, false, true);
+		Panel pan = new Panel(nomFichierProvince, text, false, true, false, null);
 		int i = 0;
 		while (pan.getHeightNumber() * pan.getDisplayingRealImageHeight() / 2  + pan.getDisplayingRealImageHeight()
 				< pan.getRealHeight()) {
@@ -165,7 +165,7 @@ public class TestPanneau {
 
 	@Test
 	public void testZoomPlus() throws IOException {
-		Panel pan = new Panel(nomFichierProvince, text, false, true);
+		Panel pan = new Panel(nomFichierProvince, text, false, true, false, null);
 		for (int i = 0; i < 3; i++) {
 			int largeurImageReellePrecedente = pan.getDisplayingRealImageWidth();
 			int hauteurImageReellePrecedente = pan.getDisplayingRealImageHeight();
@@ -181,7 +181,7 @@ public class TestPanneau {
 
 	@Test
 	public void testZoomMoins() throws IOException {
-		Panel pan = new Panel(nomFichierProvince, text, false, true);
+		Panel pan = new Panel(nomFichierProvince, text, false, true, false, null);
 		// On zoome pour être sûr de pouvoir dézoomer après
 		for (int i = 0; i < 3; i++) {
 			pan.zoomIn();

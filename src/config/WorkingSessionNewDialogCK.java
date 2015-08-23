@@ -22,11 +22,15 @@ public class WorkingSessionNewDialogCK extends WorkingSessionNewDialog {
 	private JTextField mapModDirectory = new JTextField();
 	private JTextField modDirectory2TF = new JTextField();
 	private JTextField modDirectory3TF = new JTextField();
+	private boolean removeSeaRiver;
 
-	public WorkingSessionNewDialogCK(JFrame parent, boolean modal, Text text, boolean blackBorder) {
+	public WorkingSessionNewDialogCK(JFrame parent, boolean modal, Text text,
+			boolean blackBorder, boolean removeSeaRiver) {
 		// Create the JDialog
 		super(parent, modal, text, blackBorder);
 		setSize(550, 400);
+
+		this.removeSeaRiver = removeSeaRiver;
 
 		// Create all necessary components
 		JButton modDirectory1FE = new JButton(fileExplorerText);
@@ -49,7 +53,6 @@ public class WorkingSessionNewDialogCK extends WorkingSessionNewDialog {
 		pan4.add(modDirectory3FE, BorderLayout.EAST);
 		pan4.setBorder(BorderFactory.createTitledBorder(null, text.provincesModDirectory(),
 				0, 0, null, Color.BLUE));
-
 
 		// Add to the container
 		container = new JPanel();
@@ -86,7 +89,8 @@ public class WorkingSessionNewDialogCK extends WorkingSessionNewDialog {
 			modDirectories.add(modDirectory3TF.getText());
 		}
 		return new WorkingSession(wsName.getText(), gameDirectoryTF.getText(),
-				mapModDir, modDirectories, text, true, true, false, blackBorder);
+				mapModDir, modDirectories, text, true, true, false,
+				blackBorder, removeSeaRiver);
 	}
 
 	class FileExplorer implements ActionListener {

@@ -707,7 +707,8 @@ public class Window extends JFrame implements MouseListener {
 			if (!ws.isInit()) {
 				ws.initialize();
 			} else if (changePan) {
-				ws.updatePan(configuration.preferences.hasBlackBorder);
+				ws.updatePan(configuration.preferences.hasBlackBorder,
+						configuration.preferences.removeSeaRiver);
 			}
 			loadWorkingSession(ws);
 		} catch (IllegalArgumentException e) {
@@ -825,7 +826,8 @@ public class Window extends JFrame implements MouseListener {
 			WorkingSessionNewDialog newWSDialog;
 			if (ckGame) {
 				newWSDialog = new WorkingSessionNewDialogCK(null, true, text,
-						configuration.preferences.hasBlackBorder);
+						configuration.preferences.hasBlackBorder,
+						configuration.preferences.removeSeaRiver);
 			} else {
 				newWSDialog = new WorkingSessionNewDialog(null, true, text,
 						configuration.preferences.hasBlackBorder);
