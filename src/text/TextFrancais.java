@@ -66,7 +66,7 @@ public class TextFrancais extends Text {
 	
 	@Override
 	public String nameProvinceSelectionButton() {
-		return "Chercher la province sélectionnée";
+		return "Montrer sur la carte la province sélectionnée";
 	}
 	
 	@Override
@@ -86,7 +86,7 @@ public class TextFrancais extends Text {
 
 	@Override
 	public String baronyProvinceSelectionButton() {
-		return "Chercher la baronnie sélectionnée";
+		return "Montrer sur la carte la province de la baronnie sélectionnée";
 	}
 
 	@Override

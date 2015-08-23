@@ -144,7 +144,7 @@ public class SearchDialog extends JDialog {
 			JLabel baronyProvinceSearchInfo = new JLabel(text.baronyProvinceSearchLabel());
 			baronyReader = new JTextField();
 			baronyReader.addKeyListener(new NameTextFieldListener()); // To have only letters
-			JButton baronySearchButton = new JButton(text.baronyProvinceSelectionButton());
+			JButton baronySearchButton = new JButton(text.baronyProvinceSearchButton());
 			baronySearchButton.addActionListener(new BaronySearchButtonListener());
 			baronyPaneSearch.setLayout(new GridLayout(4, 1, 5, 5));
 			baronyPaneSearch.add(baronyProvinceSearchInfo);

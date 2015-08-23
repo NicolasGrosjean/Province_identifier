@@ -66,7 +66,7 @@ public class TextEnglish extends Text {
 
 	@Override
 	public String nameProvinceSelectionButton() {
-		return "Search selected province";
+		return "Show in the map the selected province";
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class TextEnglish extends Text {
 
 	@Override
 	public String baronyProvinceSelectionButton() {
-		return "Search selected barony";
+		return "Show in the map the province of the selected barony";
 	}
 
 	@Override
