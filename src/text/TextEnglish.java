@@ -414,6 +414,11 @@ public class TextEnglish extends Text {
 
 	@Override
 	public String removeSeaRiver() {
-		return "Remove sea and river provinces (only CK working session)";
+		return "Remove sea and river provinces";
+	}
+
+	@Override
+	public String onlyForCK2WS() {
+		return "Only for CK2 working sessions";
 	}
 }

@@ -413,6 +413,11 @@ public class TextFrancais extends Text {
 
 	@Override
 	public String removeSeaRiver() {
-		return "Retirer les provinces maritimes et fluviales (seulement pour les session de travail CK)";
+		return "Retirer les provinces maritimes et fluviales";
+	}
+
+	@Override
+	public String onlyForCK2WS() {
+		return "Seulement pour les session de travail CK";
 	}
 }

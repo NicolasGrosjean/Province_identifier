@@ -504,4 +504,10 @@ public abstract class Text {
 	 * @return
 	 */
 	public abstract String removeSeaRiver();
+
+	/**
+	 * Functionality only for CK2 Working Sessions
+	 * @return
+	 */
+	public abstract String onlyForCK2WS();
 }

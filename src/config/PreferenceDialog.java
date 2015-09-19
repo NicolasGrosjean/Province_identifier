@@ -358,7 +358,7 @@ public class PreferenceDialog extends JDialog {
 		removeSeaRiver = new JCheckBox(text.removeSeaRiver());
 		removeSeaRiver.setSelected(preferences.removeSeaRiver);
 		removeSeaRiverPanel.add(removeSeaRiver);
-		removeSeaRiverPanel.setBorder(BorderFactory.createTitledBorder(""));
+		removeSeaRiverPanel.setBorder(BorderFactory.createTitledBorder(text.onlyForCK2WS()));
 		otherPan.add(removeSeaRiverPanel);
 
 		// Close button
