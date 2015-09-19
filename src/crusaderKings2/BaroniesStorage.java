@@ -99,7 +99,7 @@ public class BaroniesStorage {
 	/**
 	 * Give the nearest baronies in term of name from the search name
 	 * @param searchName Name (approximated) of province searched
-	 * @param number Number of provinces in the list
+	 * @param number Number of provinces in the list, or if number is negative all the provinces
 	 * @return List of the provinces
 	 */
 	public LinkedList<Barony> nearestBaronies(String searchName, int number) {
@@ -111,8 +111,14 @@ public class BaroniesStorage {
 			}
 		}
 		LinkedList<Barony> res = new LinkedList<Barony>();
-		for (int i = 0; i < number ; i++) {
-			res.addLast(nearestBaronies.remove());
+		if (number > 0) {
+			for (int i = 0; i < number ; i++) {
+				res.addLast(nearestBaronies.remove());
+			}
+		} else {
+			while (!nearestBaronies.isEmpty()) {
+				res.addLast(nearestBaronies.remove());
+			}
 		}
 		return res;
 	}

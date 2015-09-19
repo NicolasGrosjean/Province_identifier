@@ -794,6 +794,7 @@ public class Window extends JFrame implements MouseListener {
 					miniMap.setRectangle();
 					// Actualize selected province
 					resLabel.setText(searchProvince.toString());
+					copyButton.setEnabled(true);
 					if (CkGame) {
 						// Display barony names
 						eraseBaronyNames();

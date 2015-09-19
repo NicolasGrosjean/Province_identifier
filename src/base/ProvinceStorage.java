@@ -72,7 +72,7 @@ public class ProvinceStorage {
 	/**
 	 * Give the nearest provinces in term of name from the search name
 	 * @param searchName Name (approximated) of province searched
-	 * @param number Number of provinces in the list
+	 * @param number Number of provinces in the list, or if number is negative all the provinces
 	 * @return List of the provinces
 	 */
 	public LinkedList<Province> nearestProvinces(String searchName, int number) {
@@ -82,8 +82,14 @@ public class ProvinceStorage {
 			nearestProvinces.add(p);
 		}
 		LinkedList<Province> res = new LinkedList<Province>();
-		for (int i = 0; i < number ; i++) {
-			res.addLast(nearestProvinces.remove());
+		if (number > 0) {
+			for (int i = 0; i < number ; i++) {
+				res.addLast(nearestProvinces.remove());
+			}
+		} else {
+			while (!nearestProvinces.isEmpty()) {
+				res.addLast(nearestProvinces.remove());
+			}
 		}
 		return res;
 	}

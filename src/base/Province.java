@@ -55,6 +55,10 @@ public class Province implements Comparable{
 		return id;
 	}
 
+	public String getName() {
+		return name;
+	}
+
 	public boolean isSeaRiver() {
 		return seaRiver;
 	}
