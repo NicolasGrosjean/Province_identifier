@@ -128,10 +128,11 @@ public class Window extends JFrame implements MouseListener {
 	private LinkedList<Component> listenedComponent = new LinkedList<>();
 
 	public Window (Text text, ConfigStorage configuration) {
-		this(WINDOW_WIDTH, WINDOW_HEIGHT, text, configuration);
+		this(WINDOW_WIDTH, WINDOW_HEIGHT, text, configuration, true);
 	}
 
-	public Window(int width, int height, Text text, ConfigStorage configuration) {
+	public Window(int width, int height, Text text,
+			ConfigStorage configuration, boolean changeLook) {
 		// Configuration file
 		this.configuration = configuration;
 
@@ -226,14 +227,16 @@ public class Window extends JFrame implements MouseListener {
 	    init = false;
 
 		// Use the look and feel of the system for fileChooser
-		// Put here in order to have coherence but not no-beautiful waiting bar
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		}
-		catch (InstantiationException e) {}
-		catch (ClassNotFoundException e) {}
-		catch (UnsupportedLookAndFeelException e) {}
-		catch (IllegalAccessException e) {}
+		// Check a boolean in order to have coherence but not no-beautiful waiting bar
+	    if (changeLook) {
+			try {
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			}
+			catch (InstantiationException e) {}
+			catch (ClassNotFoundException e) {}
+			catch (UnsupportedLookAndFeelException e) {}
+			catch (IllegalAccessException e) {}
+	    }
 
 		// Window displaying
 	    pack();
@@ -247,7 +250,7 @@ public class Window extends JFrame implements MouseListener {
 
 	public Window(int width, int height, WorkingSession ws,
 			Text text, ConfigStorage configuration) {
-		this(width, height, text, configuration);
+		this(width, height, text, configuration, false);
 		enableMenus(false);
 		WaitingProgressBar WaitingBar = new WaitingProgressBar();
 		new Thread(WaitingBar).run();
