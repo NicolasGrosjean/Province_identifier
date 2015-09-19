@@ -141,6 +141,7 @@ public class Window extends JFrame implements MouseListener {
 		// Window
 		this.setTitle(text.windowTitle());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setResizable(false);
 
 		// Object container
 		container.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
