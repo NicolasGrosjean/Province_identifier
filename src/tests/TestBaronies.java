@@ -157,7 +157,7 @@ public class TestBaronies {
 			}
 		}
 
-		// Test for CK2 Game
+		// Test for CK2 Game + SWMH
 		for (int i = 1; i < 1437; i++) {
 			if (swmhBaronies.getBaronies(i) != null &&
 					swmhBaronies.getBaronies(i).size() > 7 &&
@@ -173,6 +173,30 @@ public class TestBaronies {
 					i != 274) { // So much baronies in this province
 				Assert.assertEquals("Province d'id " + i + " a plus de 7 baronnies", false, true);
 			}
+		}
+	}
+
+	@Test
+	/**
+	 * Test there is no problem with the treatment of the barony name
+	 */
+	public void baronyName() {
+		// Test for CK2 Game
+		for (int i = 1; i < 1437; i++) {
+			if (ckBaronies.getBaronies(i) != null)
+				ckBaronies.getBaronies(i).toString();
+		}
+
+		// Test for CK2 Game + SWMH
+		for (int i = 1; i < 1437; i++) {
+			if (swmhBaronies.getBaronies(i) != null)
+				swmhBaronies.getBaronies(i).toString();
+		}
+
+		// Test for CK2 Game + SWMH + special Troyes files
+		for (int i = 1; i < 1437; i++) {
+			if (lolBaronies.getBaronies(i) != null)
+				lolBaronies.getBaronies(i).toString();
 		}
 	}
 }

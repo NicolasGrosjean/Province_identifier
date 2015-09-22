@@ -75,8 +75,17 @@ public class Barony implements Comparable {
 
 	@Override
 	public String toString() {
-		return baronyName.substring(2, 3).toUpperCase()
+		// Remove "b_" and start with an UpperCase
+		String res = baronyName.substring(2, 3).toUpperCase()
 				+ baronyName.substring(3);
+		// Do the same thing for all others "_" (we suppose have more than 1 letter after the "_")
+		while (res.contains("_")) {
+			int underscorePos = res.indexOf("_");
+			res = res.substring(0, underscorePos) + " "
+					+ res.substring(underscorePos + 1, underscorePos + 2).toUpperCase()
+					+ res.substring(underscorePos + 2, res.length());
+		}
+		return res;
 	}
 
 	/**
