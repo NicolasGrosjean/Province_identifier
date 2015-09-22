@@ -77,6 +77,7 @@ public class SearchDialog extends JDialog {
 		JPanel idPaneSearch = new JPanel();
 		JLabel idProvinceSearchInfo = new JLabel(text.idProvinceSearchLabel());
 		idReader = new JFormattedTextField(NumberFormat.getIntegerInstance());
+		idReader.addActionListener(new IdSearchButtonListener());
 		JButton idSearchButton = new JButton(text.idProvinceSearchButton());
 		idSearchButton.addActionListener(new IdSearchButtonListener());
 		idPaneSearch.setLayout(new GridLayout(3, 1, 5, 5));
@@ -93,6 +94,7 @@ public class SearchDialog extends JDialog {
 		JLabel nameProvinceSearchInfo = new JLabel(text.nameProvinceSearchLabel());
 		nameReader = new JTextField();
 		nameReader.addKeyListener(new NameTextFieldListener()); // To have only letters
+		nameReader.addActionListener(new NameSearchButtonListener()); // To have same effect of the button with "Enter"
 		JButton nameSearchButton = new JButton(text.nameProvinceSearchButton());
 		nameSearchButton.addActionListener(new NameSearchButtonListener());
 		namePaneSearch.setLayout(new GridLayout(5, 1, 5, 5));
@@ -118,6 +120,7 @@ public class SearchDialog extends JDialog {
 			JLabel baronyProvinceSearchInfo = new JLabel(text.baronyProvinceSearchLabel());
 			baronyReader = new JTextField();
 			baronyReader.addKeyListener(new NameTextFieldListener()); // To have only letters
+			baronyReader.addActionListener(new BaronySearchButtonListener()); // To have same effect of the button with "Enter"
 			JButton baronySearchButton = new JButton(text.baronyProvinceSearchButton());
 			baronySearchButton.addActionListener(new BaronySearchButtonListener());
 			baronyPaneSearch.setLayout(new GridLayout(5, 1, 5, 5));
