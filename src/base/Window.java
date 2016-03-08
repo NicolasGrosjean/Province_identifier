@@ -145,7 +145,7 @@ public class Window extends JFrame implements MouseListener {
 		this.setResizable(false);
 
 		// Object container
-		container.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+		container.setPreferredSize(new Dimension(width, height));
 		container.setBackground(Color.white);
 		container.setLayout(new BorderLayout());
 
