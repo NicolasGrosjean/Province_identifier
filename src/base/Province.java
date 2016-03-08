@@ -51,6 +51,18 @@ public class Province implements Comparable{
 		this.seaRiver = seaRiver;
 	}
 	
+	public int getR() {
+		return r;
+	}
+
+	public int getG() {
+		return g;
+	}
+
+	public int getB() {
+		return b;
+	}
+
 	public int getId() {
 		return id;
 	}

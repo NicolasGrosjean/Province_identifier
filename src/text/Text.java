@@ -37,6 +37,12 @@ public abstract class Text {
 	public abstract String clickedProvince();
 	
 	/**
+	 * Text displayed before the result in RGB
+	 * @return
+	 */
+	public abstract String clickedRGBProvince();
+
+	/**
 	 * Title of the window
 	 * @return
 	 */

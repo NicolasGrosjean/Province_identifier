@@ -25,6 +25,11 @@ public class TextFrancais extends Text {
 	}
 
 	@Override
+	public String clickedRGBProvince() {
+		return "Code RGB de la province :";
+	}
+
+	@Override
 	public String windowTitle() {
 		return "Identificateur de provinces";
 	}

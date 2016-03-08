@@ -25,6 +25,11 @@ public class TextEnglish extends Text {
 	}
 
 	@Override
+	public String clickedRGBProvince() {
+		return "Province RGB code :";
+	}
+
+	@Override
 	public String windowTitle() {
 		return "Province identifier";
 	}

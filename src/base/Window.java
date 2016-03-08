@@ -73,6 +73,9 @@ public class Window extends JFrame implements MouseListener {
 
 	// Text displaying
 	private JLabel resLabel = new JLabel("");
+	private JLabel resRLabel = new JLabel("");
+	private JLabel resGLabel = new JLabel("");
+	private JLabel resBLabel = new JLabel("");
 	private JLabel barony1 = new JLabel("");
 	private JLabel barony2 = new JLabel("");
 	private JLabel barony3 = new JLabel("");
@@ -83,6 +86,7 @@ public class Window extends JFrame implements MouseListener {
 
 	// Copy button
 	private JButton copyButton = new JButton();
+	private JButton copyRGBButton = new JButton();
 
 	// Province database
 	private ProvinceStorage provinces;
@@ -319,13 +323,13 @@ public class Window extends JFrame implements MouseListener {
 
 		// Text of clicked province
 		JPanel east = new JPanel(new GridLayout(2, 1, 0, 5));
+		// Province name
 		Font provinceFont = new Font("Tahoma", Font.BOLD, 14);
 		resLabel.setFont(provinceFont);
 		resLabel.setForeground(new Color(configuration.preferences.getProvinceR(),
 				configuration.preferences.getProvinceG(),
 				configuration.preferences.getProvinceB()));
 		JPanel resPanel = new JPanel();
-		resPanel.setBorder(BorderFactory.createTitledBorder(text.clickedProvince()));
 		resLabel.setText("");
 		resPanel.add(resLabel);
 		ImageIcon copyIcon = new ImageIcon("ressources/copy_icon.png");
@@ -335,6 +339,34 @@ public class Window extends JFrame implements MouseListener {
 		copyButton.setToolTipText(text.copyClipboard());
 		copyButton.setEnabled(false);
 		resPanel.add(copyButton);
+		// Province RGB
+		resRLabel.setFont(provinceFont);
+		resRLabel.setForeground(Color.RED);
+		resGLabel.setFont(provinceFont);
+		resGLabel.setForeground(Color.GREEN);
+		resBLabel.setFont(provinceFont);
+		resBLabel.setForeground(Color.BLUE);
+		JPanel resRGBPanel = new JPanel();
+		resRLabel.setText("");
+		resGLabel.setText("");
+		resBLabel.setText("");
+		resRGBPanel.add(resRLabel);
+		resRGBPanel.add(resGLabel);
+		resRGBPanel.add(resBLabel);
+		ImageIcon copyRGBIcon = new ImageIcon("ressources/copy_icon.png");
+		copyRGBButton.setIcon(copyRGBIcon);
+		copyRGBButton.setPreferredSize(new Dimension(copyRGBIcon.getIconWidth(),
+				copyRGBIcon.getIconHeight()));
+		copyRGBButton.setToolTipText(text.copyClipboard());
+		copyRGBButton.setEnabled(false);
+		JPanel resRGBButtonPanel = new JPanel();
+		resRGBButtonPanel.add(resRGBPanel);
+		resRGBButtonPanel.add(copyRGBButton);
+		JPanel bothResPanel = new JPanel(new GridLayout(2, 1, 0, 5));
+		bothResPanel.add(resPanel);
+		bothResPanel.add(resRGBButtonPanel);
+		bothResPanel.setBorder(BorderFactory.createTitledBorder(text.clickedProvince()));
+		// Province baronies or an image
 		if (CkGame) {
 			eraseBaronyNames();
 			JPanel baroniesPanel = new JPanel(new GridLayout(7, 1));
@@ -355,7 +387,7 @@ public class Window extends JFrame implements MouseListener {
 			baroniesPanel.add(barony6);
 			baroniesPanel.add(barony7);
 			JPanel northEast = new JPanel(new BorderLayout());
-			northEast.add(resPanel, BorderLayout.NORTH);
+			northEast.add(bothResPanel, BorderLayout.NORTH);
 			northEast.add(baroniesPanel);
 			east.add(northEast);
 		} else {
@@ -365,7 +397,7 @@ public class Window extends JFrame implements MouseListener {
 			illustrationPanel.add(illustrationLabel);
 			illustrationPanel.setPreferredSize(new Dimension(256, 256));
 			JPanel northEast = new JPanel(new BorderLayout());
-			northEast.add(resPanel, BorderLayout.NORTH);
+			northEast.add(bothResPanel, BorderLayout.NORTH);
 			northEast.add(illustrationPanel);
 			east.add(northEast);
 		}
@@ -390,10 +422,13 @@ public class Window extends JFrame implements MouseListener {
 		// Button action
 		copyButton.addActionListener(new BoutonCopierListener());
 		listenedButton.add(copyButton);
+		copyRGBButton.addActionListener(new BoutonRGBCopierListener());
+		listenedButton.add(copyRGBButton);
 
 		// Focus on window for the actions, and reset for the button in order to window keep it
 		setFocusable(true);
 		copyButton.setFocusable(false);
+		copyRGBButton.setFocusable(false);
 
 		// Mouse listening for actions
 		pan.addMouseListener(this);
@@ -591,7 +626,11 @@ public class Window extends JFrame implements MouseListener {
 			if (province != null) {
 				// Display province name
 				resLabel.setText(province.toString());
+				resRLabel.setText(r + "");
+				resGLabel.setText(g + "");
+				resBLabel.setText(b + "");
 				copyButton.setEnabled(true);
+				copyRGBButton.setEnabled(true);
 				if (CkGame) {
 					// Display barony names
 					eraseBaronyNames();
@@ -608,14 +647,22 @@ public class Window extends JFrame implements MouseListener {
 				pan.getPosition(rgb, 1, true);
 			} else {
 				resLabel.setText("");
+				resRLabel.setText("");
+				resGLabel.setText("");
+				resBLabel.setText("");
 				copyButton.setEnabled(false);
+				copyRGBButton.setEnabled(false);
 				if (CkGame) {
 					eraseBaronyNames();
 				}
 			}
 		} else {
 			resLabel.setText("");
+			resRLabel.setText("");
+			resGLabel.setText("");
+			resBLabel.setText("");
 			copyButton.setEnabled(false);
+			copyRGBButton.setEnabled(false);
 			if (CkGame) {
 				eraseBaronyNames();
 			}
@@ -765,6 +812,14 @@ public class Window extends JFrame implements MouseListener {
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(resLabel.getText()), null);
 		}
 	}
+	
+	class BoutonRGBCopierListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {			
+			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
+					new StringSelection(resRLabel.getText() + ";" +
+							resGLabel.getText() + ";" + resBLabel.getText()), null);
+		}
+	}
 
 	class SearchListener implements ActionListener {
 		private int selectedIndex;
@@ -808,7 +863,11 @@ public class Window extends JFrame implements MouseListener {
 					miniMap.setRectangle();
 					// Actualize selected province
 					resLabel.setText(searchProvince.toString());
+					resRLabel.setText(searchProvince.getR() + "");
+					resGLabel.setText(searchProvince.getG() + "");
+					resBLabel.setText(searchProvince.getB() + "");
 					copyButton.setEnabled(true);
+					copyRGBButton.setEnabled(true);
 					if (CkGame) {
 						// Display barony names
 						eraseBaronyNames();
@@ -933,7 +992,11 @@ public class Window extends JFrame implements MouseListener {
 						configuration.preferences.getProvinceB()));
 				// Reset the selection informations
 				resLabel.setText("");
+				resRLabel.setText("");
+				resGLabel.setText("");
+				resBLabel.setText("");
 				copyButton.setEnabled(false);
+				copyRGBButton.setEnabled(false);
 				if (CkGame) {
 					eraseBaronyNames();
 				}
