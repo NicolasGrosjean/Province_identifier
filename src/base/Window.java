@@ -369,9 +369,19 @@ public class Window extends JFrame implements MouseListener {
 		// Province baronies or an image
 		if (CkGame) {
 			eraseBaronyNames();
+			JPanel terrainPanel = new JPanel();
+			terrainPanel.setBorder(BorderFactory.createTitledBorder("Terrain :"));
+			JLabel terrainLabel = new JLabel("Plaine"); // TODO
+			Font terrainFont = new Font("Tahoma", Font.BOLD, 12);
+			terrainLabel.setFont(terrainFont);
+			terrainLabel.setForeground(new Color(configuration.preferences.getProvinceR(),
+					configuration.preferences.getProvinceG(),
+					configuration.preferences.getProvinceB()));
+			terrainPanel.add(terrainLabel);
+			terrainPanel.setPreferredSize(new Dimension(100, 60));
 			JPanel baroniesPanel = new JPanel(new GridLayout(7, 1));
 			baroniesPanel.setBorder(BorderFactory.createTitledBorder(text.provinceBaronies()));
-			Font baronyFont = new Font("Tahoma", Font.BOLD, 13);
+			Font baronyFont = new Font("Tahoma", Font.BOLD, 12);
 			barony1.setFont(baronyFont);
 			barony2.setFont(baronyFont);
 			barony3.setFont(baronyFont);
@@ -386,9 +396,12 @@ public class Window extends JFrame implements MouseListener {
 			baroniesPanel.add(barony5);
 			baroniesPanel.add(barony6);
 			baroniesPanel.add(barony7);
+			JPanel ckPanel = new JPanel(new BorderLayout());
+			ckPanel.add(terrainPanel, BorderLayout.NORTH);
+			ckPanel.add(baroniesPanel);
 			JPanel northEast = new JPanel(new BorderLayout());
 			northEast.add(bothResPanel, BorderLayout.NORTH);
-			northEast.add(baroniesPanel);
+			northEast.add(ckPanel);
 			east.add(northEast);
 		} else {
 			JPanel illustrationPanel = new JPanel();
