@@ -1,7 +1,9 @@
 package config;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -12,6 +14,7 @@ import text.Text;
 import base.MiniMap;
 import base.Panel;
 import base.ProvinceStorage;
+import base.Terrain;
 
 public class WorkingSession {
 	private String name;
@@ -70,6 +73,7 @@ public class WorkingSession {
 			readDefinitionFile(mapDirectory + "/map/definition.csv");
 			if (ckGame) {
 				readDefaultMapFile(mapDirectory + "/map/default.map");
+				readProvinceSetup(mapDirectory + "/common/province_setup/00_province_setup.txt");
 			}
 			panel = new Panel(mapDirectory + "/map/provinces.bmp", text, xSymetry, blackBorder, removeSeaRiver, provinces);
 			miniMap = new MiniMap(mapDirectory + "/map/provinces.bmp", text, panel, xSymetry, removeSeaRiver, provinces);
@@ -229,7 +233,37 @@ public class WorkingSession {
 			}
 		}
 	}
-
+	
+	private void readProvinceSetup(String provinceSetupFileName) {
+		// Read line by line
+		try (BufferedReader br = new BufferedReader(new FileReader(provinceSetupFileName))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				// Search the ID
+				String[] lineArray = line.split("=");
+				int id;
+				try {
+					id = Integer.parseInt(lineArray[0].replace("\t", "").replace(" ", ""));
+					// The id is found
+					while ((line = br.readLine()) != null) {
+						// Search the terrain
+						lineArray = line.split("=");
+						if (lineArray[0].replace("\t", "").replace(" ", "").toLowerCase().equals("terrain")) {
+							// Terrain is found
+							provinces.getProvince(id).setTerrain(
+									lineArray[1].replace("\t", "").replace(" ", "").toLowerCase());
+							break;
+						}
+					}
+				} catch (NumberFormatException e) {
+					// The line doesn't contains the ID
+				}
+			}
+		} catch (IOException e1) {
+			throw new IllegalArgumentException("ERROR: Problem when reading " + provinceSetupFileName);
+		}
+	}
+			
 	private void readDefaultMapFile(String defaultMapFileName) throws FileNotFoundException {
 		FileInputStream fichierLecture = null;
 		boolean exceptionCaught = false;

@@ -76,6 +76,7 @@ public class Window extends JFrame implements MouseListener {
 	private JLabel resRLabel = new JLabel("");
 	private JLabel resGLabel = new JLabel("");
 	private JLabel resBLabel = new JLabel("");
+	private JLabel terrainLabel = new JLabel("");
 	private JLabel barony1 = new JLabel("");
 	private JLabel barony2 = new JLabel("");
 	private JLabel barony3 = new JLabel("");
@@ -371,8 +372,8 @@ public class Window extends JFrame implements MouseListener {
 			eraseBaronyNames();
 			JPanel terrainPanel = new JPanel();
 			terrainPanel.setBorder(BorderFactory.createTitledBorder("Terrain :"));
-			JLabel terrainLabel = new JLabel("Plaine"); // TODO
 			Font terrainFont = new Font("Tahoma", Font.BOLD, 12);
+			terrainLabel.setText("");
 			terrainLabel.setFont(terrainFont);
 			terrainLabel.setForeground(new Color(configuration.preferences.getProvinceR(),
 					configuration.preferences.getProvinceG(),
@@ -642,6 +643,7 @@ public class Window extends JFrame implements MouseListener {
 				resRLabel.setText(r + "");
 				resGLabel.setText(g + "");
 				resBLabel.setText(b + "");
+				terrainLabel.setText(text.terrainType(province.getTerrain()));
 				copyButton.setEnabled(true);
 				copyRGBButton.setEnabled(true);
 				if (CkGame) {
@@ -663,6 +665,7 @@ public class Window extends JFrame implements MouseListener {
 				resRLabel.setText("");
 				resGLabel.setText("");
 				resBLabel.setText("");
+				terrainLabel.setText("");
 				copyButton.setEnabled(false);
 				copyRGBButton.setEnabled(false);
 				if (CkGame) {
@@ -674,6 +677,7 @@ public class Window extends JFrame implements MouseListener {
 			resRLabel.setText("");
 			resGLabel.setText("");
 			resBLabel.setText("");
+			terrainLabel.setText("");
 			copyButton.setEnabled(false);
 			copyRGBButton.setEnabled(false);
 			if (CkGame) {
@@ -879,6 +883,7 @@ public class Window extends JFrame implements MouseListener {
 					resRLabel.setText(searchProvince.getR() + "");
 					resGLabel.setText(searchProvince.getG() + "");
 					resBLabel.setText(searchProvince.getB() + "");
+					terrainLabel.setText(text.terrainType(searchProvince.getTerrain()));
 					copyButton.setEnabled(true);
 					copyRGBButton.setEnabled(true);
 					if (CkGame) {
@@ -1003,11 +1008,15 @@ public class Window extends JFrame implements MouseListener {
 				resLabel.setForeground(new Color(configuration.preferences.getProvinceR(),
 						configuration.preferences.getProvinceG(),
 						configuration.preferences.getProvinceB()));
+				terrainLabel.setForeground(new Color(configuration.preferences.getProvinceR(),
+						configuration.preferences.getProvinceG(),
+						configuration.preferences.getProvinceB()));
 				// Reset the selection informations
 				resLabel.setText("");
 				resRLabel.setText("");
 				resGLabel.setText("");
 				resBLabel.setText("");
+				terrainLabel.setText("");
 				copyButton.setEnabled(false);
 				copyRGBButton.setEnabled(false);
 				if (CkGame) {

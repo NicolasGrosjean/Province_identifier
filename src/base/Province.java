@@ -37,6 +37,11 @@ public class Province implements Comparable{
 	private boolean seaRiver;
 
 	/**
+	 * Province terrain type
+	 */
+	private Terrain terrain;
+	
+	/**
 	 * Levenshtein distance between the province name and a province name searched
 	 */
 	private int levenshteinDistance;
@@ -77,6 +82,14 @@ public class Province implements Comparable{
 
 	public void addSeaRiver() {
 		seaRiver = true;
+	}
+
+	public Terrain getTerrain() {
+		return terrain;
+	}
+
+	public void setTerrain(String terrain) {
+		this.terrain = Terrain.valueOf(terrain);
 	}
 
 	public int getLevenshteinDistance() {

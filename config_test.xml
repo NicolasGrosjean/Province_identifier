@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <provinceIdentifier language="French" provinceCol="8421504" castleCol="255" cityCol="32768" templeCol="16711680" tribalCol="0" blackBorder="true" removeSeaRiver ="false">
-  <workingSession name="SWMH" gameDirectory="C:\Jeux\Paradox Interactive\Crusader Kings II" mapModDirectory="C:\Users\Nicolas\Documents\Paradox Interactive\Crusader Kings II\MOD\swmh2.854" ckGame="true" xSymetry="false" />
-  <workingSession name="CKII Vanille" gameDirectory="C:\Jeux\Paradox Interactive\Crusader Kings II" ckGame="true" xSymetry="false" />
+  <workingSession name="SWMH" gameDirectory="C:\Jeux\Steam\SteamApps\common\Crusader Kings II" mapModDirectory="C:\Users\Nicolas\Documents\Paradox Interactive\Crusader Kings II\MOD\swmh2.854" ckGame="true" xSymetry="false" />
+  <workingSession name="CKII Vanille" gameDirectory="C:\Jeux\Steam\SteamApps\common\Crusader Kings II" ckGame="true" xSymetry="false" />
 </provinceIdentifier>

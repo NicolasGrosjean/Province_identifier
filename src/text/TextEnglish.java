@@ -2,6 +2,8 @@ package text;
 
 import java.util.LinkedList;
 
+import base.Terrain;
+
 /**
  * Text in English
  * @author Mouchi
@@ -425,5 +427,33 @@ public class TextEnglish extends Text {
 	@Override
 	public String onlyForCK2WS() {
 		return "Only for CK2 working sessions";
+	}
+
+	@Override
+	public String terrainType(Terrain t) {
+		switch (t) {
+		case arctic:
+			return "Arctic";
+		case coastal_desert:
+			return "Ocean";
+		case desert:
+			return "Desert";
+		case farmlands:
+			return "Farmlands";
+		case forest:
+			return "Forest";
+		case hills:
+			return "Hills";
+		case jungle:
+			return "Jungle";
+		case mountain:
+			return "Mountain";
+		case plains:
+			return "Plains";
+		case steppe:
+			return "Steppe";
+		default:
+			throw new IllegalArgumentException("Invalid terrain!");
+		}
 	}
 }

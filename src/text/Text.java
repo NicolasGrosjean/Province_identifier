@@ -2,6 +2,8 @@ package text;
 
 import java.util.LinkedList;
 
+import base.Terrain;
+
 /**
  * Class for the text
  * @author Mouchi
@@ -516,4 +518,10 @@ public abstract class Text {
 	 * @return
 	 */
 	public abstract String onlyForCK2WS();
+
+	/**
+	 * Province terrain type
+	 * @return
+	 */
+	public abstract String terrainType(Terrain t);
 }
