@@ -449,6 +449,9 @@ public class Window extends JFrame implements MouseListener {
 		listenedComponent.add(pan);
 		listenedComponent.add(this);
 
+		// Lock/unlock the directions
+		movingActionLockingUnlocking();
+
 		// Initialize some menus if necessary
 		if (!init)
 			initializeWSNeededMenu(ws);
