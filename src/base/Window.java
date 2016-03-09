@@ -366,7 +366,7 @@ public class Window extends JFrame implements MouseListener {
 		JPanel bothResPanel = new JPanel(new GridLayout(2, 1, 0, 5));
 		bothResPanel.add(resPanel);
 		bothResPanel.add(resRGBButtonPanel);
-		bothResPanel.setBorder(BorderFactory.createTitledBorder(text.clickedProvince()));
+		bothResPanel.setBorder(BorderFactory.createTitledBorder(text.selectedProvince()));
 		// Province baronies or an image
 		if (CkGame) {
 			eraseBaronyNames();

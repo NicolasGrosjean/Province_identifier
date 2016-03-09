@@ -22,12 +22,12 @@ public class TextFrancais extends Text {
 	}
 
 	@Override
-	public String clickedProvince() {
-		return "Province cliquée :";
+	public String selectedProvince() {
+		return "Province selectionnée :";
 	}
 
 	@Override
-	public String clickedRGBProvince() {
+	public String selectedProvinceRGB() {
 		return "Code RGB de la province :";
 	}
 
