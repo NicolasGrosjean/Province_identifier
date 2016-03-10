@@ -27,10 +27,10 @@ public class TestBaronies {
 		ckDirectory.add("C:/Jeux/Steam/SteamApps/common/Crusader Kings II");
 		LinkedList<String> swmhDirectories = new LinkedList<String>();
 		swmhDirectories.add("C:/Jeux/Steam/SteamApps/common/Crusader Kings II");
-		swmhDirectories.add("C:/Users/Nicolas/Documents/Paradox Interactive/Crusader Kings II/MOD/swmh2.854");
+		swmhDirectories.add("C:/Users/Nicolas/Documents/Paradox Interactive/Crusader Kings II/MOD/Historical Immersion Project");
 		LinkedList<String> lolDirectories = new LinkedList<String>();
 		lolDirectories.add("C:/Jeux/Steam/SteamApps/common/Crusader Kings II");
-		lolDirectories.add("C:/Users/Nicolas/Documents/Paradox Interactive/Crusader Kings II/MOD/swmh2.854");
+		lolDirectories.add("C:/Users/Nicolas/Documents/Paradox Interactive/Crusader Kings II/MOD/Historical Immersion Project");
 		ckBaronies = new BaroniesStorage(FileSorting.giveFilesByDirPriority(ckDirectory, "/history/provinces/", text));
 		swmhBaronies = new BaroniesStorage(FileSorting.giveFilesByDirPriority(swmhDirectories, "/history/provinces/", text));
 		lolBaronies = new BaroniesStorage(FileSorting.giveFilesByDirPriority(lolDirectories, "/history/provinces/", text));
@@ -55,7 +55,7 @@ public class TestBaronies {
 		}
 
 		// Test for CK2 Game + SWMH
-		for (int i = 1; i < 1529; i++) {
+		for (int i = 1; i < 1833; i++) {
 			if (swmhBaronies.getBaronies(i) != null) {
 				HashSet<String> baronySet = new HashSet<String>();
 				for (Barony b : swmhBaronies.getBaronies(i)) {
@@ -107,13 +107,8 @@ public class TestBaronies {
 			if (swmhBaronies.getBaronies(i) != null) {
 				for (Barony b : swmhBaronies.getBaronies(i)) {
 					Integer j = swmhBaronyMap.put(b.getBaronyName(), i);
-					if (j != null &&
-							j != 438 && j != 446 && 
-							j != 836 && j != 831 &&
-							j != 941 && j != 738 &&
-							j != 160 && j != 1195 &&
-							j != 1212 && j != 158 &&
-							j != 1520 && j != 873) { // Some duplicate baronies in SWMH
+					if (j != null
+							&& j != 805 && j != 806) { // The province of id = 806 is not living in SWMH
 						Assert.assertEquals("Il y a plusieurs fois le même nom de baronnie "
 								+ b.getBaronyName() + " : dans les provinces d'ID "
 								+ i + " et " + j, false, true);
@@ -128,13 +123,8 @@ public class TestBaronies {
 			if (lolBaronies.getBaronies(i) != null) {
 				for (Barony b : lolBaronies.getBaronies(i)) {
 					Integer j = lolBaronyMap.put(b.getBaronyName(), i);
-					if (j != null &&
-							j != 438 && j != 446 && 
-							j != 836 && j != 831 &&
-							j != 941 && j != 738 &&
-							j != 160 && j != 1195 &&
-							j != 1212 && j != 158 &&
-							j != 1520 && j != 873) { // Some duplicate baronies in SWMH
+					if (j != null
+							&& j != 805 && j != 806) { // The province of id = 806 is not living in SWMH
 						Assert.assertEquals("Il y a plusieurs fois le même nom de baronnie "
 								+ b.getBaronyName() + " : dans les provinces d'ID "
 								+ i + " et " + j, false, true);

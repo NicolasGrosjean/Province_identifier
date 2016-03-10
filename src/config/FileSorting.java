@@ -41,7 +41,7 @@ public class FileSorting {
 			}
 			for (File f : subDirectoryFile.listFiles()) {
 				if (f.isFile()) {
-					fileNames.put(f.getName(), f.toString());
+					fileNames.put(f.getName().split(" -")[0], f.toString());
 				}
 			}
 		}
