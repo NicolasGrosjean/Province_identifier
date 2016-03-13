@@ -646,10 +646,10 @@ public class Window extends JFrame implements MouseListener {
 				resRLabel.setText(r + "");
 				resGLabel.setText(g + "");
 				resBLabel.setText(b + "");
-				terrainLabel.setText(text.terrainType(province.getTerrain()));
 				copyButton.setEnabled(true);
 				copyRGBButton.setEnabled(true);
 				if (CkGame) {
+					terrainLabel.setText(text.terrainType(province.getTerrain()));
 					// Display barony names
 					eraseBaronyNames();
 					LinkedList<Barony> provinceBaronnies = baronnies.getBaronies(province.getId());
@@ -886,10 +886,10 @@ public class Window extends JFrame implements MouseListener {
 					resRLabel.setText(searchProvince.getR() + "");
 					resGLabel.setText(searchProvince.getG() + "");
 					resBLabel.setText(searchProvince.getB() + "");
-					terrainLabel.setText(text.terrainType(searchProvince.getTerrain()));
 					copyButton.setEnabled(true);
 					copyRGBButton.setEnabled(true);
 					if (CkGame) {
+						terrainLabel.setText(text.terrainType(searchProvince.getTerrain()));
 						// Display barony names
 						eraseBaronyNames();
 						LinkedList<Barony> provinceBaronnies = baronnies.getBaronies(searchProvince.getId());
