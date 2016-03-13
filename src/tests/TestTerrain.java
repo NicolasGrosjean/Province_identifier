@@ -25,7 +25,7 @@ public class TestTerrain {
 		swmh = it.next();
 		vanilla = it.next();
 		try {
-			//swmh.initialize(); // TODO SWMH
+			swmh.initialize();
 			vanilla.initialize();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -59,5 +59,32 @@ public class TestTerrain {
 				vanilla.getProvinces().getProvince(512).getTerrain()); 
 		Assert.assertEquals("130th province terrain", Terrain.plains,
 				vanilla.getProvinces().getProvince(130).getTerrain()); 
+	}
+
+	@Test
+	/**
+	 * Test some province terrains
+	 */
+	public void swmhProvinceTerrain() {
+		Assert.assertEquals("1st province terrain", Terrain.arctic,
+				swmh.getProvinces().getProvince(1).getTerrain());
+		Assert.assertEquals("2nd province terrain", Terrain.mountain,
+				swmh.getProvinces().getProvince(2).getTerrain()); 
+		Assert.assertEquals("5th province terrain", Terrain.hills,
+				swmh.getProvinces().getProvince(5).getTerrain()); 
+		Assert.assertEquals("7th province terrain", Terrain.plains,
+				swmh.getProvinces().getProvince(7).getTerrain()); 
+		Assert.assertEquals("22th province terrain", Terrain.forest,
+				swmh.getProvinces().getProvince(22).getTerrain()); 
+		Assert.assertEquals("27th province terrain", Terrain.farmlands,
+				swmh.getProvinces().getProvince(27).getTerrain()); 
+		Assert.assertEquals("79th province terrain", Terrain.coastal_desert,
+				swmh.getProvinces().getProvince(79).getTerrain()); 
+		Assert.assertEquals("624th province terrain", Terrain.desert,
+				swmh.getProvinces().getProvince(624).getTerrain()); 
+		Assert.assertEquals("1617th province terrain", Terrain.jungle,
+				swmh.getProvinces().getProvince(1617).getTerrain()); 
+		Assert.assertEquals("1680th province terrain", Terrain.steppe,
+				swmh.getProvinces().getProvince(1680).getTerrain());
 	}
 }
