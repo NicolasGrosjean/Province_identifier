@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
@@ -14,11 +15,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import javax.imageio.ImageIO;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -406,10 +409,20 @@ public class Window extends JFrame implements MouseListener {
 			east.add(northEast);
 		} else {
 			JPanel illustrationPanel = new JPanel();
-			JLabel illustrationLabel = new JLabel(new ImageIcon("ressources/Compas_Illustrations.png"));
-			illustrationLabel.setPreferredSize(new Dimension(256, 256));
+			JLabel illustrationLabel = new JLabel();
+			illustrationLabel.setSize(new Dimension(200, 180));
+			String imageLocation = "ressources/Compas_Illustrations.png";
+			Image img = null;
+			try {
+			    img = ImageIO.read(new File(imageLocation));
+			    Image dimg = img.getScaledInstance(illustrationLabel.getWidth(),
+			    		illustrationLabel.getHeight(), Image.SCALE_SMOOTH);
+			    ImageIcon imageIcon = new ImageIcon(dimg);
+			    illustrationLabel.setIcon(imageIcon);
+			} catch (IOException e) {
+			    throw new IllegalArgumentException("ERROR : Image " + imageLocation + " not found!");
+			}
 			illustrationPanel.add(illustrationLabel);
-			illustrationPanel.setPreferredSize(new Dimension(256, 256));
 			JPanel northEast = new JPanel(new BorderLayout());
 			northEast.add(bothResPanel, BorderLayout.NORTH);
 			northEast.add(illustrationPanel);
