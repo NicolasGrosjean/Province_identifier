@@ -52,74 +52,82 @@ public class TestWindow {
 		Window window = new Window(configuration.getFirst(), text, configuration);
 
 		// Clic de souris (position par rapport au Panel)
-		MouseEvent evt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, 17, 157, 1, false);
+		MouseEvent evt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 1, 0, 18, 140, 1, false);
 
 		// Lecture du clic de souris
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (17, 157)
+		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (18, 140)
 
 		// Nouveau clic, ...
 		evt.translatePoint(1, 0);
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (18, 157)
+		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (19, 140)
 		evt.translatePoint(-1, 1);
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (17, 158)
+		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (18, 141)
 		evt.translatePoint(1, 0);
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de Tyrifjorden raté", window.getRes(), "1691 - Tyrifjorden"); // (18,158)
+		Assert.assertEquals("Identification de Tyrifjorden raté", window.getRes(), "1755 - Tyrifjorden"); // (19, 141)
 
-		// Clic de souris en haut à droite
-		evt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 2, 0, 1023, 21, 1, false);
+		// Test the right limit which is 1280 = 1024 + 256
+		// Check the width of the panel
+		Assert.assertEquals("Bad width", pan.getImageWidth(), 1280);
+		evt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 2, 0, 1279, 108, 1, false);
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1023, 21)
+		Assert.assertEquals("Identification de North Atlantic raté", window.getRes(), "1758 - North Atlantic"); // (1279, 108)
 		evt.translatePoint(1, 0);
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1024, 21)
+		// It is not displayed by the software, so we found no province
+		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1280, 108)
 		evt.translatePoint(0, 1);
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1024, 22)
+		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1280, 109)
 		evt.translatePoint(-1, 0);
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de North Sea raté", window.getRes(), "1696 - North Sea"); // (1023, 22)
+		Assert.assertEquals("Identification de North Atlantic raté", window.getRes(), "1758 - North Atlantic"); // (1279, 109)
 
-		// Clic de souris en bas à droite
-		evt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 3, 0, 1024, 511, 1, false);
+		// Test the bottom limit which is 512
+		// Check the width of the panel
+		Assert.assertEquals("Bad width", pan.getImageHeight(), 512);
+		evt = new MouseEvent(window, MouseEvent.MOUSE_CLICKED, 3, 0, 1280, 511, 1, false);
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1024, 511)
+		// No province because right limit is attained
+		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1280, 511)
 		evt.translatePoint(0, 1);
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1024, 512)
+		// No province because right (and bottom) limit is attained
+		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1280, 512)
 		evt.translatePoint(-1, 0);
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1023, 512)
+		// No province because bottom limit is attained
+		Assert.assertEquals("Identification de province inattendu", window.getRes(), ""); // (1279, 512)
 		evt.translatePoint(0, -1);
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de Gulf of Bothnia raté", window.getRes(), "1717 - Gulf of Bothnia"); // (1023, 511)
+		Assert.assertEquals("Identification de Kola raté", window.getRes(), "387 - Kola"); // (1279, 511)
 
 		// Close the window
 		window.dispose();
@@ -192,7 +200,7 @@ public class TestWindow {
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(mevt);
 		}
-		Assert.assertEquals("Identification de North Atlantic raté", window.getRes(), "1694 - North Atlantic");
+		Assert.assertEquals("Identification de Pechora raté", window.getRes(), "1832 - Pechora");
 
 		// On dézoom trois fois
 		for (int k = 0; k < 3; k++) {
@@ -234,7 +242,7 @@ public class TestWindow {
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(mevt);
 		}
-		Assert.assertEquals("Identification de Gulf of Bothnia raté", window.getRes(), "1717 - Gulf of Bothnia");
+		Assert.assertEquals("Identification de Kola raté", window.getRes(), "387 - Kola");
 
 		// Déplacement tout en bas
 		if (pan.getImageHeight() < pan.getRealHeight()) {
@@ -269,7 +277,7 @@ public class TestWindow {
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(mevt);
 		}
-		Assert.assertEquals("Identification de Gulf of Bothnia raté", window.getRes(), "1487 - Central Africa");
+		Assert.assertEquals("Identification de Central Africa raté", window.getRes(), "1487 - Central Africa");
 		
 		// Déplacement tout en haut
 		while (pan.getHeightNumber() > 0) {
@@ -294,7 +302,7 @@ public class TestWindow {
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(mevt);
 		}
-		Assert.assertEquals("Identification de Gulf of Bothnia raté", window.getRes(), "1717 - Gulf of Bothnia");
+		Assert.assertEquals("Identification de Kola raté", window.getRes(), "387 - Kola");
 
 		// Close the window
 		window.dispose();
