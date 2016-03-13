@@ -21,10 +21,10 @@ public class Main {
 		try {
 			// Language define by the script
 			Text defaultText;
-			if (args.length > 0 && args[0].equals("-en")) {
-				defaultText = new TextEnglish();
-			} else {
+			if (args.length > 0 && args[0].equals("-fr")) {
 				defaultText = new TextFrancais();
+			} else {
+				defaultText = new TextEnglish();
 			}
 
 			// Gather the configuration file
