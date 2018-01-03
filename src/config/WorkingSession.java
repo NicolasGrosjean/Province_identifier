@@ -187,38 +187,26 @@ public class WorkingSession {
 			fichierLecture = new FileInputStream(definitionFileName);
 
 			// Read by separating with ";"
-			Scanner scanner = new Scanner(fichierLecture, "ISO-8859-1"); 
+			Scanner line = new Scanner(fichierLecture, "ISO-8859-1");
+			line.useDelimiter("\n");
 			// ISO-8859-1 for special char
-			scanner.useDelimiter(Pattern.compile("[;\n]"));
 
-			// Searching integer
-			while (!scanner.hasNextInt()) {
-				@SuppressWarnings("unused")
-				String useless = scanner.next();
-			}
-
-			while (scanner.hasNextInt()) {
-				// Reading a province
-				int id = scanner.nextInt();
-				if (!scanner.hasNextInt())
-					break; // End of reading
-				int r = scanner.nextInt();
-				if (!scanner.hasNextInt())
-					break; // End of reading
-				int g = scanner.nextInt();
-				if (!scanner.hasNextInt())
-					break; // End of reading
-				int b = scanner.nextInt();
-				String nom = scanner.next();
-				while (!scanner.hasNextInt() && scanner.hasNext()) {
-					@SuppressWarnings("unused")
-					String useless = scanner.next();
+			while (line.hasNext()) {
+				String[] columns = line.next().split(";");
+				try {
+					int id = Integer.valueOf(columns[0]).intValue();
+					int r = Integer.valueOf(columns[1]).intValue();
+					int g = Integer.valueOf(columns[2]).intValue();
+					int b = Integer.valueOf(columns[3]).intValue();
+					String nom = columns[4];
+					provinces.addProvince(id, r, g, b, nom, false);
 				}
-
-				// Store the province
-				provinces.addProvince(id, r, g, b, nom, false);
+				catch (NumberFormatException e)
+				{
+					// nothing
+				}
 			}
-			scanner.close();
+			line.close();
 		} catch (FileNotFoundException e) {
 			exceptionCaught = true;
 		} finally {
