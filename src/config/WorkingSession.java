@@ -239,7 +239,7 @@ public class WorkingSession {
 						if (lineArray[0].replace("\t", "").replace(" ", "").toLowerCase().equals("terrain")) {
 							// Terrain is found
 							provinces.getProvince(id).setTerrain(
-									lineArray[1].replace("\t", "").replace(" ", "").toLowerCase());
+									lineArray[1].split("#")[0].replace("\t", "").replace(" ", "").toLowerCase());
 							break;
 						}
 					}
