@@ -18,12 +18,12 @@ public class TextFrancais extends Text {
 
 	@Override
 	public String notFound() {
-		return "non trouvÃ© !";
+		return "non trouvé !";
 	}
 
 	@Override
 	public String selectedProvince() {
-		return "Province selectionnÃ©e :";
+		return "Province selectionné :";
 	}
 
 	@Override
@@ -48,12 +48,12 @@ public class TextFrancais extends Text {
 	
 	@Override
 	public String idProvinceSearchLabel() {
-		return "ID de la province Ã  chercher : ";
+		return "ID de la province à chercher : ";
 	}
 	
 	@Override
 	public  String idProvinceSearchButton() {
-		return "Chercher la province correspondant Ã  cet ID";
+		return "Chercher la province correspondant à cet ID";
 	}
 	
 	@Override
@@ -63,7 +63,7 @@ public class TextFrancais extends Text {
 	
 	@Override
 	public String nameProvinceSearchLabel() {
-		return "Nom (approximatif) de la province Ã  chercher : ";
+		return "Nom (approximatif) de la province à chercher : ";
 	}
 	
 	@Override
@@ -73,7 +73,7 @@ public class TextFrancais extends Text {
 	
 	@Override
 	public String nameProvinceSelectionButton() {
-		return "Montrer sur la carte la province sÃ©lectionnÃ©e";
+		return "Montrer sur la carte la province sélectionné";
 	}
 	
 	@Override
@@ -83,7 +83,7 @@ public class TextFrancais extends Text {
 
 	@Override
 	public String baronyProvinceSearchLabel() {
-		return "Nom (approximatif) de la baronnie Ã  chercher : ";
+		return "Nom (approximatif) de la baronnie à chercher : ";
 	}
 
 	@Override
@@ -93,7 +93,7 @@ public class TextFrancais extends Text {
 
 	@Override
 	public String baronyProvinceSelectionButton() {
-		return "Montrer sur la carte la province de la baronnie sÃ©lectionnÃ©e";
+		return "Montrer sur la carte la province de la baronnie sélectionné";
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public class TextFrancais extends Text {
 	
 	@Override
 	public String provinceNotFound() {
-		return "Province non trouvÃ©e";
+		return "Province non trouvé";
 	}
 	
 	@Override
@@ -118,12 +118,12 @@ public class TextFrancais extends Text {
 	
 	@Override
 	public String enterProvinceNamePlease() {
-		return "Veuillez entrer un nom de province (mÃªme approximatif)";
+		return "Veuillez entrer un nom de province (même approximatif)";
 	}
 
 	@Override
 	public String enterBaronyNamePlease() {
-		return "Veuillez entrer un nom de baronnie (mÃªme approximatif)";
+		return "Veuillez entrer un nom de baronnie (même approximatif)";
 	}
 
 	@Override
@@ -138,17 +138,17 @@ public class TextFrancais extends Text {
 
 	@Override
 	public String invalidWidthNumber() {
-		return "numÃ©ro de largeur incorrect";
+		return "numéro de largeur incorrect";
 	}
 
 	@Override
 	public String invalidHeightNumber() {
-		return "numÃ©ro de hauteur incorrect";
+		return "numéro de hauteur incorrect";
 	}
 
 	@Override
 	public String invalidRGB() {
-		return "AccÃ¨s au code RGB d'un pixel hors image";
+		return "Accès au code RGB d'un pixel hors image";
 	}
 
 	@Override
@@ -168,7 +168,7 @@ public class TextFrancais extends Text {
 
 	@Override
 	public String missingLanguage() {
-		return "ERROR : la langue du logiciel n'a pas Ã©tÃ© spÃ©cifiÃ©e";
+		return "ERROR : la langue du logiciel n'a pas été spécifié";
 	}
 
 	@Override
@@ -178,7 +178,7 @@ public class TextFrancais extends Text {
 
 	@Override
 	public String frenchLanguageName() {
-		return "FranÃ§ais";
+		return "Français";
 	}
 
 	@Override
@@ -213,17 +213,17 @@ public class TextFrancais extends Text {
 
 	@Override
 	public String gameDirectory() {
-		return "RÃ©pertoire du jeu";
+		return "Répertoire du jeu";
 	}
 
 	@Override
 	public String mapModDirectory() {
-		return "[Facultatif] RÃ©pertoire d'un mod modifiant la carte";
+		return "[Facultatif] Répertoire d'un mod modifiant la carte";
 	}
 
 	@Override
 	public String provincesModDirectory() {
-		return "[Facultatif] RÃ©pertoire d'un mod modifiant les attributs des provinces";
+		return "[Facultatif] Répertoire d'un mod modifiant les attributs des provinces";
 	}
 
 	@Override
@@ -233,12 +233,12 @@ public class TextFrancais extends Text {
 
 	@Override
 	public String missingWorkingSessionName() {
-		return "Veuillez entrer un nom Ã  la session de travail";
+		return "Veuillez entrer un nom à la session de travail";
 	}
 
 	@Override
 	public String missingGameDirectory() {
-		return "Veuillez sÃ©lectionner le rÃ©pertoire du jeu";
+		return "Veuillez sélectionner le répertoire du jeu";
 	}
 
 	@Override
@@ -263,7 +263,7 @@ public class TextFrancais extends Text {
 
 	@Override
 	public String workingSessionOpenRecently() {
-		return "Ouvrir rÃ©cent";
+		return "Ouvrir récent";
 	}
 
 	@Override
@@ -277,7 +277,7 @@ public class TextFrancais extends Text {
 	}
 	@Override
 	public String castle() {
-		return "ChÃ¢teau";
+		return "Château";
 	}
 
 	@Override
@@ -312,7 +312,7 @@ public class TextFrancais extends Text {
 
 	@Override
 	public String xSymmetry() {
-		return "Appliquer Ã  la carte une symÃ©trie par rapport Ã  l'axe X";
+		return "Appliquer à la carte une symétrie par rapport à l'axe X";
 	}
 
 	@Override
@@ -332,7 +332,7 @@ public class TextFrancais extends Text {
 
 	@Override
 	public String castleColor() {
-		return "Couleur de chÃ¢teau";
+		return "Couleur de château";
 	}
 
 	@Override
@@ -363,7 +363,7 @@ public class TextFrancais extends Text {
 	@Override
 	public LinkedList<String> languageChange() {
 		LinkedList<String> result = new LinkedList<String>();
-		result.addLast("Vous devez redÃ©marrer le logiciel");
+		result.addLast("Vous devez redémarrer le logiciel");
 		result.addLast("pour que le changement de langue prenne effet");
 		return result;
 	}
@@ -385,22 +385,22 @@ public class TextFrancais extends Text {
 
 	@Override
 	public String moveTop() {
-		return "DÃ©placer haut";
+		return "Déplacer haut";
 	}
 
 	@Override
 	public String moveLeft() {
-		return "DÃ©placer gauche";
+		return "Déplacer gauche";
 	}
 
 	@Override
 	public String moveBottom() {
-		return "DÃ©placer bas";
+		return "Déplacer bas";
 	}
 
 	@Override
 	public String moveRight() {
-		return "DÃ©placer droite";
+		return "Déplacer droite";
 	}
 
 	@Override
@@ -410,7 +410,7 @@ public class TextFrancais extends Text {
 
 	@Override
 	public String zoomOut() {
-		return "DÃ©zoomer";
+		return "Dézoomer";
 	}
 
 	@Override
@@ -434,13 +434,13 @@ public class TextFrancais extends Text {
 		case arctic:
 			return "Arctique";
 		case coastal_desert:
-			return "OcÃ©an";
+			return "Océan";
 		case desert:
-			return "DÃ©sert";
+			return "Désert";
 		case farmlands:
 			return "Terres arables";
 		case forest:
-			return "ForÃªt";
+			return "Forêt";
 		case hills:
 			return "Collines";
 		case jungle:
