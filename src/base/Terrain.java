@@ -10,5 +10,6 @@ public enum Terrain {
 	jungle,
 	mountain,
 	plains,
-	steppe;
+	steppe,
+	savanna;
 }

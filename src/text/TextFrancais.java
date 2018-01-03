@@ -451,6 +451,8 @@ public class TextFrancais extends Text {
 			return "Plaines";
 		case steppe:
 			return "Steppe";
+		case savanna:
+			return "Savane";
 		default:
 			throw new IllegalArgumentException("Invalid terrain!");
 		}
