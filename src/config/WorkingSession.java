@@ -9,12 +9,11 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-import crusaderKings2.BaroniesStorage;
-import text.Text;
 import base.MiniMap;
 import base.Panel;
 import base.ProvinceStorage;
-import base.Terrain;
+import crusaderKings2.BaroniesStorage;
+import text.Text;
 
 public class WorkingSession {
 	private String name;
@@ -94,7 +93,7 @@ public class WorkingSession {
 				}
 				allDirectories.addFirst(gameDirectory);
 				provinceFileNames = FileSorting.giveFilesByDirPriority(allDirectories, "/history/provinces/", text);
-				storedBaronies = new BaroniesStorage(provinceFileNames);
+				storedBaronies = new BaroniesStorage(provinceFileNames, provinces);
 			}
 
 			// The working session is correctly initialized
@@ -222,6 +221,10 @@ public class WorkingSession {
 		}
 	}
 	
+	/**
+	 * @deprecated For CK2 3.2 or higher
+	 * @param provinceSetupFileName
+	 */
 	private void readProvinceSetup(String provinceSetupFileName) {
 		// Read line by line
 		try (BufferedReader br = new BufferedReader(new FileReader(provinceSetupFileName))) {

@@ -2,8 +2,6 @@ package tests;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -12,15 +10,15 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import base.MiniMap;
+import base.Panel;
+import base.Window;
 import config.ConfigStorage;
 import text.Text;
 import text.TextFrancais;
-import base.Window;
-import base.MiniMap;
-import base.Panel;
 
 /**
- * Unit tests for Window (test d'intégration du point de vue du projet)
+ * Unit tests for Window (test d'integration du point de vue du projet)
  * @author Mouchi
  *
  */
@@ -43,7 +41,7 @@ public class TestWindow {
 	}
 
 	/****************************************************
-	 *  WARNING : test dépendant de la map (SWMH 2.854) 
+	 *  WARNING : test dependant de la map (SWMH 2.854) 
 	 * @throws IOException *
 	 ****************************************************/
 	@Test
@@ -75,7 +73,7 @@ public class TestWindow {
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de Tyrifjorden raté", window.getRes(), "1755 - Tyrifjorden"); // (19, 141)
+		Assert.assertEquals("Identification de Tyrifjorden rate", window.getRes(), "1755 - Tyrifjorden"); // (19, 141)
 
 		// Test the right limit which is 1280 = 1024 + 256
 		// Check the width of the panel
@@ -84,7 +82,7 @@ public class TestWindow {
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de North Atlantic raté", window.getRes(), "1758 - North Atlantic"); // (1279, 108)
+		Assert.assertEquals("Identification de North Atlantic rate", window.getRes(), "1758 - North Atlantic"); // (1279, 108)
 		evt.translatePoint(1, 0);
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
@@ -100,7 +98,7 @@ public class TestWindow {
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de North Atlantic raté", window.getRes(), "1758 - North Atlantic"); // (1279, 109)
+		Assert.assertEquals("Identification de North Atlantic rate", window.getRes(), "1758 - North Atlantic"); // (1279, 109)
 
 		// Test the bottom limit which is 512
 		// Check the width of the panel
@@ -127,7 +125,7 @@ public class TestWindow {
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(evt);
 		}
-		Assert.assertEquals("Identification de Kola raté", window.getRes(), "387 - Kola"); // (1279, 511)
+		Assert.assertEquals("Identification de Kola rate", window.getRes(), "387 - Kola"); // (1279, 511)
 
 		// Close the window
 		window.dispose();
@@ -150,14 +148,14 @@ public class TestWindow {
 		Window window = new Window(configuration.getFirst(), text, configuration);
 		MiniMap miniMap = configuration.getFirst().getMiniMap();
 
-		// Déplacement tout à droite
+		// Deplacement tout à droite
 		int i = 1;
 		if (pan.getImageWidth() < pan.getRealWidth()) {
 			ActionEvent actionEvt = new ActionEvent(window, ActionEvent.ACTION_PERFORMED, "", 1, 0);
 			for (ActionListener a: window.getJMenuBar().getMenu(2).getItem(3).getActionListeners()) {
 				a.actionPerformed(actionEvt);
 			}
-			Assert.assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), i);
+			Assert.assertEquals("Numero de largeur incorrect", pan.getWidthNumber(), i);
 			assertMiniMap(miniMap, i, 0);
 			i++;
 		}
@@ -167,7 +165,7 @@ public class TestWindow {
 			for (ActionListener a: window.getJMenuBar().getMenu(2).getItem(3).getActionListeners()) {
 				a.actionPerformed(actionEvt);
 			}
-			Assert.assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), i);
+			Assert.assertEquals("Numero de largeur incorrect", pan.getWidthNumber(), i);
 			assertMiniMap(miniMap, i, 0);
 			i++;
 		}
@@ -175,7 +173,7 @@ public class TestWindow {
 		for (ActionListener a: window.getJMenuBar().getMenu(2).getItem(3).getActionListeners()) {
 			a.actionPerformed(actionEvt);
 		}
-		Assert.assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), --i);
+		Assert.assertEquals("Numero de largeur incorrect", pan.getWidthNumber(), --i);
 		assertMiniMap(miniMap, i, 0);
 
 		// Trois zoom plus
@@ -190,8 +188,8 @@ public class TestWindow {
 			}
 			Assert.assertEquals("Largeur incorrecte", pan.getDisplayingRealImageWidth(), largeurImageReellePrecedente / 2);
 			Assert.assertEquals("Hauteur incorrecte", pan.getDisplayingRealImageHeight(), hauteurImageReellePrecedente / 2);
-			Assert.assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), numLargeurPrecedent * 2 + 1);
-			Assert.assertEquals("Numéro de hauteur incorrect", pan.getHeightNumber(), numHauteurPrecedent * 2 + 1);
+			Assert.assertEquals("Numero de largeur incorrect", pan.getWidthNumber(), numLargeurPrecedent * 2 + 1);
+			Assert.assertEquals("Numero de hauteur incorrect", pan.getHeightNumber(), numHauteurPrecedent * 2 + 1);
 			assertMiniMap(miniMap, pan.getWidthNumber(), pan.getHeightNumber());
 		}
 
@@ -200,9 +198,9 @@ public class TestWindow {
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(mevt);
 		}
-		Assert.assertEquals("Identification de Pechora raté", window.getRes(), "1832 - Pechora");
+		Assert.assertEquals("Identification de Pechora rate", window.getRes(), "1832 - Pechora");
 
-		// On dézoom trois fois
+		// On dezoom trois fois
 		for (int k = 0; k < 3; k++) {
 			int largeurImageReellePrecedente = pan.getDisplayingRealImageWidth();
 			int hauteurImageReellePrecedente = pan.getDisplayingRealImageHeight();
@@ -214,26 +212,26 @@ public class TestWindow {
 			}
 			Assert.assertEquals("Largeur incorrecte", pan.getDisplayingRealImageWidth(), largeurImageReellePrecedente * 2);
 			Assert.assertEquals("Hauteur incorrecte", pan.getDisplayingRealImageHeight(), hauteurImageReellePrecedente * 2);
-			Assert.assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), (numLargeurPrecedent - 1) / 2);
-			Assert.assertEquals("Numéro de hauteur incorrect", pan.getHeightNumber(), (numHauteurPrecedent - 1) / 2);
+			Assert.assertEquals("Numero de largeur incorrect", pan.getWidthNumber(), (numLargeurPrecedent - 1) / 2);
+			Assert.assertEquals("Numero de hauteur incorrect", pan.getHeightNumber(), (numHauteurPrecedent - 1) / 2);
 			assertMiniMap(miniMap, pan.getWidthNumber(), pan.getHeightNumber());
 		}
 
-		// Déplacement tout à gauche
+		// Deplacement tout à gauche
 		while (pan.getWidthNumber() > 0) {
 			actionEvt = new ActionEvent(window, ActionEvent.ACTION_PERFORMED, "", 1, 0);
 			for (ActionListener a: window.getJMenuBar().getMenu(2).getItem(1).getActionListeners()) {
 				a.actionPerformed(actionEvt);
 			}
 			i--;
-			Assert.assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), i);
+			Assert.assertEquals("Numero de largeur incorrect", pan.getWidthNumber(), i);
 			assertMiniMap(miniMap, i, 0);
 		}
 		actionEvt = new ActionEvent(window, ActionEvent.ACTION_PERFORMED, "", 1, 0);
 		for (ActionListener a: window.getJMenuBar().getMenu(2).getItem(1).getActionListeners()) {
 			a.actionPerformed(actionEvt);
 		}
-		Assert.assertEquals("Numéro de largeur incorrect", pan.getWidthNumber(), i);
+		Assert.assertEquals("Numero de largeur incorrect", pan.getWidthNumber(), i);
 		assertMiniMap(miniMap, i, 0);
 
 		// On clique en (LargeurMax, HauteurMax)
@@ -242,16 +240,16 @@ public class TestWindow {
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(mevt);
 		}
-		Assert.assertEquals("Identification de Kola raté", window.getRes(), "387 - Kola");
+		Assert.assertEquals("Identification de Kola rate", window.getRes(), "387 - Kola");
 
-		// Déplacement tout en bas
+		// Deplacement tout en bas
 		if (pan.getImageHeight() < pan.getRealHeight()) {
 			actionEvt = new ActionEvent(window, ActionEvent.ACTION_PERFORMED, "", 1, 0);
 			for (ActionListener a: window.getJMenuBar().getMenu(2).getItem(2).getActionListeners()) {
 				a.actionPerformed(actionEvt);
 			}
 			i++;
-			Assert.assertEquals("Numéro de hauteur incorrect", pan.getHeightNumber(), i);
+			Assert.assertEquals("Numero de hauteur incorrect", pan.getHeightNumber(), i);
 			assertMiniMap(miniMap, 0, i);
 		}
 		while (pan.getHeightNumber() * pan.getDisplayingRealImageHeight() / 2  + pan.getDisplayingRealImageHeight()
@@ -261,14 +259,14 @@ public class TestWindow {
 				a.actionPerformed(actionEvt);
 			}
 			i++;
-			Assert.assertEquals("Numéro de hauteur incorrect", pan.getHeightNumber(), i);
+			Assert.assertEquals("Numero de hauteur incorrect", pan.getHeightNumber(), i);
 			assertMiniMap(miniMap, 0, i);
 		}
 		actionEvt = new ActionEvent(window, ActionEvent.ACTION_PERFORMED, "", 1, 0);
 		for (ActionListener a: window.getJMenuBar().getMenu(2).getItem(2).getActionListeners()) {
 			a.actionPerformed(actionEvt);
 		}
-		Assert.assertEquals("Numéro de hauteur incorrect", pan.getHeightNumber(), i);
+		Assert.assertEquals("Numero de hauteur incorrect", pan.getHeightNumber(), i);
 		assertMiniMap(miniMap, 0, i);
 		
 		// On clique en (LargeurMax, HauteurMax)
@@ -277,23 +275,23 @@ public class TestWindow {
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(mevt);
 		}
-		Assert.assertEquals("Identification de Central Africa raté", window.getRes(), "1487 - Central Africa");
+		Assert.assertEquals("Identification de Central Africa rate", window.getRes(), "1487 - Central Africa");
 		
-		// Déplacement tout en haut
+		// Deplacement tout en haut
 		while (pan.getHeightNumber() > 0) {
 			actionEvt = new ActionEvent(window, ActionEvent.ACTION_PERFORMED, "", 1, 0);
 			for (ActionListener a: window.getJMenuBar().getMenu(2).getItem(0).getActionListeners()) {
 				a.actionPerformed(actionEvt);
 			}
 			i--;
-			Assert.assertEquals("Numéro de hauteur incorrect", pan.getHeightNumber(), i);
+			Assert.assertEquals("Numero de hauteur incorrect", pan.getHeightNumber(), i);
 			assertMiniMap(miniMap, 0, i);
 		}
 		actionEvt = new ActionEvent(window, ActionEvent.ACTION_PERFORMED, "", 1, 0);
 		for (ActionListener a: window.getJMenuBar().getMenu(2).getItem(0).getActionListeners()) {
 			a.actionPerformed(actionEvt);
 		}
-		Assert.assertEquals("Numéro de hauteur incorrect", pan.getHeightNumber(), i);
+		Assert.assertEquals("Numero de hauteur incorrect", pan.getHeightNumber(), i);
 		assertMiniMap(miniMap, 0, i);
 
 		// On clique en (LargeurMax, HauteurMax)
@@ -302,7 +300,7 @@ public class TestWindow {
 		for(MouseListener ml: pan.getMouseListeners()){
 			ml.mouseClicked(mevt);
 		}
-		Assert.assertEquals("Identification de Kola raté", window.getRes(), "387 - Kola");
+		Assert.assertEquals("Identification de Kola rate", window.getRes(), "387 - Kola");
 
 		// Close the window
 		window.dispose();

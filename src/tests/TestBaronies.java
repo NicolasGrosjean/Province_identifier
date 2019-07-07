@@ -8,11 +8,12 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import text.Text;
-import text.TextFrancais;
+import base.ProvinceStorage;
 import config.FileSorting;
 import crusaderKings2.BaroniesStorage;
 import crusaderKings2.Barony;
+import text.Text;
+import text.TextFrancais;
 
 
 public class TestBaronies {
@@ -24,16 +25,20 @@ public class TestBaronies {
 	public static void SetUp() {
 		Text text = new TextFrancais();
 		LinkedList<String> ckDirectory = new LinkedList<String>();
-		ckDirectory.add("C:/Jeux/Steam/SteamApps/common/Crusader Kings II");
+		ckDirectory.add("D:/Programmes/Steam/SteamApps/common/Crusader Kings II");
 		LinkedList<String> swmhDirectories = new LinkedList<String>();
-		swmhDirectories.add("C:/Jeux/Steam/SteamApps/common/Crusader Kings II");
-		swmhDirectories.add("C:/Users/Nicolas/Documents/Paradox Interactive/Crusader Kings II/MOD/Historical Immersion Project");
+		swmhDirectories.add("D:/Programmes/Steam/SteamApps/common/Crusader Kings II");
+		swmhDirectories.add("D:/Documents/Paradox Interactive/Crusader Kings II/MOD/Historical Immersion Project");
 		LinkedList<String> lolDirectories = new LinkedList<String>();
-		lolDirectories.add("C:/Jeux/Steam/SteamApps/common/Crusader Kings II");
-		lolDirectories.add("C:/Users/Nicolas/Documents/Paradox Interactive/Crusader Kings II/MOD/Historical Immersion Project");
-		ckBaronies = new BaroniesStorage(FileSorting.giveFilesByDirPriority(ckDirectory, "/history/provinces/", text));
-		swmhBaronies = new BaroniesStorage(FileSorting.giveFilesByDirPriority(swmhDirectories, "/history/provinces/", text));
-		lolBaronies = new BaroniesStorage(FileSorting.giveFilesByDirPriority(lolDirectories, "/history/provinces/", text));
+		lolDirectories.add("D:/Programmes/Steam/SteamApps/common/Crusader Kings II");
+		lolDirectories.add("D:/Documents/Paradox Interactive/Crusader Kings II/MOD/Historical Immersion Project");
+		ProvinceStorage provinces = new ProvinceStorage();
+		for (int i = 1; i < 3000; i++) {
+			provinces.addProvince(i, 42, 42, 42, "Fake Province", false);
+		}
+		ckBaronies = new BaroniesStorage(FileSorting.giveFilesByDirPriority(ckDirectory, "/history/provinces/", text), provinces);
+		swmhBaronies = new BaroniesStorage(FileSorting.giveFilesByDirPriority(swmhDirectories, "/history/provinces/", text), provinces);
+		lolBaronies = new BaroniesStorage(FileSorting.giveFilesByDirPriority(lolDirectories, "/history/provinces/", text), provinces);
 	}
 
 	@Test
@@ -47,7 +52,7 @@ public class TestBaronies {
 				HashSet<String> baronySet = new HashSet<String>();
 				for (Barony b : ckBaronies.getBaronies(i)) {
 					if (!baronySet.add(b.getBaronyName())) {
-						Assert.assertEquals("Province d'id " + i + " a plusieurs fois le même nom de baronnie "
+						Assert.assertEquals("Province d'id " + i + " a plusieurs fois le meme nom de baronnie "
 								+ b.getBaronyName(), false, true);
 					}
 				}
@@ -60,7 +65,7 @@ public class TestBaronies {
 				HashSet<String> baronySet = new HashSet<String>();
 				for (Barony b : swmhBaronies.getBaronies(i)) {
 					if (!baronySet.add(b.getBaronyName())) {
-						Assert.assertEquals("Province d'id " + i + "a plusieurs fois le même nom de baronnie "
+						Assert.assertEquals("Province d'id " + i + "a plusieurs fois le meme nom de baronnie "
 								+ b.getBaronyName(), false, true);
 					}
 				}
@@ -73,7 +78,7 @@ public class TestBaronies {
 				HashSet<String> baronySet = new HashSet<String>();
 				for (Barony b : lolBaronies.getBaronies(i)) {
 					if (!baronySet.add(b.getBaronyName())) {
-						Assert.assertEquals("Province d'id " + i + "a plusieurs fois le même nom de baronnie "
+						Assert.assertEquals("Province d'id " + i + "a plusieurs fois le meme nom de baronnie "
 								+ b.getBaronyName(), false, true);
 					}
 				}
@@ -93,7 +98,7 @@ public class TestBaronies {
 				for (Barony b : ckBaronies.getBaronies(i)) {
 					Integer j = ckBaronyMap.put(b.getBaronyName(), i);
 					if (j != null) {
-						Assert.assertEquals("Il y a plusieurs fois le même nom de baronnie "
+						Assert.assertEquals("Il y a plusieurs fois le meme nom de baronnie "
 								+ b.getBaronyName() + " : dans les provinces d'ID "
 								+ i + " et " + j, false, true);
 					}
@@ -109,7 +114,7 @@ public class TestBaronies {
 					Integer j = swmhBaronyMap.put(b.getBaronyName(), i);
 					if (j != null
 							&& j != 805 && j != 806) { // The province of id = 806 is not living in SWMH
-						Assert.assertEquals("Il y a plusieurs fois le même nom de baronnie "
+						Assert.assertEquals("Il y a plusieurs fois le meme nom de baronnie "
 								+ b.getBaronyName() + " : dans les provinces d'ID "
 								+ i + " et " + j, false, true);
 					}
@@ -125,7 +130,7 @@ public class TestBaronies {
 					Integer j = lolBaronyMap.put(b.getBaronyName(), i);
 					if (j != null
 							&& j != 805 && j != 806) { // The province of id = 806 is not living in SWMH
-						Assert.assertEquals("Il y a plusieurs fois le même nom de baronnie "
+						Assert.assertEquals("Il y a plusieurs fois le meme nom de baronnie "
 								+ b.getBaronyName() + " : dans les provinces d'ID "
 								+ i + " et " + j, false, true);
 					}

@@ -8,8 +8,10 @@ public enum Terrain {
 	forest,
 	hills,
 	jungle,
+	marsh,
 	mountain,
 	plains,
 	steppe,
-	savanna;
+	savanna,
+	woods;
 }

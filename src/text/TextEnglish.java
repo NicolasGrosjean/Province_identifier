@@ -431,6 +431,8 @@ public class TextEnglish extends Text {
 
 	@Override
 	public String terrainType(Terrain t) {
+		if (t == null)
+			return "";
 		switch (t) {
 		case arctic:
 			return "Arctic";
@@ -446,6 +448,8 @@ public class TextEnglish extends Text {
 			return "Hills";
 		case jungle:
 			return "Jungle";
+		case marsh:
+			return "Marsh";
 		case mountain:
 			return "Mountain";
 		case plains:
@@ -454,6 +458,8 @@ public class TextEnglish extends Text {
 			return "Steppe";
 		case savanna:
 			return "Savanna";
+		case woods:
+			return "Woods";
 		default:
 			throw new IllegalArgumentException("Invalid terrain!");
 		}

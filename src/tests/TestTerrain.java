@@ -39,26 +39,24 @@ public class TestTerrain {
 	public void vanillaProvinceTerrain() {
 		Assert.assertEquals("1st province terrain", Terrain.arctic,
 				vanilla.getProvinces().getProvince(1).getTerrain());
-		Assert.assertEquals("2nd province terrain", Terrain.mountain,
-				vanilla.getProvinces().getProvince(2).getTerrain()); 
+		Assert.assertEquals("274nd province terrain", Terrain.mountain,
+				vanilla.getProvinces().getProvince(274).getTerrain());
 		Assert.assertEquals("5th province terrain", Terrain.hills,
-				vanilla.getProvinces().getProvince(5).getTerrain()); 
-		Assert.assertEquals("7th province terrain", Terrain.plains,
-				vanilla.getProvinces().getProvince(7).getTerrain()); 
-		Assert.assertEquals("13th province terrain", Terrain.forest,
-				vanilla.getProvinces().getProvince(13).getTerrain()); 
-		Assert.assertEquals("14th province terrain", Terrain.farmlands,
-				vanilla.getProvinces().getProvince(14).getTerrain()); 
-		Assert.assertEquals("937th province terrain", Terrain.coastal_desert,
-				vanilla.getProvinces().getProvince(937).getTerrain()); 
-		Assert.assertEquals("299th province terrain", Terrain.desert,
-				vanilla.getProvinces().getProvince(299).getTerrain()); 
+				vanilla.getProvinces().getProvince(5).getTerrain());
+		Assert.assertEquals("81th province terrain", Terrain.plains,
+				vanilla.getProvinces().getProvince(81).getTerrain()); 
+		Assert.assertEquals("279th province terrain", Terrain.forest,
+				vanilla.getProvinces().getProvince(279).getTerrain());
+		Assert.assertEquals("265th province terrain", Terrain.farmlands,
+				vanilla.getProvinces().getProvince(265).getTerrain());
+		Assert.assertEquals("624th province terrain", Terrain.desert,
+				vanilla.getProvinces().getProvince(624).getTerrain());
 		Assert.assertEquals("1118th province terrain", Terrain.jungle,
-				vanilla.getProvinces().getProvince(1118).getTerrain()); 
-		Assert.assertEquals("512th province terrain", Terrain.steppe,
+				vanilla.getProvinces().getProvince(1118).getTerrain());
+		Assert.assertEquals("512th province terrain", Terrain.marsh,
 				vanilla.getProvinces().getProvince(512).getTerrain()); 
-		Assert.assertEquals("130th province terrain", Terrain.plains,
-				vanilla.getProvinces().getProvince(130).getTerrain()); 
+		Assert.assertEquals("610th province terrain", Terrain.steppe,
+				vanilla.getProvinces().getProvince(610).getTerrain());
 	}
 
 	@Test

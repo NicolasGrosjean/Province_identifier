@@ -13,19 +13,21 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import base.Province;
+import base.ProvinceStorage;
 
 public class BaroniesStorage {
 	private Map<Integer, LinkedList<Barony>> provinceBaronies;
 
-	public BaroniesStorage(LinkedList<String> provinceFileNames) {
+	public BaroniesStorage(LinkedList<String> provinceFileNames, ProvinceStorage provinces) {
 		this.provinceBaronies = new HashMap<Integer, LinkedList<Barony>>();
 		while (!provinceFileNames.isEmpty()) {
-			init(provinceFileNames.removeFirst());
+			init(provinceFileNames.removeFirst(), provinces);
 		}
 	}
 
-	private void init(String provinceFileName) {
+	private void init(String provinceFileName, ProvinceStorage provinces) {
 		FileInputStream fichierLecture = null;
+		Scanner scanner = null;
 		try {
 			// Remove the parent path to the provinceFileName
 			File provinceFile = new File(provinceFileName);
@@ -40,7 +42,7 @@ public class BaroniesStorage {
 			HashSet<String> baronyNameSet = new HashSet<String>();
 
 			fichierLecture = new FileInputStream(provinceFileName);
-			Scanner scanner=new Scanner(fichierLecture, "ISO-8859-1");
+			scanner = new Scanner(fichierLecture, "ISO-8859-1");
 			scanner.useDelimiter(Pattern.compile("[=\\s\n\t]"));
 			while (scanner.hasNext()) {
 				String word = scanner.next();
@@ -67,6 +69,16 @@ public class BaroniesStorage {
 									provinceID));
 						}
 					}
+				} else if ("terrain".equals(word)) {
+					String terrain = scanner.next();
+					while (terrain.equals("") && scanner.hasNext()) {
+						terrain = scanner.next();
+					}
+					Province province = provinces.getProvince(provinceID);
+					if (province != null) {
+						// If the it as a game base province not in the mod, it could be null 
+						province.setTerrain(terrain.split("#")[0].replace("\t", "").replace(" ", "").toLowerCase());
+					}
 				}
 			}
 
@@ -78,6 +90,7 @@ public class BaroniesStorage {
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found");
 		} finally {
+			scanner.close();
 			try {
 				if (fichierLecture != null)
 					fichierLecture.close();
