@@ -1,6 +1,7 @@
 package config;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -72,7 +73,9 @@ public class WorkingSession {
 			readDefinitionFile(mapDirectory + "/map/definition.csv");
 			if (ckGame) {
 				readDefaultMapFile(mapDirectory + "/map/default.map");
-				readProvinceSetup(mapDirectory + "/common/province_setup/00_province_setup.txt");
+				if (new File(mapDirectory + "/common/province_setup/00_province_setup.txt").exists()) {
+					readProvinceSetup(mapDirectory + "/common/province_setup/00_province_setup.txt");
+				}
 			}
 			panel = new Panel(mapDirectory + "/map/provinces.bmp", text, xSymetry, blackBorder, removeSeaRiver, provinces);
 			miniMap = new MiniMap(mapDirectory + "/map/provinces.bmp", text, panel, xSymetry, removeSeaRiver, provinces);
